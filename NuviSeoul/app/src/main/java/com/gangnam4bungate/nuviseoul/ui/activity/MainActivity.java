@@ -3,6 +3,7 @@ package com.gangnam4bungate.nuviseoul.ui.activity;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
@@ -20,11 +21,13 @@ import com.mystory.commonlibrary.network.MashupCallback;
 
 import org.json.JSONObject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, MashupCallback {
 
     private GoogleMap mMap;
+    //@BindView(R.id.cast_button_type_closed_caption) TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }catch (Exception e){
 
         }
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

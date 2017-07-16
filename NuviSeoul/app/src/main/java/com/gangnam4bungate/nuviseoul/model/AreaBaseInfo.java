@@ -7,40 +7,40 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class AreaBaseInfo {
-    @SerializedName("addr1")
-    String addrl;
-    @SerializedName("addr2")
-    String addr2;
-    @SerializedName("areacode")
-    String areacode;
-    @SerializedName("cat1")
-    String cat1;
-    @SerializedName("cat2")
-    String cat2;
-    @SerializedName("cat3")
-    String cat3;
-    @SerializedName("contentid")
-    String contentid;
-    @SerializedName("contenttypeid")
-    String contenttypeid;
-    @SerializedName("createdtime")
-    String createdtime;
-    @SerializedName("firstimage")
-    String firstimage;
-    @SerializedName("firstimage2")
-    String firstimage2;
-    @SerializedName("mapx")
-    String mapx;
-    @SerializedName("mapy")
-    String mapy;
-    @SerializedName("mlevel")
-    String mlevel;
-    @SerializedName("modifiedtime")
-    String modifiedtime;
-    @SerializedName("readcount")
-    String readcount;
-    @SerializedName("sigungucode")
-    String sigungucode;
+        @SerializedName("addr1")
+        String addrl;
+        @SerializedName("addr2")
+        String addr2;
+        @SerializedName("areacode")
+        String areacode;
+        @SerializedName("cat1")
+        String cat1;
+        @SerializedName("cat2")
+        String cat2;
+        @SerializedName("cat3")
+        String cat3;
+        @SerializedName("contentid")
+        String contentid;
+        @SerializedName("contenttypeid")
+        String contenttypeid;
+        @SerializedName("createdtime")
+        String createdtime;
+        @SerializedName("firstimage")
+        String firstimage;
+        @SerializedName("firstimage2")
+        String firstimage2;
+        @SerializedName("mapx")
+        String mapx;
+        @SerializedName("mapy")
+        String mapy;
+        @SerializedName("mlevel")
+        String mlevel;
+        @SerializedName("modifiedtime")
+        String modifiedtime;
+        @SerializedName("readcount")
+        String readcount;
+        @SerializedName("sigungucode")
+        String sigungucode;
     @SerializedName("tel")
     String tel;
     @SerializedName("title")
