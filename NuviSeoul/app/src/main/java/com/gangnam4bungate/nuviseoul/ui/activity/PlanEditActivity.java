@@ -1,5 +1,6 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
+import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
 
 /**
@@ -7,4 +8,6 @@ import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
  */
 
 public class PlanEditActivity extends CommonActivity {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_planedit);
 }
