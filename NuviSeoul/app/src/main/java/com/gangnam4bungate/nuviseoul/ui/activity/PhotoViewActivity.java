@@ -7,4 +7,10 @@ import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
  */
 
 public class PhotoViewActivity extends CommonActivity {
+
+
+
+
+
 }
+
