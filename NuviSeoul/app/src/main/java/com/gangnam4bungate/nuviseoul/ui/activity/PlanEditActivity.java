@@ -7,4 +7,6 @@ import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
  */
 
 public class PlanEditActivity extends CommonActivity {
+
+    //planEdit
 }
