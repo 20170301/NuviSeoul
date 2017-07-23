@@ -8,5 +8,5 @@ import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
 
 public class PlanEditActivity extends CommonActivity {
 
-    //planEdit1231
+    //planEdit1231123
 }
