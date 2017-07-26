@@ -30,7 +30,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".ui.activity.PlanEditActivity"
             android:label="@string/title_activity_main">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
