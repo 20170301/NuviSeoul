@@ -1,6 +1,8 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
 import android.app.DatePickerDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -17,12 +19,13 @@ import java.util.Calendar;
 public class PlanEditActivity extends CommonActivity {
     int year, month, date;
     EditText travelSubjectText;
-    Button registerButton;
     Button startDateButton;
     Button endDateButton;
     EditText startDateText;
     EditText endDateText;
+    Button registerButton;
     DatePickerDialog.OnDateSetListener mDateSetListener;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class PlanEditActivity extends CommonActivity {
         endDateButton = (Button) findViewById(R.id.endDateButton);
         startDateText = (EditText) findViewById(R.id.startDateText);
         endDateText = (EditText) findViewById(R.id.endDateText);
+        registerButton = (Button) findViewById(R.id.registerButton);
 
         Calendar cal = Calendar.getInstance();
         year = cal.get(cal.YEAR);
@@ -54,6 +58,23 @@ public class PlanEditActivity extends CommonActivity {
             }
         };
 
+
+
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFragment();
+            }
+        });
+
+    }
+
+    public void openFragment(){
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace( R.id.fragment_place, new PlanEditDayActivity());
+        fragmentTransaction.commit();
     }
 
 

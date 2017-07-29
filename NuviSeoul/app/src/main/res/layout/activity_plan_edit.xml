@@ -38,6 +38,15 @@
         android:ems="10"
         android:inputType="textPersonName" />
 
+    <FrameLayout
+        android:id="@+id/fragment_place"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/travelSubjectText">
+
+    </FrameLayout>
+
     <Button
         android:id="@+id/startDateButton"
         android:layout_width="wrap_content"
