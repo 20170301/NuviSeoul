@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gangnam4bungate.nuviseoul.ui.activity.PhotoActivity"
+    android:weightSum="1"
+    android:orientation="vertical"><![CDATA[
+
+
+
+        android:layout_width="368dp"
+        android:layout_height="495dp"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+
+        ]]>
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.10"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:onClick="onClick1"
+            android:text="첫번째 서울 여행!\n4.12~4.18" />
+
+        <Button
+            android:id="@+id/button7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.10"
+            android:backgroundTint="@android:color/holo_green_light"
+            android:text="고딩 친구들이랑~\n4.12~4.18" />
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.10"
+            android:backgroundTint="@android:color/holo_orange_light"
+            android:text="광화문 거리!\n4.12~4.18" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.10"
+            android:backgroundTint="@android:color/holo_purple"
+            android:text="룰루랄라~!\n4.12~4.18" />
+
+</LinearLayout>
