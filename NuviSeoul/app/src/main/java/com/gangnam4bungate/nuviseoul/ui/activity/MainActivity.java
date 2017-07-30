@@ -1,9 +1,10 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
-import android.support.v4.app.FragmentActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.widget.TextView;
+import android.view.View;
 
 import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
@@ -21,7 +22,6 @@ import com.mystory.commonlibrary.network.MashupCallback;
 
 import org.json.JSONObject;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, MashupCallback {
@@ -95,4 +95,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             //Log.d(CODES.TAG, object.toString());
         }
     }
+
+    public void goPhoto(View v){
+        Intent intent = new Intent(this, PhotoActivity.class);
+        startActivity(intent);
+    }
+
 }
