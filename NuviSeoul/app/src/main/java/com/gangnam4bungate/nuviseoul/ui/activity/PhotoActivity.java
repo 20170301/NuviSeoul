@@ -16,7 +16,7 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     public void onClick1(View v){
-        Intent intent = new Intent(this, PhotoViewActivity.class);
+        Intent intent = new Intent(this, PhotoDetailActivity.class);
         startActivity(intent);
     }
 }

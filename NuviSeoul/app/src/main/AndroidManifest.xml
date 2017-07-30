@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.PhotoActivity" />
-        <activity android:name=".ui.activity.PhotoDtailActivity"></activity>
+        <activity android:name=".ui.activity.PhotoDetailActivity"></activity>
     </application>
 
 </manifest>
