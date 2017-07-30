@@ -4,12 +4,12 @@
     android:id="@+id/gridview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.PhotoViewActivity"
     android:columnWidth="90dp"
-    android:numColumns="auto_fit"
-    android:verticalSpacing="10dp"
+    android:gravity="center"
     android:horizontalSpacing="10dp"
+    android:numColumns="auto_fit"
     android:stretchMode="columnWidth"
-    android:gravity="center">
+    android:verticalSpacing="10dp"
+    tools:context=".ui.activity.PhotoViewActivity">
 
 </GridView>
