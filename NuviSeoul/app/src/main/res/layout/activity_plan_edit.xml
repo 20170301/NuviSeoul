@@ -41,62 +41,12 @@
     <FrameLayout
         android:id="@+id/fragment_place"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/travelSubjectText">
 
     </FrameLayout>
-
-    <Button
-        android:id="@+id/startDateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/travelSubjectText"
-        android:layout_alignRight="@+id/travelSubjectText"
-        android:layout_below="@+id/travelSubjectText"
-        android:layout_marginEnd="19dp"
-        android:layout_marginRight="19dp"
-        android:layout_marginTop="73dp"
-        android:text="시작 날짜" />
-
-    <Button
-        android:id="@+id/endDateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/startDateButton"
-        android:layout_alignStart="@+id/startDateButton"
-        android:layout_below="@+id/startDateButton"
-        android:layout_marginTop="74dp"
-        android:text="마지막 날짜" />
-
-    <EditText
-        android:id="@+id/startDateText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/endDateButton"
-        android:layout_alignLeft="@+id/travelSubject"
-        android:layout_alignStart="@+id/travelSubject"
-        android:ems="10"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/endDateText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/endDateButton"
-        android:layout_alignLeft="@+id/startDateText"
-        android:layout_alignStart="@+id/startDateText"
-        android:ems="10"
-        android:inputType="textPersonName" />
-
-    <Button
-        android:id="@+id/registerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/endDateText"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/endDateText"
-        android:layout_marginBottom="62dp"
-        android:text="확인" />
 
 </RelativeLayout>
