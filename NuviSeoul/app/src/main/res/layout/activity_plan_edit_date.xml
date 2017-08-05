@@ -6,15 +6,14 @@
         android:id="@+id/editText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="36dp"
-        android:layout_marginStart="36dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginRight="26dp"
         android:layout_marginTop="84dp"
+        android:layout_toLeftOf="@+id/button2"
+        android:layout_toStartOf="@+id/button2"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name" />
+        android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/button2"
@@ -25,5 +24,5 @@
         android:layout_alignTop="@+id/editText2"
         android:layout_marginEnd="17dp"
         android:layout_marginRight="17dp"
-        android:text="Button" />
+        android:text="+" />
 </RelativeLayout>
