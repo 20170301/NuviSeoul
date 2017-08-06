@@ -47,7 +47,7 @@
             android:name=".ui.activity.RecommendActivity"
             android:label="@string/title_activity_recommend">
         </activity>
-        <activity android:name=".ui.activity.PlanEditDayActivity"/>
+        <activity android:name=".ui.activity.PlanEditActivity"/>
     </application>
 
 </manifest>
