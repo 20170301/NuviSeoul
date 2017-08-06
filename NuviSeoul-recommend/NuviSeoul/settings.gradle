@@ -1,3 +1,0 @@
-include ':app' , ':CommonLib'
-project(':CommonLib').projectDir = new File(rootDir, '../CommonLibrary/CommonLib')
-
