@@ -1,96 +1,138 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.SlidingDrawer;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gangnam4bungate.nuviseoul.R;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
 
-public class RecommendActivity extends FragmentActivity implements OnMapReadyCallback {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-    private GoogleMap mMap;
+/**
+ * Created by wsseo on 2017. 7. 9..
+ */
+
+public class RecommendActivity extends CommonActivity {
+
+    RecyclerView horizontal_recycler_view;
+    HorizontalAdapter horizontalAdapter;
+    private List<RecommendData> data;
+
+    ImageView closehandle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        horizontal_recycler_view= (RecyclerView) findViewById(R.id.horizontal_recycler_view);
+
+        closehandle = (ImageView) findViewById(R.id.close);
+
+        closehandle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SlidingDrawer drawer = (SlidingDrawer)findViewById(R.id.slide);
+                drawer.animateClose();
+            }
+        });
+
+        data = fill_with_data();
+
+
+        horizontalAdapter=new HorizontalAdapter(data, getApplication());
+
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(RecommendActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        horizontal_recycler_view.setLayoutManager(horizontalLayoutManager);
+        horizontal_recycler_view.setAdapter(horizontalAdapter);
+
+
     }
 
+    public List<RecommendData> fill_with_data() {
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        List<RecommendData> data = new ArrayList<>();
 
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        LatLng seoul = new LatLng(37.52, 127.0);
-        mMap.addMarker(new MarkerOptions().position(seoul).title("Marker in Seoul"));
-        //1. 좌표 설정
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(seoul));
+        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 1"));
+        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 2"));
+        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 3"));
+        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 4"));
+        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 5"));
+        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 6"));
+        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 7"));
+        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 8"));
+        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 9"));
 
-        //2 좌표와 카메라 zoom 설정
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(seoul,13));
-        /*-------------------------------------------------------------------------------------------------*/
-        //1 Map Click
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng arg0) {
-                String textTitle = "[Map Click] latitude ="
-                        + arg0.latitude + ", longitude ="
-                        + arg0.longitude;
-              /*  Toast.makeText(getApplicationContext(), textTitle, Toast.LENGTH_LONG)
-                        .show();*/
-                //Marker 추가
-                LatLng latLng=new LatLng(arg0.latitude,arg0.longitude);
-                mMap.addMarker(new MarkerOptions().position(latLng).title(textTitle));
+
+        return data;
+    }
+
+    public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
+
+
+        List<RecommendData> horizontalList = Collections.emptyList();
+        Context context;
+
+
+        public HorizontalAdapter(List<RecommendData> horizontalList, Context context) {
+            this.horizontalList = horizontalList;
+            this.context = context;
+        }
+
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+
+            ImageView imageView;
+            TextView txtview;
+            public MyViewHolder(View view) {
+                super(view);
+                imageView=(ImageView) view.findViewById(R.id.imageview);
+                txtview=(TextView) view.findViewById(R.id.txtview);
             }
-        });
+        }
 
-        //2. 클릭을 오래 했을때
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
 
-            public void onMapLongClick(LatLng point) {
-                String text = "[Map LongClick] latitude ="
-                        + point.latitude + ", longitude ="
-                        + point.longitude;
-                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG)
-                        .show();
-            }
-        });
-        /*-------------------------------------------------------------------------------------------------*/
-        //2.Map marker Click
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            public boolean onMarkerClick(Marker marker) {
-                String text = "[Map Marker Click] latitude ="
-                        + marker.getPosition().latitude + ", longitude ="
-                        + marker.getPosition().longitude;
-                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG)
-                        .show();
-                return false;
-            }
-        });
-        /*-------------------------------------------------------------------------------------------------*/
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recommend_location, parent, false);
+
+            return new MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
+            holder.imageView.setImageResource(horizontalList.get(position).imageId);
+            holder.txtview.setText(horizontalList.get(position).txt);
+
+            holder.imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+
+                public void onClick(View v) {
+                    String list = horizontalList.get(position).txt.toString();
+                    Toast.makeText(RecommendActivity.this, list, Toast.LENGTH_SHORT).show();
+                }
+
+            });
+
+        }
+
+        @Override
+        public int getItemCount()
+        {
+            return horizontalList.size();
+        }
     }
 }
