@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.ArrayList;
@@ -32,9 +31,6 @@ public class RecommendActivity extends CommonGoogleMapActivity {
     RecyclerView horizontal_recycler_view;
     HorizontalAdapter horizontalAdapter;
     private List<RecommendData> data;
-
-
-    //private GoogleMap mMap;
 
     ImageView closehandle;
 
@@ -61,30 +57,13 @@ public class RecommendActivity extends CommonGoogleMapActivity {
 
         data = fill_with_data();
 
-
         horizontalAdapter=new HorizontalAdapter(data, getApplication());
 
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(RecommendActivity.this, LinearLayoutManager.HORIZONTAL, false);
         horizontal_recycler_view.setLayoutManager(horizontalLayoutManager);
         horizontal_recycler_view.setAdapter(horizontalAdapter);
-
-
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        super.onMapReady(googleMap);
-    }
 
     public List<RecommendData> fill_with_data() {
 
