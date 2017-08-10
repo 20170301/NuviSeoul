@@ -1,5 +1,6 @@
 package com.gangnam4bungate.nuviseoul.ui.common;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -107,8 +108,16 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
                         .add(new LatLng(21.291, -157.821))  // Hawaii
                         .add(new LatLng(37.423, -122.091))  // Mountain View
                 );*/
+               /*
+               PolylineOptions polyline_options = new PolylineOptions()
+                        .addAll(arraylist_lat_lon).color(Color.GREEN).width(2);
+                polyline = googleMap.addPolyline(polyline_options);
+               */
                 //2점 연결 - 시작점 , 마지막점
-                mMap.addPolyline(new PolylineOptions().geodesic(true)
+                mMap.addPolyline(new PolylineOptions()
+                        .color(Color.BLUE)
+                        .width(5)
+                        .geodesic(true)
                         .add(mLastedMarkLatLng)
                         .add(latLng)
                         //.add(new LatLng(arg0.latitude,arg0.longitude))
