@@ -13,7 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gangnam4bungate.nuviseoul.R;
-import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
+import com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,11 +25,16 @@ import java.util.List;
  * Created by wsseo on 2017. 7. 9..
  */
 
-public class RecommendActivity extends CommonActivity {
+//public class RecommendActivity extends CommonActivity {
+//public class RecommendActivity extends CommonGoogleMapActivity implements CommonActivity {
+public class RecommendActivity extends CommonGoogleMapActivity {
 
     RecyclerView horizontal_recycler_view;
     HorizontalAdapter horizontalAdapter;
     private List<RecommendData> data;
+
+
+    //private GoogleMap mMap;
 
     ImageView closehandle;
 
@@ -35,6 +42,10 @@ public class RecommendActivity extends CommonActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         horizontal_recycler_view= (RecyclerView) findViewById(R.id.horizontal_recycler_view);
 
@@ -58,6 +69,21 @@ public class RecommendActivity extends CommonActivity {
         horizontal_recycler_view.setAdapter(horizontalAdapter);
 
 
+    }
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        super.onMapReady(googleMap);
     }
 
     public List<RecommendData> fill_with_data() {
