@@ -3,13 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../CommonLibrary/CommonLib/CommonLib.iml" filepath="$PROJECT_DIR$/../CommonLibrary/CommonLib/CommonLib.iml" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 5ce83db54fdfdea5c2311b767bee159cf70a7db4
-      <module fileurl="file://$PROJECT_DIR$/NuviSeoul.iml" filepath="$PROJECT_DIR$/NuviSeoul.iml" />
->>>>>>> 5ce83db54fdfdea5c2311b767bee159cf70a7db4
       <module fileurl="file://$PROJECT_DIR$/NuviSeoul.iml" filepath="$PROJECT_DIR$/NuviSeoul.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
