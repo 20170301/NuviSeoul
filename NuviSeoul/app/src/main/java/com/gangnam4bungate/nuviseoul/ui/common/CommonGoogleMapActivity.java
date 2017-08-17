@@ -2,6 +2,7 @@ package com.gangnam4bungate.nuviseoul.ui.common;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -14,14 +15,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
  * Created by hschoi on 2017. 8. 06..
  */
 
-public class CommonGoogleMapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class CommonGoogleMapActivity extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener{
     protected GoogleMap mMap;
     private LatLng mLastedMarkLatLng;
 
@@ -44,9 +47,68 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);*/
     }
+    @Override
+    public void onDirectionFinderStart() {
 
-    private  void sendRequestWithDirection(String strOrigin,String strDestination)
+    }
+
+
+    @Override
+    public void onDirectionFinderSuccess(List<Route> routes) {
+
+
+        for( Route route : routes) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation,16));
+
+            mMap.addMarker(new MarkerOptions().position(route.startLocation)
+                    .title(route.startAddress));
+
+            mMap.addMarker(new MarkerOptions().position(route.endLocation)
+                            .title(route.endAddress));
+
+            PolylineOptions  polylineOptions=new PolylineOptions()
+                    .geodesic(true)
+                    .color(Color.BLUE)
+                    .width(5)
+                    ;
+
+            polylineOptions.add(route.startLocation);
+
+            for(int i=0; i < route.points.size();i++)
+                polylineOptions.add(route.points.get(i));
+
+            polylineOptions.add(route.endLocation);
+
+            mMap.addPolyline(polylineOptions);
+        }
+    /* Iterator<Route> iterator=routes.iterator();
+        while(iterator.hasNext()) {
+            Route  item=(Route)iterator.next();
+
+            mMap.addPolyline(new PolylineOptions()
+                    .color(Color.BLUE)
+                    .width(5)
+                    .geodesic(true)
+                    .add(item.startLocation)
+                    .add(item.endLocation)
+            );
+
+            Toast.makeText(getApplicationContext(),item.startLocation.toString(), Toast.LENGTH_LONG)
+                    .show();
+        }*/
+       /* String sOrigin="";
+        sOrigin.format("<<<%f,%f >>",(float)mLastedMarkLatLng.latitude,(float)mLastedMarkLatLng.longitude);
+        String sDestination=latLng.toString();
+        Toast.makeText(getApplicationContext(),sOrigin, Toast.LENGTH_LONG)
+                .show();*/
+    }
+
+    private  void sendRequestWithDirection(LatLng ltOrigin,LatLng ltDestination)
     {
+        //String strOrigin="37.509590,127.013767";
+        //String strDestination="37.493909,127.014278";
+        String strOrigin=ltOrigin.latitude+","+ltOrigin.longitude;
+        String strDestination=ltDestination.latitude+","+ltDestination.longitude;
         if(strOrigin.isEmpty())
         {
             Toast.makeText(this,"Please, input origin address.",Toast.LENGTH_SHORT).show();
@@ -61,7 +123,7 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
 
         try
         {
-            new DirectionFinder((DirectionFinderListener) this,strOrigin,strDestination).execute();
+            new DirectionFinder(this,strOrigin,strDestination).execute();
         }
         catch(UnsupportedEncodingException e)
         {
@@ -159,19 +221,22 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
                 polyline = googleMap.addPolyline(polyline_options);
                */
                 //2점 연결 - 시작점 , 마지막점
-               /* mMap.addPolyline(new PolylineOptions()
+                /*mMap.addPolyline(new PolylineOptions()
                         .color(Color.BLUE)
                         .width(5)
                         .geodesic(true)
                         .add(mLastedMarkLatLng)
                         .add(latLng)
                         //.add(new LatLng(arg0.latitude,arg0.longitude))
-                );*/
+                );
 
-                //String sOrigin=mLastedMarkLatLng.toString();
-                //String sDestination=latLng.toString();
-               // sendRequestWithDirection(mLastedMarkLatLng.toString(),latLng.toString());
-               sendRequestWithDirection("서울특별시 용산구 후암동 339","서울특별시 송파구 송파대로 441");
+                String sOrigin="";
+                sOrigin.format("<<<%f,%f >>",(float)mLastedMarkLatLng.latitude,(float)mLastedMarkLatLng.longitude);
+                String sDestination=latLng.toString();
+                Toast.makeText(getApplicationContext(),sOrigin, Toast.LENGTH_LONG)
+                        .show();
+                */
+               sendRequestWithDirection(mLastedMarkLatLng, latLng);
                 mLastedMarkLatLng = latLng;
             }
         });

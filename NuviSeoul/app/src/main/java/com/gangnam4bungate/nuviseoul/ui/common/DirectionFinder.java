@@ -2,6 +2,7 @@ package com.gangnam4bungate.nuviseoul.ui.common;
 
 /**
  * Created by choi on 2017-08-16.
+ * 대한민국은 법으로 google에서 대중 교통만  길찾기를 지원함 &mode=transit
  */
 import android.os.AsyncTask;
 
@@ -47,7 +48,7 @@ public class DirectionFinder {
         String urlOrigin = URLEncoder.encode(origin, "utf-8");
         String urlDestination = URLEncoder.encode(destination, "utf-8");
 
-        return DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination + "&key=" + GOOGLE_API_KEY;
+        return DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination + "&mode=transit&key=" + GOOGLE_API_KEY;
     }
 
     private class DownloadRawData extends AsyncTask<String, Void, String> {
