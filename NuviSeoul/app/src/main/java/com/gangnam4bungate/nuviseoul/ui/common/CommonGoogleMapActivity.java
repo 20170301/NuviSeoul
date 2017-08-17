@@ -16,6 +16,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.mystory.commonlibrary.map.DirectionFinder;
+import com.mystory.commonlibrary.map.DirectionFinderListener;
+import com.mystory.commonlibrary.map.Route;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -24,7 +27,7 @@ import java.util.List;
  * Created by hschoi on 2017. 8. 06..
  */
 
-public class CommonGoogleMapActivity extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener{
+public class CommonGoogleMapActivity extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener {
     protected GoogleMap mMap;
     private LatLng mLastedMarkLatLng;
 
