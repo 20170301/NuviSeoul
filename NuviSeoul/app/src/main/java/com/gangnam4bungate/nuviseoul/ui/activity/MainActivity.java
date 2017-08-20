@@ -2,12 +2,15 @@ package com.gangnam4bungate.nuviseoul.ui.activity;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
+import com.gangnam4bungate.nuviseoul.holder.PlanAdapter;
 import com.gangnam4bungate.nuviseoul.model.AreaBaseModel;
 import com.gangnam4bungate.nuviseoul.network.NetworkManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,24 +24,34 @@ import com.mystory.commonlibrary.network.MashupCallback;
 
 import org.json.JSONObject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, MashupCallback {
 
+    private RecyclerView mRvPlan;
+    private PlanAdapter mPlanAdapter;
     private GoogleMap mMap;
-    //@BindView(R.id.cast_button_type_closed_caption) TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        try {
-            ButterKnife.bind(this);
-        }catch (Exception e){
+        initLayout();
+    }
 
-        }
+    public void initLayout(){
+
+        ArrayList<String> list = new ArrayList<>();
+        list.add("1");
+
+        mPlanAdapter = new PlanAdapter();
+        mPlanAdapter.bindData(list);
+        mRvPlan = (RecyclerView) findViewById(R.id.rv_plan);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mRvPlan.setLayoutManager(layoutManager);
+        mRvPlan.setAdapter(mPlanAdapter);
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -50,7 +63,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         NetworkManager.getInstance().requestAreaBaseListInfo(this, CODES.API_CONTENTTYPE.FESTIVAL);
 
     }
-
 
     /**
      * Manipulates the map once available.

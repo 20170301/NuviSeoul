@@ -13,7 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gangnam4bungate.nuviseoul.R;
-import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
+import com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +26,9 @@ import java.util.List;
  * Created by wsseo on 2017. 7. 9..
  */
 
-public class RecommendActivity extends CommonActivity {
+//public class RecommendActivity extends CommonActivity {
+//public class RecommendActivity extends CommonGoogleMapActivity implements CommonActivity {
+public class RecommendActivity extends CommonGoogleMapActivity {
 
     RecyclerView horizontal_recycler_view;
     HorizontalAdapter horizontalAdapter;
@@ -35,6 +40,10 @@ public class RecommendActivity extends CommonActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         horizontal_recycler_view= (RecyclerView) findViewById(R.id.horizontal_recycler_view);
 
@@ -50,35 +59,27 @@ public class RecommendActivity extends CommonActivity {
 
         data = fill_with_data();
 
-
         horizontalAdapter=new HorizontalAdapter(data, getApplication());
 
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(RecommendActivity.this, LinearLayoutManager.HORIZONTAL, false);
         horizontal_recycler_view.setLayoutManager(horizontalLayoutManager);
         horizontal_recycler_view.setAdapter(horizontalAdapter);
-
-
     }
+
 
     public List<RecommendData> fill_with_data() {
 
         List<RecommendData> data = new ArrayList<>();
 
-        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 1"));
-        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 2"));
-        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 3"));
-        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 4"));
-        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 5"));
-        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 6"));
-        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 7"));
-        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 8"));
-        data.add(new RecommendData( R.mipmap.ic_launcher, "Image 9"));
+        data.add(new RecommendData( R.mipmap.ic_launcher, "서울타워",37.5511694,126.98822659999996));
+        data.add(new RecommendData( R.mipmap.ic_launcher, "경복궁",37.579617,126.97704099999999));
+        data.add(new RecommendData( R.mipmap.ic_launcher, "63빌딩",37.5193776,126.94021029999999));
 
 
         return data;
     }
 
-    public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
+    public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.ViewHolder> {
 
 
         List<RecommendData> horizontalList = Collections.emptyList();
@@ -91,11 +92,11 @@ public class RecommendActivity extends CommonActivity {
         }
 
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
             ImageView imageView;
             TextView txtview;
-            public MyViewHolder(View view) {
+            public ViewHolder(View view) {
                 super(view);
                 imageView=(ImageView) view.findViewById(R.id.imageview);
                 txtview=(TextView) view.findViewById(R.id.txtview);
@@ -105,23 +106,38 @@ public class RecommendActivity extends CommonActivity {
 
 
         @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recommend_location, parent, false);
 
-            return new MyViewHolder(itemView);
+            return new ViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
 
             holder.imageView.setImageResource(horizontalList.get(position).imageId);
-            holder.txtview.setText(horizontalList.get(position).txt);
+            holder.txtview.setText(horizontalList.get(position).text);
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
 
-                public void onClick(View v) {
-                    String list = horizontalList.get(position).txt.toString();
+                public void onClick(View v) {                                           // 클릭시 좌표마커 찍는 곳
+                    String list = horizontalList.get(position).text.toString();
+                    double lati = horizontalList.get(position).latitude;
+                    double longi = horizontalList.get(position).longitude;
+
+                    LatLng location = new LatLng(lati, longi);
+
+                    MarkerOptions marker = new MarkerOptions();
+                    marker .position(new LatLng(lati, longi))
+                            .title(list)
+                            .snippet("Seoul");
+
+                    MapMarkerDisplay(marker);
+                    MapMarkerZoom(location);
+                    MapLineDrawing(location);
+                    MapPreviousLocation(location);
+
                     Toast.makeText(RecommendActivity.this, list, Toast.LENGTH_SHORT).show();
                 }
 
