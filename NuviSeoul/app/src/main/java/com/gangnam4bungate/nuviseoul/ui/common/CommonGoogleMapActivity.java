@@ -1,8 +1,11 @@
 package com.gangnam4bungate.nuviseoul.ui.common;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
@@ -13,14 +16,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.mystory.commonlibrary.map.DirectionFinder;
+import com.mystory.commonlibrary.map.DirectionFinderListener;
+import com.mystory.commonlibrary.map.Route;
+
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
  * Created by hschoi on 2017. 8. 06..
  */
 
-public class CommonGoogleMapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class CommonGoogleMapActivity extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener {
     protected GoogleMap mMap;
-    private  LatLng mLastedMarkLatLng;
+    private LatLng mLastedMarkLatLng;
+
     @Override
     /*protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +42,7 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
         mapFragment.getMapAsync(this);
     }
    */
-    protected void onCreate(@Nullable  Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //onCreateView(savedInstanceState);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -40,7 +50,90 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);*/
     }
+    @Override
+    public void onDirectionFinderStart() {
 
+    }
+
+
+    @Override
+    public void onDirectionFinderSuccess(List<Route> routes) {
+
+
+        for( Route route : routes) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation,16));
+
+            mMap.addMarker(new MarkerOptions().position(route.startLocation)
+                    .title(route.startAddress));
+
+            mMap.addMarker(new MarkerOptions().position(route.endLocation)
+                            .title(route.endAddress));
+
+            PolylineOptions  polylineOptions=new PolylineOptions()
+                    .geodesic(true)
+                    .color(Color.BLUE)
+                    .width(5)
+                    ;
+
+            polylineOptions.add(route.startLocation);
+
+            for(int i=0; i < route.points.size();i++)
+                polylineOptions.add(route.points.get(i));
+
+            polylineOptions.add(route.endLocation);
+
+            mMap.addPolyline(polylineOptions);
+        }
+    /* Iterator<Route> iterator=routes.iterator();
+        while(iterator.hasNext()) {
+            Route  item=(Route)iterator.next();
+
+            mMap.addPolyline(new PolylineOptions()
+                    .color(Color.BLUE)
+                    .width(5)
+                    .geodesic(true)
+                    .add(item.startLocation)
+                    .add(item.endLocation)
+            );
+
+            Toast.makeText(getApplicationContext(),item.startLocation.toString(), Toast.LENGTH_LONG)
+                    .show();
+        }*/
+       /* String sOrigin="";
+        sOrigin.format("<<<%f,%f >>",(float)mLastedMarkLatLng.latitude,(float)mLastedMarkLatLng.longitude);
+        String sDestination=latLng.toString();
+        Toast.makeText(getApplicationContext(),sOrigin, Toast.LENGTH_LONG)
+                .show();*/
+    }
+
+    private  void sendRequestWithDirection(LatLng ltOrigin,LatLng ltDestination)
+    {
+        //String strOrigin="37.509590,127.013767";
+        //String strDestination="37.493909,127.014278";
+        String strOrigin=ltOrigin.latitude+","+ltOrigin.longitude;
+        String strDestination=ltDestination.latitude+","+ltDestination.longitude;
+        if(strOrigin.isEmpty())
+        {
+            Toast.makeText(this,"Please, input origin address.",Toast.LENGTH_SHORT).show();
+            return ;
+        }
+
+        if(strDestination.isEmpty())
+        {
+            Toast.makeText(this,"Please, input destination address.",Toast.LENGTH_SHORT).show();
+            return ;
+        }
+
+        try
+        {
+            new DirectionFinder(this,strOrigin,strDestination).execute();
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -57,8 +150,25 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
         //LatLng sydney = new LatLng(-34, 151);
         //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         LatLng seoul = new LatLng(37.52, 127.0);
-        mLastedMarkLatLng =seoul ;
-        mMap.addMarker(new MarkerOptions().position(seoul).title("Marker in Seoul"));
+        mLastedMarkLatLng = seoul;
+        mMap.addMarker(new MarkerOptions().position(seoul)
+                                           .title("Marker in Seoul")
+                                           /*.icon(BitmapDescriptorFactory.fromResource(com.google.android.gms.R.drawable.push_in))*/
+        );
+
+        //
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+
         //1. 좌표 설정
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(seoul));
 
@@ -114,7 +224,7 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
                 polyline = googleMap.addPolyline(polyline_options);
                */
                 //2점 연결 - 시작점 , 마지막점
-                mMap.addPolyline(new PolylineOptions()
+                /*mMap.addPolyline(new PolylineOptions()
                         .color(Color.BLUE)
                         .width(5)
                         .geodesic(true)
@@ -122,6 +232,14 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
                         .add(latLng)
                         //.add(new LatLng(arg0.latitude,arg0.longitude))
                 );
+
+                String sOrigin="";
+                sOrigin.format("<<<%f,%f >>",(float)mLastedMarkLatLng.latitude,(float)mLastedMarkLatLng.longitude);
+                String sDestination=latLng.toString();
+                Toast.makeText(getApplicationContext(),sOrigin, Toast.LENGTH_LONG)
+                        .show();
+                */
+               sendRequestWithDirection(mLastedMarkLatLng, latLng);
                 mLastedMarkLatLng = latLng;
             }
         });
@@ -165,11 +283,11 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
     public void MapLineDrawing(LatLng _location)
     {
         mMap.addPolyline(new PolylineOptions()
-                        .color(Color.BLUE)
-                        .width(5)
-                        .geodesic(true)
-                        .add(mLastedMarkLatLng)
-                        .add(_location)
+                .color(Color.BLUE)
+                .width(5)
+                .geodesic(true)
+                .add(mLastedMarkLatLng)
+                .add(_location)
         );
     }
 

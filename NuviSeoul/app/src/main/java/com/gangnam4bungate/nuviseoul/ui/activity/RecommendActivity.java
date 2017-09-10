@@ -79,7 +79,7 @@ public class RecommendActivity extends CommonGoogleMapActivity {
         return data;
     }
 
-    public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.ViewHolder> {
+    public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
 
 
         List<RecommendData> horizontalList = Collections.emptyList();
@@ -92,11 +92,11 @@ public class RecommendActivity extends CommonGoogleMapActivity {
         }
 
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        public class MyViewHolder extends RecyclerView.ViewHolder {
 
             ImageView imageView;
             TextView txtview;
-            public ViewHolder(View view) {
+            public MyViewHolder(View view) {
                 super(view);
                 imageView=(ImageView) view.findViewById(R.id.imageview);
                 txtview=(TextView) view.findViewById(R.id.txtview);
@@ -106,14 +106,14 @@ public class RecommendActivity extends CommonGoogleMapActivity {
 
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recommend_location, parent, false);
 
-            return new ViewHolder(itemView);
+            return new MyViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, final int position) {
+        public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
             holder.imageView.setImageResource(horizontalList.get(position).imageId);
             holder.txtview.setText(horizontalList.get(position).text);
