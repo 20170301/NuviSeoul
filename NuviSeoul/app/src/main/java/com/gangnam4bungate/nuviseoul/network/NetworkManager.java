@@ -46,6 +46,7 @@ public class NetworkManager {
             String url = builtUri.toString() + query;
 
             HttpClientManager.getInstance((Context) object).sendGet_naver(object, url, CODES.RequestCode.REQUEST_SEARCH, CODES.NAVER_CLIENT_ID, CODES.NAVER_CLIENT_SECRET);
+
         }catch(Exception e){
 
         }
