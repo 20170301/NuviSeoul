@@ -7,4 +7,5 @@ import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
  */
 
 public class RecommendActivity extends CommonActivity {
+
 }
