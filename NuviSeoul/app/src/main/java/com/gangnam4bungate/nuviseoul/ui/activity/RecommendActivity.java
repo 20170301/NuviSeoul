@@ -120,8 +120,7 @@ public class RecommendActivity extends CommonGoogleMapActivity {
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
-
-                public void onClick(View v) {                                           // 클릭시 좌표마커 찍는 곳
+                public void onClick(View v) {
                     String list = horizontalList.get(position).text.toString();
                     double lati = horizontalList.get(position).latitude;
                     double longi = horizontalList.get(position).longitude;

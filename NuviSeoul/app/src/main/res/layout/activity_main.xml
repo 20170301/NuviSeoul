@@ -5,29 +5,37 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:background="@drawable/menubar">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="19dp"
+            android:layout_height="12dp"
+            android:layout_margin="5dp"
             android:background="@drawable/menu"
-            android:layout_alignParentLeft="true"/>
+            android:layout_gravity="center_vertical"/>
 
        <LinearLayout
            android:layout_width="0dp"
-           android:layout_height="wrap_content"
+           android:layout_height="match_parent"
            android:layout_weight="1"
            android:orientation="horizontal">
 
            <EditText
                android:layout_width="0dp"
                android:layout_height="wrap_content"
+               android:layout_gravity="bottom"
                android:layout_weight="1"/>
 
            <ImageView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
+               android:layout_width="23dp"
+               android:layout_height="21dp"
+               android:layout_marginTop="7dp"
+               android:layout_marginBottom="5dp"
+               android:layout_marginRight="5dp"
+               android:layout_marginLeft="5dp"
+               android:layout_gravity="center_vertical"
                android:background="@drawable/search"/>
        </LinearLayout>
 
@@ -43,15 +51,36 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_plan"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:scrollbars="horizontal"
-            android:background="#ffffff"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true">
 
-        </android.support.v7.widget.RecyclerView>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/arrow_left"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_plan"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="81dp"
+                android:scrollbars="horizontal"
+                android:background="#ffffff"
+                android:layout_alignParentBottom="true"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/arrow_right"/>
+        </LinearLayout>
     </RelativeLayout>
 </LinearLayout>
 

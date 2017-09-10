@@ -6,7 +6,6 @@ package com.gangnam4bungate.nuviseoul.ui.activity;
 
 public class RecommendData {
 
-
     public int imageId;
     public String text;
     public double latitude;

@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="130dp"
-    android:layout_height="130dp"
-    android:background="@drawable/planlist_bg">
-
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal"/>
+    android:layout_width="81dp"
+    android:layout_height="80dp"
+    android:background="@drawable/planbox">
 
     <TextView
         android:layout_width="wrap_content"
