@@ -61,6 +61,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         NetworkManager.getInstance().requestAreaBaseListInfo(this, CODES.API_CONTENTTYPE.FESTIVAL);
+        NetworkManager.getInstance().requestNaverSearchInfo(this, "여행");
 
     }
 

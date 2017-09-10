@@ -2,6 +2,7 @@ package com.gangnam4bungate.nuviseoul.network;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Config;
 import android.util.Log;
 
 import com.gangnam4bungate.nuviseoul.R;
@@ -40,4 +41,17 @@ public class NetworkManager {
         }
     }
 
+    public void requestNaverSearchInfo(Object object, String query){
+        try {
+            Uri builtUri = Uri.parse(CODES.NaverDomain + CODES.URLCodes.URL_SEARCH)
+                    .buildUpon()
+                    .build();
+
+            String url = builtUri.toString() + query;
+
+            HttpClientManager.getInstance((Context) object).sendGet_naver(object, url, CODES.RequestCode.REQUEST_SEARCH, CODES.NAVER_CLIENT_ID, CODES.NAVER_CLIENT_SECRET);
+        }catch(Exception e){
+
+        }
+    }
 }
