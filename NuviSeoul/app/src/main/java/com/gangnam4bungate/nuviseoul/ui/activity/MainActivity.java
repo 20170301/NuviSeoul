@@ -108,4 +108,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             //Log.d(CODES.TAG, object.toString());
         }
     }
+
+    /**
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
