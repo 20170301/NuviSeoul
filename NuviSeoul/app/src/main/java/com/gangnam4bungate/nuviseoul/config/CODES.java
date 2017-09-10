@@ -11,6 +11,7 @@ public class CODES {
     public static String Dev_ServiceKey = "Wasn0OGY43ReOgSy5nz8ZNURGTw4Y5MRPt%2B1rJw0xZCEbQG07s6n5hjqHHqzzIRBCP8U1H64Q0RIgAZPRWSPlA%3D%3D";
     public static String NAVER_CLIENT_ID = "WA672XziAZbalmbhFN_9";
     public static String NAVER_CLIENT_SECRET = "IVvaGuS7Tb";
+
     public static class URLCodes {
         public static String URL_AREABASELIST = "/openapi/service/rest/KorService/areaBasedList";
         public static String URL_SEARCH = "/v1/search/blog?query=";

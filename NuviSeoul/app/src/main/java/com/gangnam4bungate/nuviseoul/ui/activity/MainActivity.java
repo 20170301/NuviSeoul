@@ -1,17 +1,20 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
 import com.gangnam4bungate.nuviseoul.holder.PlanAdapter;
 import com.gangnam4bungate.nuviseoul.model.AreaBaseModel;
-import com.gangnam4bungate.nuviseoul.network.NetworkManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,6 +33,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private RecyclerView mRvPlan;
     private PlanAdapter mPlanAdapter;
     private GoogleMap mMap;
+    private ImageView searchButton;
+    private EditText editText;
     //@BindView(R.id.cast_button_type_closed_caption) TextView textView;
 
     @Override
@@ -48,10 +53,23 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mPlanAdapter = new PlanAdapter();
         mPlanAdapter.bindData(list);
         mRvPlan = (RecyclerView) findViewById(R.id.rv_plan);
+        searchButton = (ImageView) findViewById(R.id.searchButton);
+        editText = (EditText) findViewById(R.id.editText);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRvPlan.setLayoutManager(layoutManager);
         mRvPlan.setAdapter(mPlanAdapter);
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String editTextValue = editText.getText().toString();
+                Intent intent = new Intent(v.getContext(), SearchActivity.class);
+                intent.putExtra("editTextValue", editTextValue);
+                v.getContext().startActivity(intent);
+            }
+        });
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -60,7 +78,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
 
-        NetworkManager.getInstance().requestAreaBaseListInfo(this, CODES.API_CONTENTTYPE.FESTIVAL);
+        //NetworkManager.getInstance().requestAreaBaseListInfo(this, CODES.API_CONTENTTYPE.FESTIVAL);
+        //NetworkManager.getInstance().requestNaverSearchInfo(this, "Hello");
 
     }
 

@@ -6,41 +6,44 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:orientation="horizontal"
-        android:background="@drawable/menubar">
+        android:background="@drawable/menubar"
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="19dp"
             android:layout_height="12dp"
+            android:layout_gravity="center_vertical"
             android:layout_margin="5dp"
-            android:background="@drawable/menu"
-            android:layout_gravity="center_vertical"/>
+            android:background="@drawable/menu" />
 
-       <LinearLayout
-           android:layout_width="0dp"
-           android:layout_height="match_parent"
-           android:layout_weight="1"
-           android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-           <EditText
-               android:layout_width="0dp"
-               android:layout_height="wrap_content"
-               android:layout_gravity="bottom"
-               android:layout_weight="1"/>
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_weight="1" />
 
-           <ImageView
-               android:layout_width="23dp"
-               android:layout_height="21dp"
-               android:layout_marginTop="7dp"
-               android:layout_marginBottom="5dp"
-               android:layout_marginRight="5dp"
-               android:layout_marginLeft="5dp"
-               android:layout_gravity="center_vertical"
-               android:background="@drawable/search"/>
-       </LinearLayout>
+            <ImageView
+                android:id="@+id/searchButton"
+                android:layout_width="23dp"
+                android:layout_height="21dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/search" />
+        </LinearLayout>
 
 
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
