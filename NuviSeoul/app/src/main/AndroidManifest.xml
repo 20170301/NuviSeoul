@@ -37,8 +37,18 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.RecommendActivity" />
-        <activity android:name=".ui.activity.PlanEditActivity"/>
-    </application>
+    <activity android:name=".ui.activity.RecommendActivity" >
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity" />
+
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+    <activity android:name=".ui.activity.PlanEditActivity"/>
+</application>
 
 </manifest>

@@ -13,7 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gangnam4bungate.nuviseoul.R;
-import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
+import com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +24,9 @@ import java.util.List;
  * Created by wsseo on 2017. 7. 9..
  */
 
-public class RecommendActivity extends CommonActivity {
+//public class RecommendActivity extends CommonActivity {
+//public class RecommendActivity extends CommonGoogleMapActivity implements CommonActivity {
+public class RecommendActivity extends CommonGoogleMapActivity {
 
     RecyclerView horizontal_recycler_view;
     HorizontalAdapter horizontalAdapter;
@@ -35,6 +38,10 @@ public class RecommendActivity extends CommonActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         horizontal_recycler_view= (RecyclerView) findViewById(R.id.horizontal_recycler_view);
 
@@ -50,15 +57,13 @@ public class RecommendActivity extends CommonActivity {
 
         data = fill_with_data();
 
-
         horizontalAdapter=new HorizontalAdapter(data, getApplication());
 
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(RecommendActivity.this, LinearLayoutManager.HORIZONTAL, false);
         horizontal_recycler_view.setLayoutManager(horizontalLayoutManager);
         horizontal_recycler_view.setAdapter(horizontalAdapter);
-
-
     }
+
 
     public List<RecommendData> fill_with_data() {
 
