@@ -2,14 +2,10 @@ package com.gangnam4bungate.nuviseoul.network;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Config;
-import android.util.Log;
 
 import com.gangnam4bungate.nuviseoul.R;
-import com.mystory.commonlibrary.network.HttpClientManager;
 import com.gangnam4bungate.nuviseoul.config.CODES;
-
-import java.net.URLEncoder;
+import com.mystory.commonlibrary.network.HttpClientManager;
 
 /**
  * Created by wsseo on 2017. 6. 27..
