@@ -2,14 +2,11 @@ package com.gangnam4bungate.nuviseoul.network;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Config;
 import android.util.Log;
 
 import com.gangnam4bungate.nuviseoul.R;
-import com.mystory.commonlibrary.network.HttpClientManager;
 import com.gangnam4bungate.nuviseoul.config.CODES;
-
-import java.net.URLEncoder;
+import com.mystory.commonlibrary.network.HttpClientManager;
 
 /**
  * Created by wsseo on 2017. 6. 27..
@@ -50,6 +47,10 @@ public class NetworkManager {
             String url = builtUri.toString() + query;
 
             HttpClientManager.getInstance((Context) object).sendGet_naver(object, url, CODES.RequestCode.REQUEST_SEARCH, CODES.NAVER_CLIENT_ID, CODES.NAVER_CLIENT_SECRET);
+            HttpClientManager result = HttpClientManager.getInstance((Context) object);
+            Log.d(CODES.TAG, "abccc " + object.toString());
+            Log.d(CODES.TAG, "abccc2 " + result.toString());
+
         }catch(Exception e){
 
         }

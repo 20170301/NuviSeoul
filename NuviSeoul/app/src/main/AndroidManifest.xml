@@ -51,6 +51,17 @@
                 android:value="com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity" />
         </activity>
         <activity android:name=".ui.activity.PlanEditActivity"/>
+
+        <activity
+            android:name=".ui.activity.SearchActivity"
+            android:label="Search"
+            android:theme="@style/AppTheme">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gangnam4bungate.nuviseoul.ui.activity.SearchActivity" />
+
+        </activity>
 </application>
 
 </manifest>
