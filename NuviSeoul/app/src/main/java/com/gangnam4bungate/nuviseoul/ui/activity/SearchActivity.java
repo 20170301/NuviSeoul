@@ -42,7 +42,7 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
 
     @Override
     public void onMashupSuccess(JSONObject object, String requestCode) {
-        //Log.d(CODES.TAG, "Search " + object.toString());
+        Log.d(CODES.TAG, "Search " + object.toString());
 //        String jsonInfo = object.toString();
 //        JsonParser jsonParser = new JsonParser();
 
@@ -50,18 +50,36 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
         {
             JSONObject jsonObject = new JSONObject(object.toString());
             JSONArray item = jsonObject.getJSONArray("items");
-            String titleInfo = "";
-            String linkInfo = "";
+            String titleInfo, linkInfo, descripsionInfo;
 
             for (int i = 0; i < item.length(); i++)
             {
                 titleInfo = item.getJSONObject(i).getString("title");
+                String title = titleInfo.replaceAll("<b>", "").replaceAll("</b>","");
                 linkInfo = item.getJSONObject(i).getString("link");
+                descripsionInfo = item.getJSONObject(i).getString("description");
+                String description = descripsionInfo.replaceAll("<b>", "").replaceAll("</b>","");
 
-                searchTextView.append(titleInfo + "\n");
-                searchTextView.append(linkInfo + "\n");
+                String naverFristJuso = "";
+                String naverLastJuso = "";
+                String daumJuso = "";
+
+                searchTextView.append(title + "\n");
+                searchTextView.append(description + "\n");
+
+                if(linkInfo.contains("naver")){
+                    int frist = linkInfo.indexOf("?");
+                    int last = linkInfo.lastIndexOf("=");
+                    naverFristJuso = linkInfo.substring(0,frist);
+                    naverLastJuso = linkInfo.substring(last,linkInfo.length());
+                    searchTextView.append(naverFristJuso +""+naverLastJuso + "\n");
+                } else if(linkInfo.contains("daum")){
+                    daumJuso = linkInfo.replaceAll("\\|","");
+                    searchTextView.append(daumJuso + "\n");
+                }
+
             }
-//            searchTextView.setText(""+titleInfo+"\n"+""+linkInfo);
+
         }
         catch (JSONException e)
         {
@@ -76,12 +94,9 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
 
     }
 
-    /**
-     * Take care of popping the fragment back stack or finishing the activity
-     * as appropriate.
-     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
+
 }
