@@ -76,6 +76,7 @@ public class RecommendActivity extends CommonGoogleMapActivity {
         data.add(new RecommendData( R.mipmap.ic_launcher, "63빌딩",37.5193776,126.94021029999999));
 
 
+
         return data;
     }
 
