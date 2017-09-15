@@ -3,7 +3,10 @@ package com.gangnam4bungate.nuviseoul.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Adapter;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -33,8 +36,8 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        searchTextView = (TextView)findViewById(R.id.searchTextView);
+        setContentView(R.layout.activity_main_search);
+        //searchTextView = (TextView)findViewById(R.id.searchTextView);
         Intent intent = getIntent();
         String value = intent.getStringExtra("editTextValue");
         NetworkManager.getInstance().requestNaverSearchInfo(this, value);
@@ -45,40 +48,47 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
         Log.d(CODES.TAG, "Search " + object.toString());
 //        String jsonInfo = object.toString();
 //        JsonParser jsonParser = new JsonParser();
+        RecyclerView view = (RecyclerView) findViewById(R.id.main_recyclerview);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
         try
         {
             JSONObject jsonObject = new JSONObject(object.toString());
             JSONArray item = jsonObject.getJSONArray("items");
-            String titleInfo, linkInfo, descripsionInfo;
+            searchRecyclerView searchRecyclerView = new searchRecyclerView(item);
+            view.setLayoutManager(layoutManager);
+            view.setAdapter(searchRecyclerView);
 
-            for (int i = 0; i < item.length(); i++)
-            {
-                titleInfo = item.getJSONObject(i).getString("title");
-                String title = titleInfo.replaceAll("<b>", "").replaceAll("</b>","");
-                linkInfo = item.getJSONObject(i).getString("link");
-                descripsionInfo = item.getJSONObject(i).getString("description");
-                String description = descripsionInfo.replaceAll("<b>", "").replaceAll("</b>","");
 
-                String naverFristJuso = "";
-                String naverLastJuso = "";
-                String daumJuso = "";
-
-                searchTextView.append(title + "\n");
-                searchTextView.append(description + "\n");
-
-                if(linkInfo.contains("naver")){
-                    int frist = linkInfo.indexOf("?");
-                    int last = linkInfo.lastIndexOf("=");
-                    naverFristJuso = linkInfo.substring(0,frist);
-                    naverLastJuso = linkInfo.substring(last,linkInfo.length());
-                    searchTextView.append(naverFristJuso +""+naverLastJuso + "\n");
-                } else if(linkInfo.contains("daum")){
-                    daumJuso = linkInfo.replaceAll("\\|","");
-                    searchTextView.append(daumJuso + "\n");
-                }
-
-            }
+//            String titleInfo, linkInfo, descripsionInfo;
+//
+//            for (int i = 0; i < item.length(); i++)
+//            {
+//                titleInfo = item.getJSONObject(i).getString("title");
+//                String title = titleInfo.replaceAll("<b>", "").replaceAll("</b>","");
+//                linkInfo = item.getJSONObject(i).getString("link");
+//                descripsionInfo = item.getJSONObject(i).getString("description");
+//                String description = descripsionInfo.replaceAll("<b>", "").replaceAll("</b>","");
+//
+//                String naverFristJuso = "";
+//                String naverLastJuso = "";
+//                String daumJuso = "";
+//
+//                searchTextView.append(title + "\n");
+//                searchTextView.append(description + "\n");
+//
+//                if(linkInfo.contains("naver")){
+//                    int frist = linkInfo.indexOf("?");
+//                    int last = linkInfo.lastIndexOf("=");
+//                    naverFristJuso = linkInfo.substring(0,frist);
+//                    naverLastJuso = linkInfo.substring(last,linkInfo.length());
+//                    searchTextView.append(naverFristJuso +""+naverLastJuso + "\n");
+//                } else if(linkInfo.contains("daum")){
+//                    daumJuso = linkInfo.replaceAll("\\|","");
+//                    searchTextView.append(daumJuso + "\n");
+//                }
+//
+//            }
 
         }
         catch (JSONException e)
