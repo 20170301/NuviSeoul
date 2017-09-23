@@ -36,8 +36,9 @@ public class RecommendActivity extends CommonGoogleMapActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.mViewType=1;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recommend);
+       setContentView(R.layout.activity_recommend);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

@@ -1,11 +1,9 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
@@ -13,12 +11,8 @@ import com.gangnam4bungate.nuviseoul.config.CODES;
 import com.gangnam4bungate.nuviseoul.holder.PlanAdapter;
 import com.gangnam4bungate.nuviseoul.model.AreaBaseModel;
 import com.gangnam4bungate.nuviseoul.network.NetworkManager;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
+import com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.mystory.commonlibrary.network.MashupCallback;
 
@@ -26,14 +20,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback, MashupCallback {
+//public class MainActivity extends FragmentActivity implements OnMapReadyCallback, MashupCallback {
+public class MainActivity extends CommonGoogleMapActivity implements MashupCallback  {
 
     private RecyclerView mRvPlan;
     private PlanAdapter mPlanAdapter;
-    private GoogleMap mMap;
+    //private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.mViewType=0;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -60,6 +56,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
 
+
         NetworkManager.getInstance().requestAreaBaseListInfo(this, CODES.API_CONTENTTYPE.FESTIVAL);
         NetworkManager.getInstance().requestNaverSearchInfo(this, "여행");
 
@@ -74,7 +71,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-    @Override
+    /*@Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
@@ -82,7 +79,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-    }
+    }*/
 
     @Override
     public void onMashupSuccess(JSONObject object, String requestCode) {
