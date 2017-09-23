@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,7 +28,7 @@ import java.util.List;
  * Created by hschoi on 2017. 8. 06..
  */
 
-public class CommonGoogleMapActivity extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener {
+public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapReadyCallback,DirectionFinderListener {
     protected GoogleMap mMap;
     private LatLng mLastedMarkLatLng;
 
@@ -268,5 +269,31 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
             }
         });
     /*-------------------------------------------------------------------------------------------------*/
+    }
+
+    public void MapMarkerDisplay(MarkerOptions _marker)
+    {
+        mMap.addMarker(_marker).showInfoWindow();
+    }
+
+    public void MapMarkerZoom(LatLng _location)
+    {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(_location,13));
+    }
+
+    public void MapLineDrawing(LatLng _location)
+    {
+        mMap.addPolyline(new PolylineOptions()
+                .color(Color.BLUE)
+                .width(5)
+                .geodesic(true)
+                .add(mLastedMarkLatLng)
+                .add(_location)
+        );
+    }
+
+    public void MapPreviousLocation(LatLng _plocation)
+    {
+        mLastedMarkLatLng = _plocation;
     }
 }

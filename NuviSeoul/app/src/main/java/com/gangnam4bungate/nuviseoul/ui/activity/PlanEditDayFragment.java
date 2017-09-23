@@ -17,7 +17,7 @@ import com.gangnam4bungate.nuviseoul.R;
 
 import java.util.Calendar;
 
-public class PlanEditDayActivity extends Fragment{
+public class PlanEditDayFragment extends Fragment{
     Button startDateButton;
     Button endDateButton;
     EditText startDateText;
@@ -30,13 +30,13 @@ public class PlanEditDayActivity extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-            final View view = inflater.inflate(R.layout.activity_plan_edit_day, container, false);
+        final View view = inflater.inflate(R.layout.activity_plan_edit_day, container, false);
 
-            startDateButton = (Button) view.findViewById(R.id.startDateButton);
-            endDateButton = (Button) view.findViewById(R.id.endDateButton);
-            startDateText = (EditText) view.findViewById(R.id.startDateText);
-            endDateText = (EditText) view.findViewById(R.id.endDateText);
-            registerButton = (Button) view.findViewById(R.id.registerButton);
+        startDateButton = (Button) view.findViewById(R.id.startDateButton);
+        endDateButton = (Button) view.findViewById(R.id.endDateButton);
+        startDateText = (EditText) view.findViewById(R.id.startDateText);
+        endDateText = (EditText) view.findViewById(R.id.endDateText);
+        registerButton = (Button) view.findViewById(R.id.registerButton);
 
         Calendar cal = Calendar.getInstance();
         year = cal.get(cal.YEAR);
@@ -62,16 +62,16 @@ public class PlanEditDayActivity extends Fragment{
         });
 
 
-            registerButton.setOnClickListener(new View.OnClickListener() {
-                PlanEditDateActivity planEditDateActivity = new PlanEditDateActivity();
-                @Override
-                public void onClick(View v) {
-                    FragmentManager fm = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_place, planEditDateActivity);
-                    fragmentTransaction.commit();
-                }
-            });
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            PlanEditDateFragment planEditDateActivity = new PlanEditDateFragment();
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_place, planEditDateActivity);
+                fragmentTransaction.commit();
+            }
+        });
 
         return view;
 
