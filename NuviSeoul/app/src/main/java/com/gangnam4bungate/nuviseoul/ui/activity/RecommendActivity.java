@@ -124,7 +124,6 @@ public class RecommendActivity extends CommonGoogleMapActivity {
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
-
                 public void onClick(View v) {
                     String list = horizontalList.get(position).txt.toString();
                     Toast.makeText(RecommendActivity.this, list, Toast.LENGTH_SHORT).show();

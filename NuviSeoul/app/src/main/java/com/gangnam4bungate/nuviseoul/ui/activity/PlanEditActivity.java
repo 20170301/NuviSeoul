@@ -1,5 +1,6 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -11,8 +12,8 @@ import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
 
 public class PlanEditActivity extends CommonActivity {
 
-    PlanEditDayActivity planEditDayActivity;
-    PlanEditDateActivity planEditDateActivity;
+    PlanEditDayFragment planEditDayActivity;
+    PlanEditDateFragment planEditDateActivity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -20,8 +21,8 @@ public class PlanEditActivity extends CommonActivity {
         setContentView(R.layout.activity_plan_edit);
 
 
-        planEditDayActivity = new PlanEditDayActivity();
-        planEditDateActivity = new PlanEditDateActivity();
+        planEditDayActivity = new PlanEditDayFragment();
+        planEditDateActivity = new PlanEditDateFragment();
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
