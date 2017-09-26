@@ -1,10 +1,16 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -26,8 +32,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback, MashupCallback {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, MashupCallback {
 
+    private TextView mTv_title;
+    private ImageView mIv_add;
     private RecyclerView mRvPlan;
     private PlanAdapter mPlanAdapter;
     private GoogleMap mMap;
@@ -45,6 +53,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         ArrayList<String> list = new ArrayList<>();
         list.add("1");
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setContentInsetsAbsolute(0,0);
+        mTv_title = (TextView) toolbar.findViewById(R.id.tv_title);
+        setSupportActionBar(toolbar);
+
+        mIv_add = (ImageView) findViewById(R.id.iv_add);
+        if(mIv_add != null){
+            mIv_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), PlanEditActivity.class));
+                }
+            });
+        }
+
         mPlanAdapter = new PlanAdapter();
         mPlanAdapter.bindData(list);
         mRvPlan = (RecyclerView) findViewById(R.id.rv_plan);
@@ -53,7 +76,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mRvPlan.setLayoutManager(layoutManager);
         mRvPlan.setAdapter(mPlanAdapter);
 
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -61,8 +83,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         NetworkManager.getInstance().requestAreaBaseListInfo(this, CODES.API_CONTENTTYPE.FESTIVAL);
-        NetworkManager.getInstance().requestNaverSearchInfo(this, "여행");
-
     }
 
     /**

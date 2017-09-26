@@ -15,9 +15,9 @@ import com.gangnam4bungate.nuviseoul.R;
  * Created by Seo on 2017-07-23.
  */
 
-public class PlanEditDateActivity extends Fragment {
+public class PlanEditDateFragment extends Fragment {
 
-    public PlanEditDateActivity(){
+    public PlanEditDateFragment(){
 
     }
 
