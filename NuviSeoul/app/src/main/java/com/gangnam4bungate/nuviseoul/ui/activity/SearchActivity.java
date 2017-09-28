@@ -55,6 +55,7 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
         {
             JSONObject jsonObject = new JSONObject(object.toString());
             JSONArray item = jsonObject.getJSONArray("items");
+
             searchRecyclerView searchRecyclerView = new searchRecyclerView(item);
             view.setLayoutManager(layoutManager);
             view.setAdapter(searchRecyclerView);

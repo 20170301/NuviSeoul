@@ -9,6 +9,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.renderscript.Sampler;
 import android.support.annotation.Nullable;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +17,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.gangnam4bungate.nuviseoul.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class PlanEditDayFragment extends Fragment{
     Button startDateButton;
@@ -29,16 +33,18 @@ public class PlanEditDayFragment extends Fragment{
     EditText endDateText;
     Button registerButton;
     EditText travelSubjecjText;
+    Context context;
     int year, month, date;
+
     DatePickerDialog.OnDateSetListener mDateSetListener;
+
 
         @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+            final View view = inflater.inflate(R.layout.activity_plan_edit_day, container, false);
 
-        final View view = inflater.inflate(R.layout.activity_plan_edit_day, container, false);
 
-        travelSubjecjText = (EditText) view.findViewById(R.id.travelSubjectText);
         startDateButton = (Button) view.findViewById(R.id.startDateButton);
         endDateButton = (Button) view.findViewById(R.id.endDateButton);
         startDateText = (EditText) view.findViewById(R.id.startDateText);
@@ -50,8 +56,8 @@ public class PlanEditDayFragment extends Fragment{
         month = cal.get(cal.MONTH) + 1;
         date = cal.get(cal.DATE);
 
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle("값이 잘못 되었습니다.");
+//        final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+//        dialog.setTitle("값이 잘못 되었습니다.");
 
 
         startDateButton.setOnClickListener(new View.OnClickListener() {
@@ -74,21 +80,34 @@ public class PlanEditDayFragment extends Fragment{
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             PlanEditDateFragment planEditDateActivity = new PlanEditDateFragment();
+
             @Override
             public void onClick(View v) {
+                String test = ((PlanEditActivity)getActivity()).pleaseGetText();
 
-                if(travelSubjecjText.getText().toString().isEmpty()){
+                if("".equals(test)){
                     Toast.makeText(getActivity(), "여행 제목을 입력해주세요.", Toast.LENGTH_LONG).show();
                 }else if(startDateText.getText().toString().isEmpty()){
                     Toast.makeText(getActivity(), "시작날짜를 입력해주세요.", Toast.LENGTH_LONG).show();
                 }else if(endDateText.getText().toString().isEmpty()){
                     Toast.makeText(getActivity(), "마지막 날짜를 입력해주세요.", Toast.LENGTH_LONG).show();
                 }else {
+
+                    Bundle bundle = new Bundle(2);
+                    bundle.putString("startDate", startDateText.getText().toString().replace("-", ""));
+                    bundle.putString("endDate", endDateText.getText().toString().replace("-",""));
+                    planEditDateActivity.setArguments(bundle);
+
+                    //
                     FragmentManager fm = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fm.beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_place, planEditDateActivity);
                     fragmentTransaction.commit();
                 }
+
+//                int subDay =  Integer.parseInt(endDateText.getText().toString().replace("-","")) - Integer.parseInt(startDateText.getText().toString().replace("-", ""));
+
+//                Log.d("총 여행일", subDay + "");
             }
         });
 
@@ -99,18 +118,34 @@ public class PlanEditDayFragment extends Fragment{
     private DatePickerDialog.OnDateSetListener startListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            String month_;
+
+            if(month >=10){
+                month_ = Integer.toString(month);
+            }else{
+                month_ = 0 + "" + month;
+            }
 
 
-            startDateText.setText(String.format("%d/%d/%d", year, month, dayOfMonth));
+            String day = year + "-" + month_ + "-" + dayOfMonth;
+            startDateText.setText(day);
         }
     };
 
     private DatePickerDialog.OnDateSetListener endListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            String month_;
+
+            if(month >=10){
+                month_ = Integer.toString(month);
+            }else{
+                month_ = 0 + "" + month;
+            }
 
 
-            endDateText.setText(String.format("%d/%d/%d", year, month, dayOfMonth));
+            String day = year + "-" + month_ + "-" + dayOfMonth;
+            endDateText.setText(day);
         }
     };
 
