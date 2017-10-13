@@ -42,7 +42,6 @@
             android:inputType="textPersonName" />
 
     </LinearLayout>
-
     <FrameLayout
         android:id="@+id/fragment_place"
         android:layout_width="match_parent"

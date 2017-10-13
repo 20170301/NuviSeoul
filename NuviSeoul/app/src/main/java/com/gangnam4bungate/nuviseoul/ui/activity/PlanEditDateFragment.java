@@ -1,21 +1,21 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.gangnam4bungate.nuviseoul.R;
-import com.gangnam4bungate.nuviseoul.config.dayDTO;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Seo on 2017-07-23.
@@ -35,18 +35,40 @@ public class PlanEditDateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        String startDate = getArguments().getString("startDate").replace("-","");
-        String endDate = getArguments().getString("endDate").replace("-","");
-        int startDate_int = Integer.parseInt(startDate);
-        int endDate_int = Integer.parseInt(endDate);
+        String start_Date = getArguments().getString("startDate");
+        String end_Date = getArguments().getString("endDate");
+        int startDate_int = Integer.parseInt(start_Date);
+        int endDate_int = Integer.parseInt(end_Date);
 
-        int betweenDay = endDate_int - startDate_int;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        long diff;
+        long diffDays = 0;
+        Date beginDate = null;
+        Date endDate;
+
+        try {
+            beginDate = formatter.parse(start_Date);
+            endDate = formatter.parse(end_Date);
+
+            diff = endDate.getTime() - beginDate.getTime();
+            diffDays = diff / (24 * 60 * 60 * 1000);
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        int betweenDay = (int)diffDays;
+
 
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.activity_day_recyclerview, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.dayRecyclerView);
 
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(beginDate);
         for(int i = 0; i <= betweenDay; i++){
-            list.add(startDate_int + i);
+            cal.add(Calendar.DATE, 1);
+            list.add(cal.get(Calendar.YEAR) + cal.get(Calendar.MONTH) + cal.get(Calendar.DATE));
         }
 
         dayRecyclerView = new DayRecyclerView(getActivity(), list);
