@@ -1,6 +1,7 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -39,9 +42,8 @@ public class RecommendActivity extends CommonGoogleMapActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.mViewType=1;
         super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_recommend);
+        setContentView(R.layout.activity_recommend);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setContentInsetsAbsolute(0,0);
@@ -75,6 +77,11 @@ public class RecommendActivity extends CommonGoogleMapActivity {
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(RecommendActivity.this, LinearLayoutManager.HORIZONTAL, false);
         horizontal_recycler_view.setLayoutManager(horizontalLayoutManager);
         horizontal_recycler_view.setAdapter(horizontalAdapter);
+
+        Paint paint = new Paint();
+
+        paint.setAlpha(50);
+        ((LinearLayout)findViewById(R.id.content)).setBackgroundColor(paint.getColor());
     }
 
 
@@ -107,11 +114,11 @@ public class RecommendActivity extends CommonGoogleMapActivity {
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
             ImageView imageView;
-            TextView txtview;
+
             public MyViewHolder(View view) {
                 super(view);
                 imageView=(ImageView) view.findViewById(R.id.imageview);
-                txtview=(TextView) view.findViewById(R.id.txtview);
+
             }
         }
 
@@ -128,7 +135,6 @@ public class RecommendActivity extends CommonGoogleMapActivity {
         public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
             holder.imageView.setImageResource(horizontalList.get(position).imageId);
-            holder.txtview.setText(horizontalList.get(position).text);
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -139,7 +145,8 @@ public class RecommendActivity extends CommonGoogleMapActivity {
 
                     LatLng location = new LatLng(lati, longi);
 
-                    MarkerOptions marker = new MarkerOptions();
+                    MarkerOptions marker = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location));
+
                     marker .position(new LatLng(lati, longi))
                             .title(list)
                             .snippet("Seoul");

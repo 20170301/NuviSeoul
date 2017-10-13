@@ -1,12 +1,17 @@
 package com.mystory.commonlibrary.network;
 
 import android.content.Context;
+import android.content.res.ObbInfo;
+import android.graphics.Bitmap;
+import android.util.Base64;
+import android.util.LruCache;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -125,8 +130,6 @@ public class HttpClientManager {
                     return headers;
                 }
             };
-
-
             mRequestQueue.add(request);
         }catch(Exception e){
 
