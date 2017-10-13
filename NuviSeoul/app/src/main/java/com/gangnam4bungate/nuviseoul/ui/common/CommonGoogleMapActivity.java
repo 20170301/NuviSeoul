@@ -2,7 +2,6 @@ package com.gangnam4bungate.nuviseoul.ui.common;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -15,7 +14,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
+import com.mystory.commonlibrary.map.DirectionFinder;
+import com.mystory.commonlibrary.map.DirectionFinderListener;
+import com.mystory.commonlibrary.map.Route;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -59,56 +60,6 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
 
-        //중복데이터 제거
-        boolean bInsert=false;
-        for( Route route : routes) {
-            bInsert=true;
-            for( Route tmpRoute : mRoutes)  {
-                if((route.startAddress==tmpRoute.startAddress)
-                       &(route.endAddress==tmpRoute.endAddress) ) {
-                    bInsert=false;
-                    break;
-                }
-            }
-            if(bInsert) {
-                mRoutes.add(route);
-            }
-        }
-
-        LatLng endLocation=null;
-        for( Route route : mRoutes) {
-            //---------------------------------------------------------------------------------
-            /*if((route.startLocation.latitude==route.endLocation.latitude)
-                   &(route.startLocation.longitude==route.endLocation.longitude) ) {*/
-             if((route.startLocation==null)
-                     ||(route.endLocation==null)){
-                mMap.addMarker(new MarkerOptions().position(route.startLocation)
-                        .title(route.startAddress));
-            } else {
-                mMap.addMarker(new MarkerOptions().position(route.startLocation)
-                        .title(route.startAddress));
-                //---------------------------------------------------------------------------------
-                mMap.addMarker(new MarkerOptions().position(route.endLocation)
-                        .title(route.endAddress));
-                //---------------------------------------------------------------------------------
-                PolylineOptions polylineOptions=new PolylineOptions()
-                        .geodesic(true)
-                        .color(Color.BLUE)
-                        .width(5)
-                        ;
-                polylineOptions.add(route.startLocation);
-
-                for(int i=0; i < route.points.size();i++)
-                    polylineOptions.add(route.points.get(i));
-
-                polylineOptions.add(route.endLocation);
-
-                mMap.addPolyline(polylineOptions);
-                endLocation = route.endLocation;
-            }
-        }
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(endLocation,mZoonSize/*16*/));
        /* Iterator<Route> iterator=routes.iterator();
         while(iterator.hasNext()) {
             Route  item=(Route)iterator.next();
