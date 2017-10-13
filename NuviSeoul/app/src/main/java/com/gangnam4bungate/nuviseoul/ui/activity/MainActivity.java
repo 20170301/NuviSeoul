@@ -1,16 +1,10 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
-import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -76,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mRvPlan.setLayoutManager(layoutManager);
         mRvPlan.setAdapter(mPlanAdapter);
 
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -83,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         NetworkManager.getInstance().requestAreaBaseListInfo(this, CODES.API_CONTENTTYPE.FESTIVAL);
+        NetworkManager.getInstance().requestNaverSearchInfo(this, "여행");
+
     }
 
     /**
