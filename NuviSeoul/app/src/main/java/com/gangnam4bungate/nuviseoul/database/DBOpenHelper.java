@@ -21,10 +21,16 @@ import java.util.Date;
 public class DBOpenHelper {
     private static final String DATABASE_NAME = "plan.db";
     private static final int DATABASE_VERSION = 1;
-    public static SQLiteDatabase mDB;
+    public static SQLiteDatabase mDB = null;
     private DatabaseHelper mDBHelper;
-    private Context mCtx;
-
+    private Context mContext;
+    private static DBOpenHelper mDBOpenHelper = null;
+    public static DBOpenHelper getInstance(){
+        if(mDBOpenHelper == null){
+            mDBOpenHelper = new DBOpenHelper();
+        }
+        return mDBOpenHelper;
+    }
     private class DatabaseHelper extends SQLiteOpenHelper{
 
         // 생성자
@@ -49,12 +55,9 @@ public class DBOpenHelper {
         }
     }
 
-    public DBOpenHelper(Context context){
-        this.mCtx = context;
-    }
-
-    public DBOpenHelper open() throws SQLException {
-        mDBHelper = new DatabaseHelper(mCtx, DATABASE_NAME, null, DATABASE_VERSION);
+    public DBOpenHelper open(Context context) throws SQLException {
+        mContext = context;
+        mDBHelper = new DatabaseHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
         mDB = mDBHelper.getWritableDatabase();
         return this;
     }
@@ -63,6 +66,13 @@ public class DBOpenHelper {
         mDB.close();
     }
 
+
+    public boolean isOpen(){
+        if(mDB != null)
+            return mDB.isOpen();
+        else
+            return false;
+    }
 
     // Insert DB
     public long planInsert(PlanData data){
@@ -127,7 +137,7 @@ public class DBOpenHelper {
 
     // 이름 검색 하기 (rawQuery)
     public Cursor plan_getMatchName(String name){
-        Cursor c = mDB.rawQuery( "select * from " + DataBases.CreatePlanDB._TABLENAME + "where " + DataBases.CreatePlanDB._NAME + " =" + "'" + name + "'" , null);
+        Cursor c = mDB.rawQuery( "select * from " + DataBases.CreatePlanDB._TABLENAME + " where " + DataBases.CreatePlanDB._NAME + " = " + "'" + name + "'" , null);
         return c;
     }
 
@@ -135,11 +145,13 @@ public class DBOpenHelper {
     public long plandetailInsert(PlanDetailData data){
         ContentValues values = new ContentValues();
         try {
-            SimpleDateFormat t_sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String str_datetime = t_sdf.format(data.getDatetime());
+            SimpleDateFormat t_sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String str_startdate = t_sdf.format(data.getStartDate());
+            String str_enddate = t_sdf.format(data.getEndDate());
 
             values.put(DataBases.CreatePlanDetailDB._PLANID, data.getPlanid());
-            values.put(DataBases.CreatePlanDetailDB._DATETIME, str_datetime);
+            values.put(DataBases.CreatePlanDetailDB._STARTDATE, str_startdate);
+            values.put(DataBases.CreatePlanDetailDB._ENDDATE, str_enddate);
             values.put(DataBases.CreatePlanDetailDB._PLACE_NAME, data.getPlacename());
             values.put(DataBases.CreatePlanDetailDB._PATH_SEQ, data.getPathseq());
             values.put(DataBases.CreatePlanDetailDB._PLACE_GPS_LATITUDE, data.getLatitude());
@@ -157,10 +169,12 @@ public class DBOpenHelper {
 
         ContentValues values = new ContentValues();
         try {
-            SimpleDateFormat t_sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String str_datetime = t_sdf.format(data.getDatetime());
+            SimpleDateFormat t_sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String str_startdate = t_sdf.format(data.getStartDate());
+            String str_enddate = t_sdf.format(data.getEndDate());
 
-            values.put(DataBases.CreatePlanDetailDB._DATETIME, str_datetime);
+            values.put(DataBases.CreatePlanDetailDB._STARTDATE, str_startdate);
+            values.put(DataBases.CreatePlanDetailDB._ENDDATE, str_enddate);
             values.put(DataBases.CreatePlanDetailDB._PLACE_NAME, data.getPlacename());
             values.put(DataBases.CreatePlanDetailDB._PATH_SEQ, data.getPathseq());
             values.put(DataBases.CreatePlanDetailDB._PLACE_GPS_LATITUDE, data.getLatitude());

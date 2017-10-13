@@ -1,5 +1,6 @@
 package com.gangnam4bungate.nuviseoul.data;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -11,14 +12,10 @@ public class PlanData {
     String name = "";
     Date start_date;
     Date end_date;
-    PlanDetailData mDetailData;
+    ArrayList<PlanDetailData> mDetailDataList;
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -45,11 +42,11 @@ public class PlanData {
         this.end_date = end_date;
     }
 
-    public PlanDetailData getDetailData() {
-        return mDetailData;
+    public ArrayList<PlanDetailData> getDetailDataList() {
+        return mDetailDataList;
     }
 
-    public void setDetailData(PlanDetailData mDetailData) {
-        this.mDetailData = mDetailData;
+    public void setDetailDataList(ArrayList<PlanDetailData> detailList) {
+        this.mDetailDataList = detailList;
     }
 }

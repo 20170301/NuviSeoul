@@ -9,18 +9,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.mystory.commonlibrary.network.MashupCallback;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +37,7 @@ import java.util.List;
 
 //public class RecommendActivity extends CommonActivity {
 //public class RecommendActivity extends CommonGoogleMapActivity implements CommonActivity {
-public class RecommendActivity extends CommonGoogleMapActivity {
+public class RecommendActivity extends CommonGoogleMapActivity implements MashupCallback {
 
     RecyclerView horizontal_recycler_view;
     HorizontalAdapter horizontalAdapter;
@@ -82,6 +87,35 @@ public class RecommendActivity extends CommonGoogleMapActivity {
 
         paint.setAlpha(50);
         ((LinearLayout)findViewById(R.id.content)).setBackgroundColor(paint.getColor());
+
+        Button saveBtn = (Button) findViewById(R.id.locationSave);
+        Button resetBtn = (Button) findViewById(R.id.locationReset);
+        Button cancelBtn = (Button) findViewById(R.id.locationCancel);
+
+        saveBtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 저장 버튼 눌렀을시 이벤트
+                Toast.makeText(RecommendActivity.this, "저장!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        resetBtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 초기화 버튼 눌렀을시 이벤트
+                Toast.makeText(RecommendActivity.this, "초기화!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        cancelBtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 취소 버튼 눌렀을시 이벤트
+                Toast.makeText(RecommendActivity.this, "취소!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 
@@ -94,8 +128,24 @@ public class RecommendActivity extends CommonGoogleMapActivity {
         data.add(new RecommendData( R.mipmap.ic_launcher, "63빌딩",37.5193776,126.94021029999999));
 
 
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelableArrayList("location", );
+//        Intent intent  = new Intent();
+//        intent.putExtra("locations", new Bundle());
+//        setResult(0, intent);
 
         return data;
+    }
+
+    // 파싱된 json 처리해야 할곳
+    @Override
+    public void onMashupSuccess(JSONObject object, String requestCode) {
+
+    }
+
+    @Override
+    public void onMashupFail(VolleyError error, String requestCode) {
+
     }
 
     public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
