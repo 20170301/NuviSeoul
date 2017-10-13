@@ -2,7 +2,6 @@ package com.gangnam4bungate.nuviseoul.network;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
@@ -20,11 +19,11 @@ public class NetworkManager {
         return mNetworkManager;
     }
 
-    public void requestAreaBaseListInfo(Object object, String content_type_id){
+    public void requestAreaBaseListInfo(Object object, String keyword){
         try {
             Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_AREABASELIST)
                     .buildUpon()
-                    .appendQueryParameter(CODES.CommonCodes.CONTENTTYPEID, content_type_id)
+                    .appendQueryParameter(CODES.CommonCodes.KEYWORD, keyword)
                     .appendQueryParameter(CODES.CommonCodes.MOBILEOS, "AND")
                     .appendQueryParameter(CODES.CommonCodes.MOBILEAPP, ((Context) object).getString(R.string.app_name))
                     .appendQueryParameter(CODES.CommonCodes._TYPE, "json")

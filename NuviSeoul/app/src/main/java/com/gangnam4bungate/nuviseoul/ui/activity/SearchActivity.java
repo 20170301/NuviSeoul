@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Adapter;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -14,13 +13,11 @@ import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
 import com.gangnam4bungate.nuviseoul.network.NetworkManager;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
-import com.google.gson.JsonParser;
 import com.mystory.commonlibrary.network.MashupCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -39,8 +36,8 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
         setContentView(R.layout.activity_main_search);
         //searchTextView = (TextView)findViewById(R.id.searchTextView);
         Intent intent = getIntent();
-        String value = intent.getStringExtra("editTextValue");
-        NetworkManager.getInstance().requestNaverSearchInfo(this, value);
+        String value = intent.getStringExtra("mEt_title_value");
+        NetworkManager.getInstance().requestAreaBaseListInfo(this, value);
     }
 
     @Override
@@ -54,7 +51,11 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
         try
         {
             JSONObject jsonObject = new JSONObject(object.toString());
-            JSONArray item = jsonObject.getJSONArray("items");
+            JSONObject response = jsonObject.getJSONObject("response");
+            JSONObject body = response.getJSONObject("body");
+            JSONObject locations = body.getJSONObject("items");
+            JSONArray item = locations.getJSONArray("item");
+            //
 
             searchRecyclerView searchRecyclerView = new searchRecyclerView(item);
             view.setLayoutManager(layoutManager);

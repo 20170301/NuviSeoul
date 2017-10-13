@@ -4,34 +4,29 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
-import com.gangnam4bungate.nuviseoul.database.DBOpenHelper;
 import com.gangnam4bungate.nuviseoul.holder.PlanAdapter;
 import com.gangnam4bungate.nuviseoul.model.AreaBaseModel;
 import com.gangnam4bungate.nuviseoul.network.NetworkManager;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -39,19 +34,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.mystory.commonlibrary.network.MashupCallback;
 import com.mystory.commonlibrary.utils.Util;
 
 import org.json.JSONObject;
 
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, MashupCallback,
                                                                 GoogleApiClient.ConnectionCallbacks,
@@ -59,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                                 LocationListener{
 
     private TextView mTv_title;
+    private EditText mEt_title;
     private ImageView mIv_add;
     private ImageView mIv_search;
     private RecyclerView mRvPlan;
@@ -124,9 +115,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setContentInsetsAbsolute(0,0);
         mTv_title = (TextView) toolbar.findViewById(R.id.tv_title);
+        mEt_title = (EditText) toolbar.findViewById(R.id.et_title);
         if(mTv_title != null)
             mTv_title.setText(getString(R.string.main_title));
         setSupportActionBar(toolbar);
+        /////////////////////////////
+        mTv_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTv_title.setVisibility(View.INVISIBLE);
+                mEt_title.setVisibility(View.VISIBLE);
+            }
+        });
+        ///////////////////////////////
 
         mIv_add = (ImageView) findViewById(R.id.iv_add);
         if(mIv_add != null){
@@ -142,7 +143,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             mIv_search.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                    String mEt_title_value = mEt_title.getText().toString();
+                    Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+                    intent.putExtra("mEt_title_value", mEt_title_value);
+                    startActivity(intent);
                 }
             });
         }

@@ -1,22 +1,16 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
 import android.app.DatePickerDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.Cursor;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gangnam4bungate.nuviseoul.R;
@@ -25,7 +19,6 @@ import com.gangnam4bungate.nuviseoul.data.PlanDetailData;
 import com.gangnam4bungate.nuviseoul.database.DBOpenHelper;
 import com.gangnam4bungate.nuviseoul.database.DataBases;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
-import com.mystory.commonlibrary.utils.Util;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -13,14 +13,14 @@ public class CODES {
     public static String NAVER_CLIENT_SECRET = "IVvaGuS7Tb";
 
     public static class URLCodes {
-        public static String URL_AREABASELIST = "/openapi/service/rest/KorService/areaBasedList";
+        public static String URL_AREABASELIST = "/openapi/service/rest/KorService/searchKeyword?";
         public static String URL_SEARCH = "/v1/search/blog?query=";
     }
 
     public static class CommonCodes {
         public static String SERVICEKEY = "ServiceKey";
         public static String AREACODE = "areaCode";
-        public static String CONTENTTYPEID = "contentTypeId";
+        public static String KEYWORD = "keyword";
         public static String MOBILEOS = "MobileOS";
         public static String MOBILEAPP = "MobileApp";
         public static String _TYPE = "_type";
