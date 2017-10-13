@@ -7,11 +7,15 @@ package com.gangnam4bungate.nuviseoul.ui.activity;
 public class RecommendData {
 
     public int imageId;
-    public String txt;
+    public String text;
+    public double latitude;
+    public double longitude;
 
-    RecommendData(int imageId, String text) {
+    RecommendData(int imageId, String text, double latitude, double longitude) {
 
         this.imageId = imageId;
-        this.txt=text;
+        this.text=text;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

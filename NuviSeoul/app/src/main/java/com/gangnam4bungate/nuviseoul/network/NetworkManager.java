@@ -47,10 +47,6 @@ public class NetworkManager {
             String url = builtUri.toString() + query;
 
             HttpClientManager.getInstance((Context) object).sendGet_naver(object, url, CODES.RequestCode.REQUEST_SEARCH, CODES.NAVER_CLIENT_ID, CODES.NAVER_CLIENT_SECRET);
-            HttpClientManager result = HttpClientManager.getInstance((Context) object);
-            Log.d(CODES.TAG, "abccc " + object.toString());
-            Log.d(CODES.TAG, "abccc2 " + result.toString());
-
         }catch(Exception e){
 
         }
