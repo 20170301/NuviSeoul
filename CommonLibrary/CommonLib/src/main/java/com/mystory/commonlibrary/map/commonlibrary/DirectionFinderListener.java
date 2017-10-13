@@ -1,4 +1,4 @@
-package com.mystory.commonlibrary.map.commonlibrary.map;
+package com.mystory.commonlibrary.map.commonlibrary;
 
 /**
  * Created by choi on 2017-08-16.
