@@ -8,7 +8,8 @@ import java.util.Date;
 
 public class PlanDetailData {
     int planid;
-    Date datetime;
+    Date startdate;
+    Date enddate;
     String placename;
     int pathseq;
     double latitude;
@@ -18,9 +19,11 @@ public class PlanDetailData {
         return planid;
     }
 
-    public Date getDatetime() {
-        return datetime;
+    public Date getStartDate() {
+        return startdate;
     }
+
+    public Date getEndDate() { return enddate; }
 
     public String getPlacename() {
         return placename;
@@ -42,9 +45,11 @@ public class PlanDetailData {
         this.planid = planid;
     }
 
-    public void setDatetime(Date datetime) {
-        this.datetime = datetime;
+    public void setStartDate(Date datetime) {
+        this.startdate = datetime;
     }
+
+    public void setEndDate(Date datetime) { this.enddate = datetime;}
 
     public void setPlacename(String placename) {
         this.placename = placename;

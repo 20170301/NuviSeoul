@@ -1,6 +1,7 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -94,6 +95,11 @@ public class RecommendActivity extends CommonGoogleMapActivity {
         data.add(new RecommendData( R.mipmap.ic_launcher, "63빌딩",37.5193776,126.94021029999999));
 
 
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelableArrayList("location", );
+//        Intent intent  = new Intent();
+//        intent.putExtra("locations", new Bundle());
+//        setResult(0, intent);
 
         return data;
     }

@@ -27,7 +27,8 @@ public class DataBases {
         public static final String _TABLENAME = "plandetail";
 
         public static final String _PLANID = "planid";
-        public static final String _DATETIME = "datetime";
+        public static final String _STARTDATE = "startdate";
+        public static final String _ENDDATE = "enddate";
         public static final String _PLACE_NAME = "placename";
         public static final String _PATH_SEQ = "pathseq";
         public static final String _PLACE_GPS_LATITUDE = "latitude";
@@ -36,11 +37,12 @@ public class DataBases {
         public static final String _CREATE =
                 "create table "+ _TABLENAME +"("
                         + _PLANID  + " integer, "
-                        + _DATETIME + " datetime not null, "
+                        + _STARTDATE + " date not null, "
+                        + _ENDDATE + " date not null, "
                         + _PLACE_NAME + " text not null, "
                         + _PATH_SEQ  + " integer, "
-                        + _PLACE_GPS_LATITUDE + "double, "
-                        + _PLACE_GPS_LONGITUDE + "double)";
+                        + _PLACE_GPS_LATITUDE + " double, "
+                        + _PLACE_GPS_LONGITUDE + " double)";
 
     }
 }
