@@ -9,7 +9,6 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
 
 public class Route {
-    public String Index;
     public Distance distance;
     public Duration duration;
     public String endAddress;

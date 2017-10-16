@@ -2,10 +2,11 @@ package com.gangnam4bungate.nuviseoul.ui.common;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -14,23 +15,20 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.mystory.commonlibrary.map.DirectionFinder;
 import com.mystory.commonlibrary.map.DirectionFinderListener;
 import com.mystory.commonlibrary.map.Route;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by hschoi on 2017. 8. 06..
  */
 
-public class CommonGoogleMapActivity extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener {
-    protected int mZoonSize=14;
-    protected int mViewType=0;
+public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapReadyCallback,DirectionFinderListener {
     protected GoogleMap mMap;
-    protected List<Route> mRoutes=new ArrayList<Route>();
     private LatLng mLastedMarkLatLng;
 
     @Override
@@ -45,22 +43,49 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
     }
    */
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        mRoutes.clear();
         super.onCreate(savedInstanceState);
         //onCreateView(savedInstanceState);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
        /* SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);*/
+        this.mMap.clear();
     }
     @Override
     public void onDirectionFinderStart() {
+
     }
+
 
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
 
-       /* Iterator<Route> iterator=routes.iterator();
+
+        for( Route route : routes) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation,16));
+
+            mMap.addMarker(new MarkerOptions().position(route.startLocation)
+                    .title(route.startAddress));
+
+            mMap.addMarker(new MarkerOptions().position(route.endLocation)
+                            .title(route.endAddress));
+
+            PolylineOptions  polylineOptions=new PolylineOptions()
+                    .geodesic(true)
+                    .color(Color.BLUE)
+                    .width(5)
+                    ;
+
+            polylineOptions.add(route.startLocation);
+
+            for(int i=0; i < route.points.size();i++)
+                polylineOptions.add(route.points.get(i));
+
+            polylineOptions.add(route.endLocation);
+
+            mMap.addPolyline(polylineOptions);
+        }
+    /* Iterator<Route> iterator=routes.iterator();
         while(iterator.hasNext()) {
             Route  item=(Route)iterator.next();
 
@@ -109,8 +134,6 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
             e.printStackTrace();
         }
 
-        //Camera Zoom
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.552186, 127.0),13));
     }
     /**
      * Manipulates the map once available.
@@ -124,19 +147,16 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        if(false) {
-            // Add a marker in Sydney and move the camera
-            //LatLng sydney = new LatLng(-34, 151);
-            //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            //LatLng seoul = new LatLng(37.52, 127.0);
-            LatLng seoul = new LatLng(37.552186, 127.0);
-            mLastedMarkLatLng = seoul;
-            mMap.addMarker(new MarkerOptions().position(seoul)
-                            .title("Marker in Seoul")
+        // Add a marker in Sydney and move the camera
+        //LatLng sydney = new LatLng(-34, 151);
+        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        LatLng seoul = new LatLng(37.52, 127.0);
+        mLastedMarkLatLng = seoul;
+        mMap.addMarker(new MarkerOptions().position(seoul)
+                                           .title("Marker in Seoul")
                                            /*.icon(BitmapDescriptorFactory.fromResource(com.google.android.gms.R.drawable.push_in))*/
-            );
-        }
+        );
+
         //
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -154,8 +174,7 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(seoul));
 
         //2 좌표와 카메라 zoom 설정
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(seoul,13));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.552186, 127.0),mZoonSize/*13*/));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(seoul,13));
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(-18.142, 178.431), 2));
         //moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-33.86997, 151.2089), 18));//실내지도
     /*-------------------------------------------------------------------------------------------------*/
@@ -180,22 +199,20 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
                 .position(new LatLng(41.889, -87.622)));*/
 /*-------------------------------------------------------------------------------------------------*/
         //1 Map Click
-        if(mViewType==1) {
-            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng arg0) {
-                 /*   String textTitle = "[Map Click] latitude ="
-                            + arg0.latitude + ", longitude ="
-                            + arg0.longitude;*/
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng arg0) {
+                String textTitle = "[Map Click] latitude ="
+                        + arg0.latitude + ", longitude ="
+                        + arg0.longitude;
           /*  Toast.makeText(getApplicationContext(), textTitle, Toast.LENGTH_LONG)
                     .show();*/
-                    //Marker 추가
-                    LatLng latLng=new LatLng(arg0.latitude,arg0.longitude);
-                    //MarkerOptions newMarker= new MarkerOptions().position(latLng).title(textTitle);
-                    //mMap.addMarker(new MarkerOptions().position(latLng).title(textTitle));
-                    //mMarks.add(newMarker);
-                    //1. 폴리라인
-                    // Polylines are useful for marking paths and routes on the map.
+                //Marker 추가
+                LatLng latLng=new LatLng(arg0.latitude,arg0.longitude);
+                mMap.addMarker(new MarkerOptions().position(latLng).title(textTitle));
+
+                //1. 폴리라인
+                // Polylines are useful for marking paths and routes on the map.
                /* mMap.addPolyline(new PolylineOptions().geodesic(true)
                         .add(new LatLng(-33.866, 151.195))  // Sydney
                         .add(new LatLng(-18.142, 178.431))  // Fiji
@@ -207,7 +224,7 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
                         .addAll(arraylist_lat_lon).color(Color.GREEN).width(2);
                 polyline = googleMap.addPolyline(polyline_options);
                */
-                    //2점 연결 - 시작점 , 마지막점
+                //2점 연결 - 시작점 , 마지막점
                 /*mMap.addPolyline(new PolylineOptions()
                         .color(Color.BLUE)
                         .width(5)
@@ -223,48 +240,60 @@ public class CommonGoogleMapActivity extends FragmentActivity implements OnMapRe
                 Toast.makeText(getApplicationContext(),sOrigin, Toast.LENGTH_LONG)
                         .show();
                 */
-                if(mLastedMarkLatLng==null) {
-                    mLastedMarkLatLng = latLng;
-                }
-                sendRequestWithDirection(mLastedMarkLatLng, latLng);
+               sendRequestWithDirection(mLastedMarkLatLng, latLng);
                 mLastedMarkLatLng = latLng;
-                }
-            });
-        }
-
+            }
+        });
 
         //2. 클릭을 오래 했을때
-        if(mViewType==1) {
-            mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
 
-                public void onMapLongClick(LatLng point) {
-                    String text = "[Map LongClick] latitude ="
-                            + point.latitude + ", longitude ="
-                            + point.longitude;
-                    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG)
-                            .show();
-                }
-            });
-        }
+            public void onMapLongClick(LatLng point) {
+                String text = "[Map LongClick] latitude ="
+                        + point.latitude + ", longitude ="
+                        + point.longitude;
+                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
     /*-------------------------------------------------------------------------------------------------*/
         //2.Map marker Click
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             public boolean onMarkerClick(Marker marker) {
-                if(mViewType==1) {
-                    /*String text = "[Map Marker Click] latitude ="
-                            + marker.getPosition().latitude + ", longitude ="
-                            + marker.getPosition().longitude;
-                    Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG)
-                            .show();*/
-                    //mMap.addPolyline(new PolylineOptions());
-                    mMap.clear();
-                    mRoutes.clear();
-                }else {
-                    //상세 보여주기
-                }
+                String text = "[Map Marker Click] latitude ="
+                        + marker.getPosition().latitude + ", longitude ="
+                        + marker.getPosition().longitude;
+                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG)
+                        .show();
                 return false;
             }
         });
     /*-------------------------------------------------------------------------------------------------*/
+    }
+
+    public void MapMarkerDisplay(MarkerOptions _marker)
+    {
+        mMap.addMarker(_marker).showInfoWindow();
+    }
+
+    public void MapMarkerZoom(LatLng _location)
+    {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(_location,13));
+    }
+
+    public void MapLineDrawing(LatLng _location)
+    {
+        mMap.addPolyline(new PolylineOptions()
+                .color(Color.BLUE)
+                .width(5)
+                .geodesic(true)
+                .add(mLastedMarkLatLng)
+                .add(_location)
+        );
+    }
+
+    public void MapPreviousLocation(LatLng _plocation)
+    {
+        mLastedMarkLatLng = _plocation;
     }
 }

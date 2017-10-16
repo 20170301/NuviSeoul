@@ -32,15 +32,6 @@ public class DirectionFinder {
     private DirectionFinderListener listener;
     private String origin;
     private String destination;
-    private String routeIndex;
-
-    public void setRouteIndex(String routeIdx){
-        if((routeIdx==null)||(routeIdx=="")){
-            this.routeIndex="UnKnown";
-        }else {
-            this.routeIndex = routeIdx;
-        }
-    }
 
     public DirectionFinder(DirectionFinderListener listener, String origin, String destination) {
         this.listener = listener;
@@ -115,7 +106,6 @@ public class DirectionFinder {
             JSONObject jsonEndLocation = jsonLeg.getJSONObject("end_location");
             JSONObject jsonStartLocation = jsonLeg.getJSONObject("start_location");
 
-            route.Index = routeIndex;//현재 Route경로에 대한 고유 그룹값
             route.distance = new Distance(jsonDistance.getString("text"), jsonDistance.getInt("value"));
             route.duration = new Duration(jsonDuration.getString("text"), jsonDuration.getInt("value"));
             route.endAddress = jsonLeg.getString("end_address");

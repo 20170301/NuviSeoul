@@ -8,6 +8,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.gangnam4bungate.nuviseoul.data.PlanData;
+import com.gangnam4bungate.nuviseoul.data.PlanDetailData;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,10 +21,16 @@ import java.util.Date;
 public class DBOpenHelper {
     private static final String DATABASE_NAME = "plan.db";
     private static final int DATABASE_VERSION = 1;
-    public static SQLiteDatabase mDB;
+    public static SQLiteDatabase mDB = null;
     private DatabaseHelper mDBHelper;
-    private Context mCtx;
-
+    private Context mContext;
+    private static DBOpenHelper mDBOpenHelper = null;
+    public static DBOpenHelper getInstance(){
+        if(mDBOpenHelper == null){
+            mDBOpenHelper = new DBOpenHelper();
+        }
+        return mDBOpenHelper;
+    }
     private class DatabaseHelper extends SQLiteOpenHelper{
 
         // 생성자
@@ -46,12 +55,9 @@ public class DBOpenHelper {
         }
     }
 
-    public DBOpenHelper(Context context){
-        this.mCtx = context;
-    }
-
-    public DBOpenHelper open() throws SQLException {
-        mDBHelper = new DatabaseHelper(mCtx, DATABASE_NAME, null, DATABASE_VERSION);
+    public DBOpenHelper open(Context context) throws SQLException {
+        mContext = context;
+        mDBHelper = new DatabaseHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
         mDB = mDBHelper.getWritableDatabase();
         return this;
     }
@@ -61,15 +67,22 @@ public class DBOpenHelper {
     }
 
 
+    public boolean isOpen(){
+        if(mDB != null)
+            return mDB.isOpen();
+        else
+            return false;
+    }
+
     // Insert DB
-    public long plan_insertColumn(String name, Date startdate, Date enddate){
+    public long planInsert(PlanData data){
         ContentValues values = new ContentValues();
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String start_date = sdf.format(startdate);
-            String end_date = sdf.format(enddate);
+            String start_date = sdf.format(data.getStart_date());
+            String end_date = sdf.format(data.getEnd_date());
 
-            values.put(DataBases.CreatePlanDB._NAME, name);
+            values.put(DataBases.CreatePlanDB._NAME, data.getName());
             values.put(DataBases.CreatePlanDB._STARTDATE, start_date);
             values.put(DataBases.CreatePlanDB._ENDDATE, end_date);
         }catch(Exception e){
@@ -80,36 +93,36 @@ public class DBOpenHelper {
     }
 
     // Update DB
-    public boolean plan_updateColumn(long id , String name, Date startdate, Date enddate){
+    public boolean planUpdate(PlanData data){
 
         ContentValues values = new ContentValues();
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String start_date = sdf.format(startdate);
-            String end_date = sdf.format(enddate);
+            String start_date = sdf.format(data.getStart_date());
+            String end_date = sdf.format(data.getEnd_date());
 
-            values.put(DataBases.CreatePlanDB._NAME, name);
+            values.put(DataBases.CreatePlanDB._NAME, data.getName());
             values.put(DataBases.CreatePlanDB._STARTDATE, start_date);
             values.put(DataBases.CreatePlanDB._ENDDATE, end_date);
         }catch(Exception e){
 
         }
 
-        return mDB.update(DataBases.CreatePlanDB._TABLENAME, values, DataBases.CreatePlanDB._ID + "=" + id, null) > 0;
+        return mDB.update(DataBases.CreatePlanDB._TABLENAME, values, DataBases.CreatePlanDB._ID + "=" + data.getId(), null) > 0;
     }
 
     // Delete ID
-    public boolean plan_deleteColumn(long id){
+    public boolean planDelete(long id){
         return mDB.delete(DataBases.CreatePlanDB._TABLENAME, "_id="+id, null) > 0;
     }
 
     // Delete Contact
-    public boolean plan_deleteColumn(String name){
+    public boolean planDelete(String name){
         return mDB.delete(DataBases.CreatePlanDB._TABLENAME, DataBases.CreatePlanDB._NAME + "="+ name, null) > 0;
     }
 
     // Select All
-    public Cursor plan_getAllColumns(){
+    public Cursor planAllColumns(){
         return mDB.query(DataBases.CreatePlanDB._TABLENAME, null, null, null, null, null, null);
     }
 
@@ -124,26 +137,25 @@ public class DBOpenHelper {
 
     // 이름 검색 하기 (rawQuery)
     public Cursor plan_getMatchName(String name){
-        Cursor c = mDB.rawQuery( "select * from " + DataBases.CreatePlanDB._TABLENAME + "where " + DataBases.CreatePlanDB._NAME + " =" + "'" + name + "'" , null);
+        Cursor c = mDB.rawQuery( "select * from " + DataBases.CreatePlanDB._TABLENAME + " where " + DataBases.CreatePlanDB._NAME + " = " + "'" + name + "'" , null);
         return c;
     }
 
     // Insert DB
-    public long plandetail_insertColumn(long plankey,Date date, Date time,String placename, String distance, double latitude, double longitude){
+    public long plandetailInsert(PlanDetailData data){
         ContentValues values = new ContentValues();
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            SimpleDateFormat t_sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String str_date = sdf.format(date);
-            String str_time = t_sdf.format(time);
+            SimpleDateFormat t_sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String str_startdate = t_sdf.format(data.getStartDate());
+            String str_enddate = t_sdf.format(data.getEndDate());
 
-            values.put(DataBases.CreatePlanDetailDB._PLANKEY, plankey);
-            values.put(DataBases.CreatePlanDetailDB._DATE, str_date);
-            values.put(DataBases.CreatePlanDetailDB._TIME, str_time);
-            values.put(DataBases.CreatePlanDetailDB._PLACE_NAME, placename);
-            values.put(DataBases.CreatePlanDetailDB._DISTANCE, distance);
-            values.put(DataBases.CreatePlanDetailDB._PLACE_GPS_LATITUDE, latitude);
-            values.put(DataBases.CreatePlanDetailDB._PLACE_GPS_LONGITUDE, longitude);
+            values.put(DataBases.CreatePlanDetailDB._PLANID, data.getPlanid());
+            values.put(DataBases.CreatePlanDetailDB._STARTDATE, str_startdate);
+            values.put(DataBases.CreatePlanDetailDB._ENDDATE, str_enddate);
+            values.put(DataBases.CreatePlanDetailDB._PLACE_NAME, data.getPlacename());
+            values.put(DataBases.CreatePlanDetailDB._PATH_SEQ, data.getPathseq());
+            values.put(DataBases.CreatePlanDetailDB._PLACE_GPS_LATITUDE, data.getLatitude());
+            values.put(DataBases.CreatePlanDetailDB._PLACE_GPS_LONGITUDE, data.getLongitude());
 
         }catch(Exception e){
 
@@ -153,53 +165,44 @@ public class DBOpenHelper {
     }
 
     // Update DB
-    public boolean plandetail_updateColumn(long id, long plankey,Date date, Date time,String placename, String distance, double latitude, double longitude){
+    public boolean plandetailUpdate(PlanDetailData data){
 
         ContentValues values = new ContentValues();
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            SimpleDateFormat t_sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String str_date = sdf.format(date);
-            String str_time = t_sdf.format(time);
+            SimpleDateFormat t_sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String str_startdate = t_sdf.format(data.getStartDate());
+            String str_enddate = t_sdf.format(data.getEndDate());
 
-            values.put(DataBases.CreatePlanDetailDB._PLANKEY, plankey);
-            values.put(DataBases.CreatePlanDetailDB._DATE, str_date);
-            values.put(DataBases.CreatePlanDetailDB._TIME, str_time);
-            values.put(DataBases.CreatePlanDetailDB._PLACE_NAME, placename);
-            values.put(DataBases.CreatePlanDetailDB._DISTANCE, distance);
-            values.put(DataBases.CreatePlanDetailDB._PLACE_GPS_LATITUDE, latitude);
-            values.put(DataBases.CreatePlanDetailDB._PLACE_GPS_LONGITUDE, longitude);
+            values.put(DataBases.CreatePlanDetailDB._STARTDATE, str_startdate);
+            values.put(DataBases.CreatePlanDetailDB._ENDDATE, str_enddate);
+            values.put(DataBases.CreatePlanDetailDB._PLACE_NAME, data.getPlacename());
+            values.put(DataBases.CreatePlanDetailDB._PATH_SEQ, data.getPathseq());
+            values.put(DataBases.CreatePlanDetailDB._PLACE_GPS_LATITUDE, data.getLatitude());
+            values.put(DataBases.CreatePlanDetailDB._PLACE_GPS_LONGITUDE, data.getLongitude());
 
         }catch(Exception e){
 
         }
 
-        return mDB.update(DataBases.CreatePlanDetailDB._TABLENAME, values, DataBases.CreatePlanDetailDB._ID + "=" + id, null) > 0;
+        return mDB.update(DataBases.CreatePlanDetailDB._TABLENAME, values, DataBases.CreatePlanDetailDB._ID + "=" + data.getPlanid(), null) > 0;
     }
 
-    // Delete plankey
-    public boolean plandetail_deleteColumn(long plankey){
-        return mDB.delete(DataBases.CreatePlanDetailDB._TABLENAME, DataBases.CreatePlanDetailDB._PLANKEY + "="+ plankey, null) > 0;
+    // Delete planid
+    public boolean plandetailDelete(long planid){
+        return mDB.delete(DataBases.CreatePlanDetailDB._TABLENAME, DataBases.CreatePlanDetailDB._PLANID + "="+ planid, null) > 0;
     }
 
     // Select All
-    public Cursor plandetail_getAllColumns(){
+    public Cursor plandetailAllColumns(){
         return mDB.query(DataBases.CreatePlanDetailDB._TABLENAME, null, null, null, null, null, null);
     }
 
     // ID 컬럼 얻어 오기
-    public Cursor plandetail_getColumn(long id){
+    public Cursor plandetail_getColumn(long planid){
         Cursor c = mDB.query(DataBases.CreatePlanDetailDB._TABLENAME, null,
-                "_id="+id, null, null, null, null);
+                DataBases.CreatePlanDetailDB._PLANID + "="+planid, null, null, null, null);
         if(c != null && c.getCount() != 0)
             c.moveToFirst();
-        return c;
-    }
-
-    // 이름 검색 하기 (rawQuery)
-    public Cursor plandetail_getMatchPlankey(long plankey){
-        Cursor c = mDB.rawQuery( "select * from " + DataBases.CreatePlanDetailDB._TABLENAME + " where "
-                + DataBases.CreatePlanDetailDB._PLANKEY + " =" + "'" + plankey + "'" , null);
         return c;
     }
 
