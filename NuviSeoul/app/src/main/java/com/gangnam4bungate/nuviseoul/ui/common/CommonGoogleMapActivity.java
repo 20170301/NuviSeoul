@@ -18,9 +18,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.mystory.commonlibrary.map.DirectionFinder;
-import com.mystory.commonlibrary.map.DirectionFinderListener;
-import com.mystory.commonlibrary.map.Route;
+import com.gangnam4bungate.nuviseoul.map.DirectionFinder;
+import com.gangnam4bungate.nuviseoul.map.DirectionFinderListener;
+import com.gangnam4bungate.nuviseoul.map.Route;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
