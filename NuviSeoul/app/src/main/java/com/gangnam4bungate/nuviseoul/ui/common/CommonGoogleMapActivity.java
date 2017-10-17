@@ -2,6 +2,7 @@ package com.gangnam4bungate.nuviseoul.ui.common;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.gangnam4bungate.nuviseoul.data.PlanData;
+import com.gangnam4bungate.nuviseoul.database.DBOpenHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,6 +36,9 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
     public List<Route> mRoutes = null;//new ArrayList<Route>();
     public int mType=0;
     public int mZoom=13;
+
+    DBOpenHelper mDBOpenHelper;
+    PlanData mPlanData = new PlanData();
     @Override
     /*protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +65,11 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
         }else{
             this.mRoutes=new ArrayList<Route>();
         }
+
+        //DB
+        mDBOpenHelper = DBOpenHelper.getInstance();
+        if(mDBOpenHelper != null)
+            mDBOpenHelper.open(getApplicationContext());
     }
     @Override
     public void onDirectionFinderStart() {
@@ -155,6 +166,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
         // Add a marker in Sydney and move the camera
         //LatLng sydney = new LatLng(-34, 151);
         //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
@@ -208,7 +220,29 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                 .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
                 .position(new LatLng(41.889, -87.622)));*/
 /*-------------------------------------------------------------------------------------------------*/
-        if(this.mType==1){
+        //기존에 있는 정보 가져오기
+        if(this.mType==0){
+            //planid
+            //plandetail
+            //경로 정보 채우기
+            Cursor c = mDBOpenHelper.planAllColumns();
+            int planid = 0;
+            if(c != null){
+                while(c.moveToNext()){
+                    //위치 정보 추가
+                    //LatLng latLng=new LatLng(arg0.latitude,arg0.longitude);
+                    //MapMarkerDisplay(latLng);
+                }
+                c.close();
+            }
+        }
+/*-------------------------------------------------------------------------------------------------*/
+        else{//if(this.mType==1){
+
+            //설정에서 부터 넘어온 데이터 추가하기
+            //MapMarkerDisplay(new LatLng(37.5388,127.00155));
+            //MapMarkerDisplay(new LatLng(37.6388,127.00455));
+
             //1 Map Click
             mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
@@ -254,7 +288,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                     MapMarkerDisplay(latLng);
                 }
             });
-        }
+        }//if(this.mType==1)
 
         //2. 클릭을 오래 했을때
         /*mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
