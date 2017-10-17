@@ -1,4 +1,4 @@
-package com.mystory.commonlibrary.map.commonlibrary.map;
+package com.gangnam4bungate.nuviseoul.map;
 
 /**
  * Created by choi on 2017-08-16.
@@ -26,22 +26,39 @@ import java.util.List;
 /**
  * Created by Mai Thanh Hiep on 4/3/2016.
  */
+
 public class DirectionFinder {
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
     private static final String GOOGLE_API_KEY = "AIzaSyDbA3nymkyx7Hx7ilU_WZHoToZsPo06XN8";
     private DirectionFinderListener listener;
     private String origin;
     private String destination;
+    private List<Route> mRoutes;
+    private String unigueIdx;
 
-    public DirectionFinder(DirectionFinderListener listener, String origin, String destination) {
+    public DirectionFinder(DirectionFinderListener listener, List<Route> routes  ,String origin, String destination) {
         this.listener = listener;
         this.origin = origin;
         this.destination = destination;
+        this.mRoutes = routes;
+        this.unigueIdx=this.origin+"@"+this.destination;
     }
 
     public void execute() throws UnsupportedEncodingException {
-        listener.onDirectionFinderStart();
-        new DownloadRawData().execute(createUrl());
+        //중복데이터 확인 : 시작점과 끝점이 같으면 중복데이터로 제외함
+        boolean bInsert=true;
+
+        for(Route route : this.mRoutes )  {
+            if(route.index ==this.unigueIdx){
+                bInsert=false;
+                break;
+            }
+        }
+
+        if(bInsert){
+            listener.onDirectionFinderStart();
+            new DownloadRawData().execute(createUrl());
+        }
     }
 
     private String createUrl() throws UnsupportedEncodingException {
@@ -91,11 +108,12 @@ public class DirectionFinder {
         if (data == null)
             return;
 
-        List<Route> routes = new ArrayList<Route>();
+        //List<Route> routes = new ArrayList<Route>();
+        //this.mRoutes
         JSONObject jsonData = new JSONObject(data);
         JSONArray jsonRoutes = jsonData.getJSONArray("routes");
-        for (int i = 0; i < jsonRoutes.length(); i++) {
-            JSONObject jsonRoute = jsonRoutes.getJSONObject(i);
+       // for (int i = 0; i < jsonRoutes.length(); i++) {
+            JSONObject jsonRoute = jsonRoutes.getJSONObject(0/*i*/);
             Route route = new Route();
 
             JSONObject overview_polylineJson = jsonRoute.getJSONObject("overview_polyline");
@@ -114,10 +132,11 @@ public class DirectionFinder {
             route.endLocation = new LatLng(jsonEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
             route.points = decodePolyLine(overview_polylineJson.getString("points"));
 
-            routes.add(route);
-        }
-
-        listener.onDirectionFinderSuccess(routes);
+            //인덱스 : 시작과 출발 좌표로 함
+            route.index = this.unigueIdx;
+            this.mRoutes.add(route);
+       //}
+        listener.onDirectionFinderSuccess(this.mRoutes/*routes*/);
     }
 
     private List<LatLng> decodePolyLine(final String poly) {
