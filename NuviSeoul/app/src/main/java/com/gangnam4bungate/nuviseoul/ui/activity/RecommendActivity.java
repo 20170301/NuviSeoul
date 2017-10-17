@@ -126,8 +126,6 @@ public class RecommendActivity extends CommonGoogleMapActivity {
             }
         }
 
-
-
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recommend_location, parent, false);
@@ -162,6 +160,7 @@ public class RecommendActivity extends CommonGoogleMapActivity {
                     MapLineDrawing(location);
                     MapPreviousLocation(location);
                     */
+                    //맵에 마크 추가하기
                     MapMarkerDisplay(location);
                     Toast.makeText(RecommendActivity.this, list, Toast.LENGTH_SHORT).show();
                 }

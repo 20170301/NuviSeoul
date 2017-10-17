@@ -70,12 +70,12 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
         mMap.clear();
         boolean bFirst=true;
         for( Route route : routes) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, mZoom));
-            if(bFirst==true) {
+           if(bFirst==true) {
                 mMap.addMarker(new MarkerOptions().position(route.startLocation)
                         .title(route.startAddress));
                 bFirst=false;
             }
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, mZoom));
             mMap.addMarker(new MarkerOptions().position(route.endLocation)
                     .title(route.endAddress));
 
@@ -176,9 +176,11 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        //원점
         mMap.setMyLocationEnabled(true);
+        //mMap.setLocationSource( );
 
-        //1. 좌표 설정
+        //1. 좌표만 설정
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(seoul));
 
         //2 좌표와 카메라 zoom 설정

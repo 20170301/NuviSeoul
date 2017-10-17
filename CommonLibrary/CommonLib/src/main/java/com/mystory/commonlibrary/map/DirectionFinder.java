@@ -34,17 +34,31 @@ public class DirectionFinder {
     private String origin;
     private String destination;
     private List<Route> mRoutes;
+    private String unigueIdx;
 
     public DirectionFinder(DirectionFinderListener listener, List<Route> routes  ,String origin, String destination) {
         this.listener = listener;
         this.origin = origin;
         this.destination = destination;
         this.mRoutes = routes;
+        this.unigueIdx=this.origin+"@"+this.destination;
     }
 
     public void execute() throws UnsupportedEncodingException {
-        listener.onDirectionFinderStart();
-        new DownloadRawData().execute(createUrl());
+        //중복데이터 확인 : 시작점과 끝점이 같으면 중복데이터로 제외함
+        boolean bInsert=true;
+
+        for(Route route : this.mRoutes )  {
+            if(route.index ==this.unigueIdx){
+                bInsert=false;
+                break;
+            }
+        }
+
+        if(bInsert){
+            listener.onDirectionFinderStart();
+            new DownloadRawData().execute(createUrl());
+        }
     }
 
     private String createUrl() throws UnsupportedEncodingException {
@@ -118,8 +132,8 @@ public class DirectionFinder {
             route.endLocation = new LatLng(jsonEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
             route.points = decodePolyLine(overview_polylineJson.getString("points"));
 
-            //인덱스는 주소로함
-            route.index = route.endAddress;
+            //인덱스 : 시작과 출발 좌표로 함
+            route.index = this.unigueIdx;
             this.mRoutes.add(route);
        //}
         listener.onDirectionFinderSuccess(this.mRoutes/*routes*/);

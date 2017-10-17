@@ -4,14 +4,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,47 +20,38 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
-import com.gangnam4bungate.nuviseoul.database.DBOpenHelper;
 import com.gangnam4bungate.nuviseoul.holder.PlanAdapter;
 import com.gangnam4bungate.nuviseoul.model.AreaBaseModel;
 import com.gangnam4bungate.nuviseoul.network.NetworkManager;
+import com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.mystory.commonlibrary.network.MashupCallback;
-import com.mystory.commonlibrary.utils.Util;
 
 import org.json.JSONObject;
 
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, MashupCallback,
+/*public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, MashupCallback,
                                                                 GoogleApiClient.ConnectionCallbacks,
                                                                 GoogleApiClient.OnConnectionFailedListener,
-                                                                LocationListener{
+                                                                LocationListener{*/
+public class MainActivity extends CommonGoogleMapActivity implements MashupCallback,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener{
 
     private TextView mTv_title;
     private ImageView mIv_add;
     private ImageView mIv_search;
     private RecyclerView mRvPlan;
     private PlanAdapter mPlanAdapter;
-    private GoogleMap mMap;
+    //private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location mCurrentLocation;
@@ -260,10 +248,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(25.3, 34.3), 16));
         }*/
 
-        Location location = Util.findGeoPoint(getApplicationContext(), "서울시 용산구 이촌동 동작대교");
+        /*Location location = Util.findGeoPoint(getApplicationContext(), "서울시 용산구 이촌동 동작대교");
         if(mMap != null)
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 11));
-
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 11));*/
     }
 
     /**
@@ -275,12 +262,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
+   /*
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+   public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         updateLocationUI();
     }
-
+*/
     @Override
     public void onMashupSuccess(JSONObject object, String requestCode) {
 
