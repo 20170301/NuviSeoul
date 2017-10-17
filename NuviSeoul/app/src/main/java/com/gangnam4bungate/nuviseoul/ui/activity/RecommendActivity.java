@@ -18,9 +18,7 @@ import android.widget.Toast;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,8 +42,7 @@ public class RecommendActivity extends CommonGoogleMapActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend);
-        //초기화
-        //this.mMap.clear();
+        this.mType=1;//수정모드
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setContentInsetsAbsolute(0,0);
@@ -146,11 +143,13 @@ public class RecommendActivity extends CommonGoogleMapActivity {
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     String list = horizontalList.get(position).text.toString();
                     double lati = horizontalList.get(position).latitude;
                     double longi = horizontalList.get(position).longitude;
 
                     LatLng location = new LatLng(lati, longi);
+                    /*
 
                     MarkerOptions marker = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location));
 
@@ -162,12 +161,12 @@ public class RecommendActivity extends CommonGoogleMapActivity {
                     MapMarkerZoom(location);
                     MapLineDrawing(location);
                     MapPreviousLocation(location);
-
+                    */
+                    MapMarkerDisplay(location);
                     Toast.makeText(RecommendActivity.this, list, Toast.LENGTH_SHORT).show();
                 }
 
             });
-
         }
 
         @Override
