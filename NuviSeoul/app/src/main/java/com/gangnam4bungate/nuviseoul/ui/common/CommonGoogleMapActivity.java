@@ -10,17 +10,20 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.data.PlanData;
 import com.gangnam4bungate.nuviseoul.database.DBOpenHelper;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.gangnam4bungate.nuviseoul.map.DirectionFinder;
 import com.gangnam4bungate.nuviseoul.map.DirectionFinderListener;
 import com.gangnam4bungate.nuviseoul.map.Route;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -30,7 +33,7 @@ import java.util.List;
  * Created by hschoi on 2017. 8. 06..
  */
 
-public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapReadyCallback,DirectionFinderListener {
+public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapReadyCallback,DirectionFinderListener, GoogleMap.OnInfoWindowClickListener {
     protected GoogleMap mMap=null;
     private LatLng mLastedMarkLatLng=null;
     public ArrayList<Route> mRoutes = null;//new ArrayList<Route>();
@@ -80,29 +83,47 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
     public void onDirectionFinderSuccess(List<Route> routes) {
         mMap.clear();
         boolean bFirst=true;
+        Marker makerInfo = null;
         for( Route route : routes) {
-           if(bFirst==true) {
-                mMap.addMarker(new MarkerOptions().position(route.startLocation)
-                        .title(route.startAddress));
-                bFirst=false;
+            //첫번째 클릭의 경우, 시작과 끝이 동일함, 시작과 끝이 같은 경우는 삭제함
+            if(route.startAddress.compareToIgnoreCase(route.endAddress)==0){
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, mZoom));
+                makerInfo = mMap.addMarker(new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
+                        .position(route.endLocation)
+                        .title(route.endAddress));
+
+                routes.remove(route);
+            }else{
+                if(bFirst==true) {
+                    makerInfo =mMap.addMarker(new MarkerOptions()
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
+                            .position(route.startLocation)
+                            .title(route.startAddress));
+                    makerInfo.showInfoWindow();
+                    bFirst=false;
+                }
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, mZoom));
+                makerInfo = mMap.addMarker(new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
+                        .position(route.endLocation)
+                        .title(route.endAddress));
+                makerInfo.showInfoWindow();
+                PolylineOptions polylineOptions = new PolylineOptions()
+                        .geodesic(true)
+                        .color(Color.BLUE)
+                        .width(10);
+
+                polylineOptions.add(route.startLocation);
+
+                for (int i = 0; i < route.points.size(); i++)
+                    polylineOptions.add(route.points.get(i));
+
+                polylineOptions.add(route.endLocation);
+
+                mMap.addPolyline(polylineOptions);
             }
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, mZoom));
-            mMap.addMarker(new MarkerOptions().position(route.endLocation)
-                    .title(route.endAddress));
-
-            PolylineOptions polylineOptions = new PolylineOptions()
-                    .geodesic(true)
-                    .color(Color.BLUE)
-                    .width(5);
-
-            polylineOptions.add(route.startLocation);
-
-            for (int i = 0; i < route.points.size(); i++)
-                polylineOptions.add(route.points.get(i));
-
-            polylineOptions.add(route.endLocation);
-
-            mMap.addPolyline(polylineOptions);
         }
     /* Iterator<Route> iterator=routes.iterator();
         while(iterator.hasNext()) {
@@ -332,9 +353,20 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                         /*String textTitle = "[Map Click] latitude ="
                                 + arg0.latitude + ", longitude ="
                                 + arg0.longitude;*/
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Start"));
+           /* Marker makerInfo =  mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
+                    .position(latLng).title("Start"));
+
+            makerInfo.showInfoWindow();*/
+            sendRequestWithDirection(latLng, latLng);
         }
         mLastedMarkLatLng = latLng;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(this, "Info window clicked",
+                Toast.LENGTH_SHORT).show();
     }
 /*
     public void MapMarkerDisplay(MarkerOptions _marker)
@@ -368,6 +400,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
     {
         this.mMap.clear();
         this.mRoutes.clear();
+        this.mLastedMarkLatLng=null;
     }
 
     public ArrayList<Route> getRoutes()
