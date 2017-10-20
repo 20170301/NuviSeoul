@@ -6,19 +6,29 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
+import com.gangnam4bungate.nuviseoul.config.CODES;
+import com.gangnam4bungate.nuviseoul.network.NetworkManager;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.mystory.commonlibrary.network.MashupCallback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +40,7 @@ import java.util.List;
 
 //public class RecommendActivity extends CommonActivity {
 //public class RecommendActivity extends CommonGoogleMapActivity implements CommonActivity {
-public class RecommendActivity extends CommonGoogleMapActivity {
+public class RecommendActivity extends CommonGoogleMapActivity implements MashupCallback {
 
     RecyclerView horizontal_recycler_view;
     HorizontalAdapter horizontalAdapter;
@@ -68,7 +78,7 @@ public class RecommendActivity extends CommonGoogleMapActivity {
                 drawer.animateClose();
             }
         });
-
+/*
         data = fill_with_data();
 
         horizontalAdapter=new HorizontalAdapter(data, getApplication());
@@ -76,14 +86,57 @@ public class RecommendActivity extends CommonGoogleMapActivity {
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(RecommendActivity.this, LinearLayoutManager.HORIZONTAL, false);
         horizontal_recycler_view.setLayoutManager(horizontalLayoutManager);
         horizontal_recycler_view.setAdapter(horizontalAdapter);
-
+*/
         Paint paint = new Paint();
 
         paint.setAlpha(50);
         ((LinearLayout)findViewById(R.id.content)).setBackgroundColor(paint.getColor());
+
+        NetworkManager.getInstance().requsetRecommendLocationInfo(this);
+
+        Button saveBtn = (Button) findViewById(R.id.locationSave);
+        Button resetBtn = (Button) findViewById(R.id.locationReset);
+        Button cancelBtn = (Button) findViewById(R.id.locationCancel);
+
+        saveBtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 저장 버튼 눌렀을시 이벤트
+                if(PlanEditActivity.getInstance() != null)
+                    PlanEditActivity.getInstance().setLocations(getRoutes());
+                finish();
+
+
+               /* Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("location", getRoutes());
+                bundle.putArrayList("location", getRoutes());
+                Intent intent  = new Intent();
+                intent.putExtra("locations", new Bundle());
+                setResult(0, intent);*/
+                //Toast.makeText(RecommendActivity.this, "저장!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        resetBtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 초기화 버튼 눌렀을시 이벤트
+                MapClear();
+                //Toast.makeText(RecommendActivity.this, "초기화!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        cancelBtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 취소 버튼 눌렀을시 이벤트
+                //Toast.makeText(RecommendActivity.this, "취소!!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
     }
 
-
+/*
     public List<RecommendData> fill_with_data() {
 
         List<RecommendData> data = new ArrayList<>();
@@ -100,6 +153,60 @@ public class RecommendActivity extends CommonGoogleMapActivity {
 //        setResult(0, intent);
 
         return data;
+    }
+*/
+    @Override
+    public void onMashupSuccess(JSONObject object, String requestCode) {
+
+        String addr1 = null;
+        String title = null;
+        String mapx = null;
+        String mapy = null;
+        String image = null;
+
+
+        List<RecommendData> data = new ArrayList<>();
+
+
+        try
+        {
+            JSONObject jsonObject = new JSONObject(object.toString());
+            JSONObject response = jsonObject.getJSONObject("response");
+            JSONObject body = response.getJSONObject("body");
+            JSONObject locations = body.getJSONObject("items");
+            JSONArray location = locations.getJSONArray("item");
+
+
+            for (int i = 0; i < location.length(); i++) {
+                JSONObject jsonlocation = location.getJSONObject(i);
+
+                title = jsonlocation.getString("title");
+                addr1 = jsonlocation.getString("addr1");
+                mapx = jsonlocation.getString("mapx");
+                mapy = jsonlocation.getString("mapy");
+                image = jsonlocation.getString("firstimage");
+
+                Log.d(CODES.TAG, "image " + image);
+
+                data.add(new RecommendData( R.mipmap.ic_launcher, title, addr1, Double.parseDouble(mapy), Double.parseDouble(mapx)));
+            }
+
+            horizontalAdapter=new HorizontalAdapter(data, getApplication());
+
+            LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(RecommendActivity.this, LinearLayoutManager.HORIZONTAL, false);
+            horizontal_recycler_view.setLayoutManager(horizontalLayoutManager);
+            horizontal_recycler_view.setAdapter(horizontalAdapter);
+
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onMashupFail(VolleyError error, String requestCode) {
+
     }
 
     public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
@@ -142,7 +249,7 @@ public class RecommendActivity extends CommonGoogleMapActivity {
                 @Override
                 public void onClick(View v) {
 
-                    String list = horizontalList.get(position).text.toString();
+                    String list = horizontalList.get(position).title.toString();
                     double lati = horizontalList.get(position).latitude;
                     double longi = horizontalList.get(position).longitude;
 

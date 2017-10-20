@@ -60,8 +60,8 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
        /* SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);*/
-        if(this.mMap!=null)
-            this.mMap.clear();
+       if(this.mMap!=null)
+        this.mMap.clear();
 
         if(this.mRoutes!=null)  {
             this.mRoutes.clear();
@@ -194,8 +194,8 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
         LatLng seoul = new LatLng(37.52, 127.0);
         //mLastedMarkLatLng = seoul;
         //mMap.addMarker(new MarkerOptions().position(seoul)
-        //              .title("Marker in Seoul")
-        //                               /*.icon(BitmapDescriptorFactory.fromResource(com.google.android.gms.R.drawable.push_in))*/
+          //              .title("Marker in Seoul")
+            //                               /*.icon(BitmapDescriptorFactory.fromResource(com.google.android.gms.R.drawable.push_in))*/
         //);
 
         //
@@ -240,11 +240,6 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.house_flag))
                 .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
                 .position(new LatLng(41.889, -87.622)));*/
-
-/*-------------------------------------------------------------------------------------------------*/
-        // Setting an info window adapter allows us to change the both the contents and look of the
-        // info window.
-        //mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
 /*-------------------------------------------------------------------------------------------------*/
         //기존에 있는 정보 가져오기
         if(this.mType==0){

@@ -35,13 +35,15 @@ public class Holder {
             super(itemView);
 
             if(itemView != null){
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        v.getContext().startActivity(new Intent(v.getContext(), PlanEditActivity.class));
-                    }
-                });
+                textView = (TextView) itemView.findViewById(R.id.tv_date);
             }
         }
+
+        public void setDate(String date){
+            if(textView != null){
+                textView.setText(date);
+            }
+        }
+
     }
 }

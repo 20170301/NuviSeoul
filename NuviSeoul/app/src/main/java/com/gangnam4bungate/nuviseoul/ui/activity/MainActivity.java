@@ -3,12 +3,16 @@ package com.gangnam4bungate.nuviseoul.ui.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Location;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,42 +24,58 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
+import com.gangnam4bungate.nuviseoul.data.PlanData;
+import com.gangnam4bungate.nuviseoul.data.PlanDetailData;
+import com.gangnam4bungate.nuviseoul.database.DBOpenHelper;
+import com.gangnam4bungate.nuviseoul.database.DataBases;
 import com.gangnam4bungate.nuviseoul.holder.PlanAdapter;
 import com.gangnam4bungate.nuviseoul.model.AreaBaseModel;
 import com.gangnam4bungate.nuviseoul.network.NetworkManager;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.mystory.commonlibrary.network.MashupCallback;
+import com.mystory.commonlibrary.utils.Util;
 
 import org.json.JSONObject;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
-/*public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, MashupCallback,
+public class MainActivity extends CommonGoogleMapActivity implements OnMapReadyCallback, MashupCallback,
                                                                 GoogleApiClient.ConnectionCallbacks,
                                                                 GoogleApiClient.OnConnectionFailedListener,
-                                                                LocationListener{*/
-public class MainActivity extends CommonGoogleMapActivity implements MashupCallback,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener{
+                                                                LocationListener{
 
     private TextView mTv_title;
     private ImageView mIv_add;
     private ImageView mIv_search;
     private RecyclerView mRvPlan;
     private PlanAdapter mPlanAdapter;
-    //private GoogleMap mMap;
+    private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location mCurrentLocation;
     public final static int PERMISSION_ACCESS_FINE_LOCATION = 0;
+    DBOpenHelper mDBOpenHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +89,9 @@ public class MainActivity extends CommonGoogleMapActivity implements MashupCallb
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
+        mDBOpenHelper = DBOpenHelper.getInstance();
+        if(mDBOpenHelper != null && mDBOpenHelper.isOpen() == false)
+            mDBOpenHelper.open(getApplicationContext());
         initLayout();
     }
 
@@ -102,13 +125,6 @@ public class MainActivity extends CommonGoogleMapActivity implements MashupCallb
     }
 
     public void initLayout(){
-
-        //mGpsInfo = new GpsInfo(this);
-        //Location location = mGpsInfo.getLocation(this);
-
-        ArrayList<String> list = new ArrayList<>();
-        list.add("1");
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setContentInsetsAbsolute(0,0);
         mTv_title = (TextView) toolbar.findViewById(R.id.tv_title);
@@ -135,13 +151,64 @@ public class MainActivity extends CommonGoogleMapActivity implements MashupCallb
             });
         }
 
-        mPlanAdapter = new PlanAdapter();
-        mPlanAdapter.bindData(list);
-        mRvPlan = (RecyclerView) findViewById(R.id.rv_plan);
+        Cursor cursor = mDBOpenHelper.planAllColumns();
+        ArrayList<PlanDetailData> detailList = new ArrayList<PlanDetailData>();
+        String sDate = "";
+        String eDate = "";
+        if(cursor != null && cursor.moveToLast()){
+            int planid = cursor.getInt(cursor.getColumnIndex(DataBases.CreatePlanDB._ID));
+            sDate = cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDetailDB._STARTDATE));
+            eDate = cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDetailDB._ENDDATE));
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mRvPlan.setLayoutManager(layoutManager);
-        mRvPlan.setAdapter(mPlanAdapter);
+            cursor.close();
+
+            Cursor c = mDBOpenHelper.plandetail_getColumn(planid);
+            if(c != null){
+                c.moveToFirst();
+                do {
+                    PlanDetailData data = new PlanDetailData();
+                    data.setPlanid(planid);
+
+                    try {
+                        String sdate = c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._STARTDATE));
+                        String edate = c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._ENDDATE));
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        Date start_date = sdf.parse(sdate);
+                        Date end_date = sdf.parse(edate);
+
+                        data.setStartDate(start_date);
+                        data.setEndDate(end_date);
+                    } catch (Exception e) {
+
+                    }
+                    data.setPathseq(c.getInt(c.getColumnIndex(DataBases.CreatePlanDetailDB._PATH_SEQ)));
+                    data.setPlacename(c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_NAME)));
+                    data.setLatitude(c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LATITUDE)));
+                    data.setLongitude(c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LONGITUDE)));
+                    detailList.add(data);
+                }while (c.moveToNext());
+
+                c.close();
+            }
+        }
+
+        if(detailList != null && detailList.size() > 0){
+            mTv_title.setText(sDate + " ~ " + eDate);
+
+            mPlanAdapter = new PlanAdapter(this);
+            mPlanAdapter.bindData(detailList);
+            mRvPlan = (RecyclerView) findViewById(R.id.rv_plan);
+
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            mRvPlan.setLayoutManager(layoutManager);
+            mRvPlan.setAdapter(mPlanAdapter);
+
+        } else {
+            mPlanAdapter = new PlanAdapter(this);
+            mRvPlan = (RecyclerView) findViewById(R.id.rv_plan);
+            mRvPlan.setVisibility(View.GONE);
+        }
 
         NetworkManager.getInstance().requestAreaBaseListInfo(this, CODES.API_CONTENTTYPE.FESTIVAL);
     }
@@ -248,9 +315,10 @@ public class MainActivity extends CommonGoogleMapActivity implements MashupCallb
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(25.3, 34.3), 16));
         }*/
 
-        /*Location location = Util.findGeoPoint(getApplicationContext(), "서울시 용산구 이촌동 동작대교");
+        Location location = Util.findGeoPoint(getApplicationContext(), "서울시 용산구 이촌동 동작대교");
         if(mMap != null)
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 11));*/
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 11));
+
     }
 
     /**
@@ -262,14 +330,12 @@ public class MainActivity extends CommonGoogleMapActivity implements MashupCallb
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-
-   /*
     @Override
-   public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         updateLocationUI();
     }
-*/
+
     @Override
     public void onMashupSuccess(JSONObject object, String requestCode) {
 

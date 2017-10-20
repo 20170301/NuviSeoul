@@ -33,6 +33,33 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
+            <Button
+                android:id="@+id/locationSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="7dp"
+                android:text="저장"/>
+
+            <Button
+                android:id="@+id/locationReset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/locationSave"
+                android:layout_alignTop="@+id/locationSave"
+                android:layout_marginLeft="7dp"
+                android:text="초기화"/>
+
+            <Button
+                android:id="@+id/locationCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/locationReset"
+                android:layout_alignTop="@+id/locationReset"
+                android:layout_marginLeft="7dp"
+                android:text="취소"/>
+
 
         <SlidingDrawer
             android:id="@+id/slide"
