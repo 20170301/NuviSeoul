@@ -29,6 +29,7 @@ public class CODES {
     public static class RequestCode {
         public static String REQUEST_AREABASELIST = "REQUEST_AREABASELIST";
         public static String REQUEST_SEARCH = "REQUEST_SEARCH";
+        public static String REQUEST_AREABASEDETAILLIST = "REQUEST_AREABASEDETAILLIST";
     }
 
     public static class API_CONTENTTYPE {

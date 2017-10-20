@@ -37,6 +37,17 @@ public class NetworkManager {
         }
     }
 
+    public void requestAreaBaseDetailListInfo(Object object, String contentid){
+        try {
+            Uri builtUri = Uri.parse("http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=" + CODES.Dev_ServiceKey + "&contentId="+ contentid +"&defaultYN=Y&MobileOS=AND&overviewYN=Y&MobileApp=" + ((Context) object).getString(R.string.app_name));
+            String url = builtUri.toString();
+
+            HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_AREABASEDETAILLIST);
+        }catch (Exception e){
+
+        }
+    }
+
     public void requestNaverSearchInfo(Object object, String query){
         try {
             Uri builtUri = Uri.parse(CODES.NaverDomain + CODES.URLCodes.URL_SEARCH)
