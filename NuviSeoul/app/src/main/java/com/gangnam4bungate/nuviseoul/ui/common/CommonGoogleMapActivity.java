@@ -93,7 +93,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
                         .position(route.endLocation)
                         .title(route.endAddress));
-
+                makerInfo.showInfoWindow();
                 routes.remove(route);
             }else{
                 if(bFirst==true) {
