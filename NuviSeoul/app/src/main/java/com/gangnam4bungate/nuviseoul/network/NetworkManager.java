@@ -2,6 +2,7 @@ package com.gangnam4bungate.nuviseoul.network;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
@@ -46,24 +47,6 @@ public class NetworkManager {
             String url = builtUri.toString() + query;
 
             HttpClientManager.getInstance((Context) object).sendGet_naver(object, url, CODES.RequestCode.REQUEST_SEARCH, CODES.NAVER_CLIENT_ID, CODES.NAVER_CLIENT_SECRET);
-        }catch(Exception e){
-
-        }
-    }
-
-    public void requsetRecommendLocationInfo(Object object)
-    {
-        String key = "Wasn0OGY43ReOgSy5nz8ZNURGTw4Y5MRPt%2B1rJw0xZCEbQG07s6n5hjqHHqzzIRBCP8U1H64Q0RIgAZPRWSPlA%3D%3D";
-
-
-        try {
-            Uri builtUri = Uri.parse("http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=" + key +
-                    "&mapX=126.981611&mapY=37.568477&radius=10000&pageNo=1&numOfRows=4&listYN=Y&arrange=B&contentTypeId=14&MobileOS=AND&MobileApp=MyApplication&_type=json");
-
-            String url = builtUri.toString();
-
-            HttpClientManager.getInstance((Context) object).sendGet(object, url, "");
-
         }catch(Exception e){
 
         }

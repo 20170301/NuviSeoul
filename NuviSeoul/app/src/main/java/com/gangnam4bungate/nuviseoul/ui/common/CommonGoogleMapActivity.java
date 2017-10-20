@@ -10,19 +10,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.data.PlanData;
 import com.gangnam4bungate.nuviseoul.database.DBOpenHelper;
-import com.gangnam4bungate.nuviseoul.map.DirectionFinder;
-import com.gangnam4bungate.nuviseoul.map.DirectionFinderListener;
-import com.gangnam4bungate.nuviseoul.map.Route;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.gangnam4bungate.nuviseoul.map.DirectionFinder;
+import com.gangnam4bungate.nuviseoul.map.DirectionFinderListener;
+import com.gangnam4bungate.nuviseoul.map.Route;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -85,12 +83,12 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
         for( Route route : routes) {
            if(bFirst==true) {
                 mMap.addMarker(new MarkerOptions().position(route.startLocation)
-                        .title(route.startAddress).icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location)));
+                        .title(route.startAddress));
                 bFirst=false;
             }
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, mZoom));
             mMap.addMarker(new MarkerOptions().position(route.endLocation)
-                    .title(route.endAddress).icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location)));
+                    .title(route.endAddress));
 
             PolylineOptions polylineOptions = new PolylineOptions()
                     .geodesic(true)
@@ -171,11 +169,11 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
 
         // Add a marker in Sydney and move the camera
         //LatLng sydney = new LatLng(-34, 151);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney").icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location)));
+        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         LatLng seoul = new LatLng(37.52, 127.0);
         //mLastedMarkLatLng = seoul;
         //mMap.addMarker(new MarkerOptions().position(seoul)
-          //              .title("Marker in Seoul").icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
+          //              .title("Marker in Seoul")
             //                               /*.icon(BitmapDescriptorFactory.fromResource(com.google.android.gms.R.drawable.push_in))*/
         //);
 
@@ -334,7 +332,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                         /*String textTitle = "[Map Click] latitude ="
                                 + arg0.latitude + ", longitude ="
                                 + arg0.longitude;*/
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Start").icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location)));
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Start"));
         }
         mLastedMarkLatLng = latLng;
     }
@@ -365,10 +363,4 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
         mLastedMarkLatLng = _plocation;
     }
     */
-
-    public void MapClear()
-    {
-        this.mMap.clear();
-        this.mRoutes.clear();
-    }
 }
