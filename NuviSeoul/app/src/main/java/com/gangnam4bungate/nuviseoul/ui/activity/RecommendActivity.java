@@ -102,7 +102,18 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
             @Override
             public void onClick(View view) {
                 // 저장 버튼 눌렀을시 이벤트
-                Toast.makeText(RecommendActivity.this, "저장!!", Toast.LENGTH_SHORT).show();
+                if(PlanEditActivity.getInstance() != null)
+                    PlanEditActivity.getInstance().setLocations(getRoutes());
+                finish();
+
+
+               /* Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("location", getRoutes());
+                bundle.putArrayList("location", getRoutes());
+                Intent intent  = new Intent();
+                intent.putExtra("locations", new Bundle());
+                setResult(0, intent);*/
+                //Toast.makeText(RecommendActivity.this, "저장!!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -111,7 +122,7 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
             public void onClick(View view) {
                 // 초기화 버튼 눌렀을시 이벤트
                 MapClear();
-                Toast.makeText(RecommendActivity.this, "초기화!!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(RecommendActivity.this, "초기화!!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -119,7 +130,7 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
             @Override
             public void onClick(View view) {
                 // 취소 버튼 눌렀을시 이벤트
-                Toast.makeText(RecommendActivity.this, "취소!!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(RecommendActivity.this, "취소!!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });

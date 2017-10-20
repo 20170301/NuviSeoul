@@ -33,7 +33,7 @@ import java.util.List;
 public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapReadyCallback,DirectionFinderListener {
     protected GoogleMap mMap=null;
     private LatLng mLastedMarkLatLng=null;
-    public List<Route> mRoutes = null;//new ArrayList<Route>();
+    public ArrayList<Route> mRoutes = null;//new ArrayList<Route>();
     public int mType=0;
     public int mZoom=13;
 
@@ -368,5 +368,10 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
     {
         this.mMap.clear();
         this.mRoutes.clear();
+    }
+
+    public ArrayList<Route> getRoutes()
+    {
+        return this.mRoutes;
     }
 }

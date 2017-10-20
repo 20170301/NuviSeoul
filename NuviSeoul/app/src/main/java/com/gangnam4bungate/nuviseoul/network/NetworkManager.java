@@ -19,11 +19,11 @@ public class NetworkManager {
         return mNetworkManager;
     }
 
-    public void requestAreaBaseListInfo(Object object, String content_type_id){
+    public void requestAreaBaseListInfo(Object object, String keyword){
         try {
             Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_AREABASELIST)
                     .buildUpon()
-                    .appendQueryParameter(CODES.CommonCodes.CONTENTTYPEID, content_type_id)
+                    .appendQueryParameter(CODES.CommonCodes.KEYWORD, keyword)
                     .appendQueryParameter(CODES.CommonCodes.MOBILEOS, "AND")
                     .appendQueryParameter(CODES.CommonCodes.MOBILEAPP, ((Context) object).getString(R.string.app_name))
                     .appendQueryParameter(CODES.CommonCodes._TYPE, "json")
@@ -33,6 +33,17 @@ public class NetworkManager {
 
             HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_AREABASELIST);
         }catch(Exception e){
+
+        }
+    }
+
+    public void requestAreaBaseDetailListInfo(Object object, String contentid){
+        try {
+            Uri builtUri = Uri.parse("http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=" + CODES.Dev_ServiceKey + "&contentId="+ contentid +"&defaultYN=Y&MobileOS=AND&overviewYN=Y&MobileApp=" + ((Context) object).getString(R.string.app_name));
+            String url = builtUri.toString();
+
+            HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_AREABASEDETAILLIST);
+        }catch (Exception e){
 
         }
     }

@@ -13,14 +13,14 @@ public class CODES {
     public static String NAVER_CLIENT_SECRET = "IVvaGuS7Tb";
 
     public static class URLCodes {
-        public static String URL_AREABASELIST = "/openapi/service/rest/KorService/areaBasedList";
+        public static String URL_AREABASELIST = "/openapi/service/rest/KorService/searchKeyword?";
         public static String URL_SEARCH = "/v1/search/blog?query=";
     }
 
     public static class CommonCodes {
         public static String SERVICEKEY = "ServiceKey";
         public static String AREACODE = "areaCode";
-        public static String CONTENTTYPEID = "contentTypeId";
+        public static String KEYWORD = "keyword";
         public static String MOBILEOS = "MobileOS";
         public static String MOBILEAPP = "MobileApp";
         public static String _TYPE = "_type";
@@ -29,6 +29,7 @@ public class CODES {
     public static class RequestCode {
         public static String REQUEST_AREABASELIST = "REQUEST_AREABASELIST";
         public static String REQUEST_SEARCH = "REQUEST_SEARCH";
+        public static String REQUEST_AREABASEDETAILLIST = "REQUEST_AREABASEDETAILLIST";
     }
 
     public static class API_CONTENTTYPE {
@@ -40,5 +41,10 @@ public class CODES {
         public static String ACCOMMODATION = "32";//숙박
         public static String SHOPPING = "38";//쇼핑
         public static String FOOD = "39";//음식
+    }
+
+    public static class ActivityResult {
+        public static final int LOCATIONS = 0;
+        public static final int PLAN_EDIT = 1;
     }
 }
