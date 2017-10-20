@@ -14,7 +14,7 @@ public class CODES {
 
     public static class URLCodes {
         public static String URL_AREABASELIST = "/openapi/service/rest/KorService/searchKeyword?";
-        public static String URL_SEARCH = "/v1/search/blog?query=";
+        public static String URL_SEARCH = "/openapi/service/rest/KorService/detailCommon?ServiceKey=";
     }
 
     public static class CommonCodes {
