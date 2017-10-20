@@ -3,6 +3,7 @@ package com.gangnam4bungate.nuviseoul.ui.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,10 +24,14 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
+import com.gangnam4bungate.nuviseoul.data.PlanData;
+import com.gangnam4bungate.nuviseoul.data.PlanDetailData;
 import com.gangnam4bungate.nuviseoul.database.DBOpenHelper;
+import com.gangnam4bungate.nuviseoul.database.DataBases;
 import com.gangnam4bungate.nuviseoul.holder.PlanAdapter;
 import com.gangnam4bungate.nuviseoul.model.AreaBaseModel;
 import com.gangnam4bungate.nuviseoul.network.NetworkManager;
+import com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -50,10 +55,12 @@ import org.json.JSONObject;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, MashupCallback,
+public class MainActivity extends CommonGoogleMapActivity implements OnMapReadyCallback, MashupCallback,
                                                                 GoogleApiClient.ConnectionCallbacks,
                                                                 GoogleApiClient.OnConnectionFailedListener,
                                                                 LocationListener{
@@ -68,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationRequest mLocationRequest;
     private Location mCurrentLocation;
     public final static int PERMISSION_ACCESS_FINE_LOCATION = 0;
+    DBOpenHelper mDBOpenHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         buildGoogleApiClient();
         mGoogleApiClient.connect();
+        mDBOpenHelper = DBOpenHelper.getInstance();
+        if(mDBOpenHelper != null && mDBOpenHelper.isOpen() == false)
+            mDBOpenHelper.open(getApplicationContext());
         initLayout();
     }
 
@@ -114,13 +125,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void initLayout(){
-
-        //mGpsInfo = new GpsInfo(this);
-        //Location location = mGpsInfo.getLocation(this);
-
-        ArrayList<String> list = new ArrayList<>();
-        list.add("1");
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setContentInsetsAbsolute(0,0);
         mTv_title = (TextView) toolbar.findViewById(R.id.tv_title);
@@ -147,13 +151,64 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             });
         }
 
-        mPlanAdapter = new PlanAdapter();
-        mPlanAdapter.bindData(list);
-        mRvPlan = (RecyclerView) findViewById(R.id.rv_plan);
+        Cursor cursor = mDBOpenHelper.planAllColumns();
+        ArrayList<PlanDetailData> detailList = new ArrayList<PlanDetailData>();
+        String sDate = "";
+        String eDate = "";
+        if(cursor != null && cursor.moveToLast()){
+            int planid = cursor.getInt(cursor.getColumnIndex(DataBases.CreatePlanDB._ID));
+            sDate = cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDetailDB._STARTDATE));
+            eDate = cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDetailDB._ENDDATE));
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mRvPlan.setLayoutManager(layoutManager);
-        mRvPlan.setAdapter(mPlanAdapter);
+            cursor.close();
+
+            Cursor c = mDBOpenHelper.plandetail_getColumn(planid);
+            if(c != null){
+                c.moveToFirst();
+                do {
+                    PlanDetailData data = new PlanDetailData();
+                    data.setPlanid(planid);
+
+                    try {
+                        String sdate = c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._STARTDATE));
+                        String edate = c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._ENDDATE));
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        Date start_date = sdf.parse(sdate);
+                        Date end_date = sdf.parse(edate);
+
+                        data.setStartDate(start_date);
+                        data.setEndDate(end_date);
+                    } catch (Exception e) {
+
+                    }
+                    data.setPathseq(c.getInt(c.getColumnIndex(DataBases.CreatePlanDetailDB._PATH_SEQ)));
+                    data.setPlacename(c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_NAME)));
+                    data.setLatitude(c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LATITUDE)));
+                    data.setLongitude(c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LONGITUDE)));
+                    detailList.add(data);
+                }while (c.moveToNext());
+
+                c.close();
+            }
+        }
+
+        if(detailList != null && detailList.size() > 0){
+            mTv_title.setText(sDate + " ~ " + eDate);
+
+            mPlanAdapter = new PlanAdapter(this);
+            mPlanAdapter.bindData(detailList);
+            mRvPlan = (RecyclerView) findViewById(R.id.rv_plan);
+
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            mRvPlan.setLayoutManager(layoutManager);
+            mRvPlan.setAdapter(mPlanAdapter);
+
+        } else {
+            mPlanAdapter = new PlanAdapter(this);
+            mRvPlan = (RecyclerView) findViewById(R.id.rv_plan);
+            mRvPlan.setVisibility(View.GONE);
+        }
 
         NetworkManager.getInstance().requestAreaBaseListInfo(this, CODES.API_CONTENTTYPE.FESTIVAL);
     }

@@ -1,4 +1,4 @@
-package com.mystory.commonlibrary.map.commonlibrary.map;
+package com.gangnam4bungate.nuviseoul.map;
 
 /**
  * Created by choi on 2017-08-16.
