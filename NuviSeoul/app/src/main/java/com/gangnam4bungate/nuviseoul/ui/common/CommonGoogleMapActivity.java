@@ -363,4 +363,10 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
         mLastedMarkLatLng = _plocation;
     }
     */
+
+    public void MapClear()
+    {
+        this.mMap.clear();
+        this.mRoutes.clear();
+    }
 }
