@@ -258,6 +258,16 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
             }
         }
 /*-------------------------------------------------------------------------------------------------*/
+        //수정이나 보기 모드
+        else if(this.mType==2){
+            /*for()
+            {
+                //Marker 추가
+                LatLng latLng=new LatLng(arg0.latitude,arg0.longitude);
+                MapMarkerDisplay(latLng);
+            }*/
+        }
+/*-------------------------------------------------------------------------------------------------*/
         else{//if(this.mType==1){
 
             //설정에서 부터 넘어온 데이터 추가하기
