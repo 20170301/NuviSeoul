@@ -1,11 +1,13 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,6 +65,14 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
         if(searchDetailDTOs.get(position).homePage.equals("주소가 없어요.")){
             ((RowCell) holder).homePageButton.setVisibility(View.INVISIBLE);
         }
+
+        ((RowCell) holder).homePageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + searchDetailDTOs.get(position).homePage));
+                getContext.startActivity(intent);
+            }
+        });
     }
 
     @Override

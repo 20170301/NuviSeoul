@@ -53,6 +53,18 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(searchDTOs != null){
+            searchDTOs.clear();
+        }
+
+        if(searchDetailDTOs != null){
+            searchDetailDTOs.clear();
+        }
+    }
+
+    @Override
     public void onMashupSuccess(JSONObject object, String requestCode) {
         if(requestCode == REQUEST_AREABASEDETAILLIST){
             Log.d(CODES.TAG, "Search " + object.toString());
@@ -100,6 +112,7 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
                     searchRecyclerView searchRecyclerView = new searchRecyclerView(searchDTOs, searchDetailDTOs, this);
                     view.setLayoutManager(layoutManager);
                     view.setAdapter(searchRecyclerView);
+                    searchRecyclerView.notifyDataSetChanged();
                 }
 
             }catch (JSONException e){
