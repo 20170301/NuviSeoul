@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,11 +57,12 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
         ((RowCell) holder).searchHomepage.setText(searchDetailDTOs.get(position).homePage);
         Picasso.with(getContext)
                 .load(searchDTOs.get(position).firstImage.toString())
-                .transform(new CircleTransform())
-                .centerCrop()
-                .resize(100,100)
+                .fit()
                 .into(((RowCell) holder).searchImage);
 
+        if(searchDetailDTOs.get(position).homePage.equals("주소가 없어요.")){
+            ((RowCell) holder).homePageButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -74,6 +76,7 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView searchDescription;
         TextView searchHomepage;
         ImageView searchImage;
+        Button homePageButton;
 
         public RowCell(View view) {
             super(view);
@@ -81,6 +84,7 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
             searchDescription = (TextView) view.findViewById(R.id.searchDescription);
             searchHomepage = (TextView) view.findViewById(R.id.searchHomepage);
             searchImage = (ImageView) view.findViewById(R.id.searchImage);
+            homePageButton = (Button) view.findViewById(R.id.homePageButton);
         }
     }
 

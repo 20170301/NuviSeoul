@@ -66,12 +66,28 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
                 String homePage = "";
                 String overView = "";
 
-                overView = item.getString("overview");
+                overView = item.getString("overview")
+                        .replaceAll("</br>", "")
+                        .replaceAll("<br>","")
+                        .replaceAll("<br />", "")
+                        .replaceAll("<strong>","")
+                        .replaceAll("</strong>","")
+                        .replaceAll("&nbsp;","")
+                        .replaceAll("&lt;","")
+                        .replaceAll("&gt;","");
+
+                if(overView.length() > 100){
+                    overView = overView.substring(0, 100) + "...";
+                }
+
                 homePage = item.optString("homepage", "주소가 없어요.");
                 if(homePage.contains("href")){
                     int first_index = homePage.indexOf("\"") + 1;
-                    int last_index = homePage.lastIndexOf("\"") -1 ;
-                    homePage = homePage.substring(first_index, last_index);
+                    int last_index = homePage.indexOf("\"", first_index);
+                    homePage = homePage.substring(first_index, last_index).replace("http://", "");
+                    if(homePage.length() > 25 && homePage.contains("/")){
+                        homePage = homePage.substring(0, homePage.indexOf("/"));
+                    }
                 }
 
                 searchDetailDTOs.add(new searchDetailDTO(overView, homePage));
@@ -112,6 +128,9 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
                 for (int i =0; i < item.length(); i++){
                     contentId = item.getJSONObject(i).getString("contentid");
                     title = item.getJSONObject(i).getString("title");
+                    if(title.length()> 17){
+                        title = title.substring(0, 17) + "...";
+                    }
                     mapX = item.getJSONObject(i).getString("mapx");
                     mapY = item.getJSONObject(i).getString("mapy");
                     firstImage = item.getJSONObject(i).optString("firstimage", "no Parsing");
