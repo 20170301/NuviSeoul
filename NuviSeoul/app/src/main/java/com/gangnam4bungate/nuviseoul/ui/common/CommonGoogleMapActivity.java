@@ -93,30 +93,25 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
         boolean bFirst=true;
         Marker makerInfo = null;
         for( Route route : routes) {
-            if(route.startAddress.compareToIgnoreCase(route.endAddress)==0){
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, mZoom));
-                makerInfo = mMap.addMarker(new MarkerOptions()
+            if(bFirst==true) {
+                makerInfo =mMap.addMarker(new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
-                        .position(route.endLocation)
-                        .title(route.endAddress));
+                        .position(route.startLocation)
+                        .title(route.startAddress));
                 makerInfo.showInfoWindow();
-                routes.remove(route);
-            }else{
-                if(bFirst==true) {
-                    makerInfo =mMap.addMarker(new MarkerOptions()
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
-                            .position(route.startLocation)
-                            .title(route.startAddress));
-                    makerInfo.showInfoWindow();
-                    bFirst=false;
-                }
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, mZoom));
-                makerInfo = mMap.addMarker(new MarkerOptions()
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
-                        .position(route.endLocation)
-                        .title(route.endAddress));
-                makerInfo.showInfoWindow();
+                bFirst=false;
+            }
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, mZoom));
+            makerInfo = mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
+                    .position(route.endLocation)
+                    .title(route.endAddress));
+            makerInfo.showInfoWindow();
+
+            //시작과 종료위치가 다른 경우만 경로 데이터를 보여줌
+            if(route.startAddress.compareToIgnoreCase(route.endAddress)!=0){
+
                 PolylineOptions polylineOptions = new PolylineOptions()
                         .geodesic(true)
                         .color(Color.BLUE)

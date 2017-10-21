@@ -35,18 +35,32 @@ public class DirectionFinder {
     private String destination;
     private List<Route> mRoutes;
     private String unigueIdx;
-    private String mTitle;
+    private String mStartTitle;
+    private String mEndTitle;
 
-    public DirectionFinder(DirectionFinderListener listener, List<Route> routes  ,String origin, String destination,String pTitle) {
+
+    public DirectionFinder(DirectionFinderListener listener, List<Route> routes  ,String origin, String destination,String pEndTitle) {
         this.listener = listener;
         this.origin = origin.trim();
         this.destination = destination.trim();
-        this.mRoutes = routes;
-        if((pTitle==null)
-                ||(pTitle.length()==0)){
-            this.mTitle =  this.destination;
+      this.mRoutes = routes;
+
+        if((pEndTitle==null)
+                ||(pEndTitle.length()==0)){
+            this.mEndTitle =  this.destination;
         }else{
-            this.mTitle = pTitle.trim();
+            this.mEndTitle = pEndTitle.trim();
+        }
+        //------------------------------------------------------------
+        int iSize=this.mRoutes.size();
+        if(0<iSize)
+        {
+            //마지막  경로의 endTitle를 가져옴
+            Route route =  this.mRoutes.get((iSize-1));
+            this.mStartTitle = route.endTitle ;
+        } else   {
+            //초기치는 시작과 종료가 같음
+            this.mStartTitle =this.mEndTitle;
         }
         this.unigueIdx=this.origin+"@"+this.destination;
     }
@@ -140,13 +154,15 @@ public class DirectionFinder {
             route.startAddress = jsonLeg.getString("start_address");
             route.startLocation = new LatLng(jsonStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
             route.endLocation = new LatLng(jsonEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
-            route.points = decodePolyLine(overview_polylineJson.getString("points"));
-
+             if(route.startAddress.compareToIgnoreCase(route.endAddress)!=0) {
+                 route.points = decodePolyLine(overview_polylineJson.getString("points"));
+             }
             //인덱스 : 시작과 출발 좌표로 함
             route.index = this.unigueIdx;
 
             //명칭
-            route.title = this.mTitle;
+            route.startTitle = this.mStartTitle;
+            route.endTitle = this.mEndTitle;
 
             this.mRoutes.add(route);
        //}
