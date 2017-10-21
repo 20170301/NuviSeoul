@@ -192,6 +192,7 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
                 image = jsonlocation.optString("firstimage2", "no image");
 
                 //data.add(new RecommendData( image, title, addr1, Double.parseDouble(mapy), Double.parseDouble(mapx)));
+                data.add(new RecommendData( image, title, Double.parseDouble(mapy), Double.parseDouble(mapx)));
             }
             horizontalAdapter=new HorizontalAdapter(data, getApplication());
 
