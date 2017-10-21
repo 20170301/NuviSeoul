@@ -15,6 +15,8 @@ import com.gangnam4bungate.nuviseoul.data.PlanData;
 import com.gangnam4bungate.nuviseoul.database.DBOpenHelper;
 import com.gangnam4bungate.nuviseoul.map.DirectionFinder;
 import com.gangnam4bungate.nuviseoul.map.DirectionFinderListener;
+import com.gangnam4bungate.nuviseoul.map.PlaceFinder;
+import com.gangnam4bungate.nuviseoul.map.PlaceFinderListener;
 import com.gangnam4bungate.nuviseoul.map.Route;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,7 +35,7 @@ import java.util.List;
  * Created by hschoi on 2017. 8. 06..
  */
 
-public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapReadyCallback,DirectionFinderListener, GoogleMap.OnInfoWindowClickListener {
+public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapReadyCallback,DirectionFinderListener,PlaceFinderListener,GoogleMap.OnInfoWindowClickListener {
     protected GoogleMap mMap=null;
     private LatLng mLastedMarkLatLng=null;
     public ArrayList<Route> mRoutes = null;//new ArrayList<Route>();
@@ -77,6 +79,12 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
     @Override
     public void onDirectionFinderStart() {
 
+    }
+
+
+    @Override
+    public void onPlaceFinderSuccess(LatLng latLng, String pTitle) {
+        MapMarkerDisplay(latLng,pTitle);
     }
 
     @Override
@@ -306,8 +314,9 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                         .show();
                 */
                     //좌표를 명칭으로 바꾸는 함수 호출
-                    String _Title="";
-                    MapMarkerDisplay(latLng,_Title);
+                    //String _Title="";
+                    //MapMarkerDisplay(latLng,_Title);
+                    GetPlaceInfo(latLng);
                 }
             });
         }//if(this.mType==1)
@@ -343,6 +352,19 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
         });*/
     /*-------------------------------------------------------------------------------------------------*/
     }
+
+    public void GetPlaceInfo(LatLng latLng)
+    {
+        try
+        {
+            new PlaceFinder(this,latLng).execute();
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 
     public void MapMarkerDisplay(LatLng latLng,String pTitle)
     {
