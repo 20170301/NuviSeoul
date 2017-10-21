@@ -60,8 +60,8 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
        /* SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);*/
-       if(this.mMap!=null)
-        this.mMap.clear();
+        if(this.mMap!=null)
+            this.mMap.clear();
 
         if(this.mRoutes!=null)  {
             this.mRoutes.clear();
@@ -85,7 +85,6 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
         boolean bFirst=true;
         Marker makerInfo = null;
         for( Route route : routes) {
-            //첫번째 클릭의 경우, 시작과 끝이 동일함, 시작과 끝이 같은 경우는 삭제함
             if(route.startAddress.compareToIgnoreCase(route.endAddress)==0){
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, mZoom));
@@ -194,8 +193,8 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
         LatLng seoul = new LatLng(37.52, 127.0);
         //mLastedMarkLatLng = seoul;
         //mMap.addMarker(new MarkerOptions().position(seoul)
-          //              .title("Marker in Seoul")
-            //                               /*.icon(BitmapDescriptorFactory.fromResource(com.google.android.gms.R.drawable.push_in))*/
+        //              .title("Marker in Seoul")
+        //                               /*.icon(BitmapDescriptorFactory.fromResource(com.google.android.gms.R.drawable.push_in))*/
         //);
 
         //
@@ -209,31 +208,31 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        //원점
+
         mMap.setMyLocationEnabled(true);
         //mMap.setLocationSource( );
 
-        //1. 좌표만 설정
+
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(seoul));
 
-        //2 좌표와 카메라 zoom 설정
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(seoul,mZoom));
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(-18.142, 178.431), 2));
-        //moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-33.86997, 151.2089), 18));//실내지도
+        //moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-33.86997, 151.2089), 18));
     /*-------------------------------------------------------------------------------------------------*/
         // Other supported types include: MAP_TYPE_NORMAL,
         // MAP_TYPE_TERRAIN, MAP_TYPE_HYBRID and MAP_TYPE_NONE
         //mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        //mMap.setMapType(GoogleMap.MAP_TYPE_NONE);//화면에 맵이 사라짐
+        //mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
     /*-------------------------------------------------------------------------------------------------*/
-        //스타일 지정
+
         // Customise the styling of the base map using a JSON object defined
         // in a raw resource file.
        /* MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(
                 this, R.raw.style_json);
         mMap.setMapStyle(style);*/
 /*-------------------------------------------------------------------------------------------------*/
-        //사요자 지정 마커 사용에  - 상속 받는 쪽에서 처리
+
         // You can customize the marker image using images bundled with
         // your app, or dynamically generated bitmaps.
         /*mMap.addMarker(new MarkerOptions()
@@ -241,16 +240,15 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                 .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
                 .position(new LatLng(41.889, -87.622)));*/
 /*-------------------------------------------------------------------------------------------------*/
-        //기존에 있는 정보 가져오기
         if(this.mType==0){
             //planid
             //plandetail
-            //경로 정보 채우기
+
             Cursor c = mDBOpenHelper.planAllColumns();
             int planid = 0;
             if(c != null){
                 while(c.moveToNext()){
-                    //위치 정보 추가
+
                     //LatLng latLng=new LatLng(arg0.latitude,arg0.longitude);
                     //MapMarkerDisplay(latLng);
                 }
@@ -258,19 +256,13 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
             }
         }
 /*-------------------------------------------------------------------------------------------------*/
-        //수정이나 보기 모드
-        else if(this.mType==2){
-            /*for()
-            {
-                //Marker 추가
-                LatLng latLng=new LatLng(arg0.latitude,arg0.longitude);
-                MapMarkerDisplay(latLng);
-            }*/
+        else   if(this.mType==2){
+
         }
 /*-------------------------------------------------------------------------------------------------*/
         else{//if(this.mType==1){
 
-            //설정에서 부터 넘어온 데이터 추가하기
+
             //MapMarkerDisplay(new LatLng(37.5388,127.00155));
             //MapMarkerDisplay(new LatLng(37.6388,127.00455));
 
@@ -283,11 +275,11 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                             + arg0.longitude;*/
           /*  Toast.makeText(getApplicationContext(), textTitle, Toast.LENGTH_LONG)
                     .show();*/
-                    //Marker 추가
+                    //Marker
                     LatLng latLng=new LatLng(arg0.latitude,arg0.longitude);
                     //mMap.addMarker(new MarkerOptions().position(latLng).title(textTitle));
 
-                    //1. 폴리라인
+
                     // Polylines are useful for marking paths and routes on the map.
                /* mMap.addPolyline(new PolylineOptions().geodesic(true)
                         .add(new LatLng(-33.866, 151.195))  // Sydney
@@ -300,7 +292,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                         .addAll(arraylist_lat_lon).color(Color.GREEN).width(2);
                 polyline = googleMap.addPolyline(polyline_options);
                */
-                    //2점 연결 - 시작점 , 마지막점
+
                 /*mMap.addPolyline(new PolylineOptions()
                         .color(Color.BLUE)
                         .width(5)
@@ -321,7 +313,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
             });
         }//if(this.mType==1)
 
-        //2. 클릭을 오래 했을때
+
         /*mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
 
             public void onMapLongClick(LatLng point) {
