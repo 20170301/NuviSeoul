@@ -191,11 +191,6 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
                 mapy = jsonlocation.getString("mapy");
                 image = jsonlocation.optString("firstimage2", "no image");
 
-                //Bitmap bmImg;
-                //back task = new back();
-                //task.execute(image);
-
-                //data.add(new RecommendData( R.mipmap.ic_launcher, title, addr1, Double.parseDouble(mapy), Double.parseDouble(mapx)));
                 data.add(new RecommendData( image, title, addr1, Double.parseDouble(mapy), Double.parseDouble(mapx)));
             }
 
@@ -298,31 +293,6 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
             return horizontalList.size();
         }
     }
-/*
-    private class back extends AsyncTask<String, Integer,Bitmap> {
-
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-
-            // TODO Auto-generated method stub
-
-            try{
-                URL myFileUrl = new URL(urls[0]);
-                HttpURLConnection conn = (HttpURLConnection)myFileUrl.openConnection();
-                conn.setDoInput(true);
-                conn.connect();
-                InputStream is = conn.getInputStream();
-                bmImg = BitmapFactory.decodeStream(is);
-
-            }catch(IOException e)
-            {
-                e.printStackTrace();
-            }
-
-            return bmImg;
-        }
-    }
-    */
 
     public class RecommendCircleTransform implements Transformation {
         @Override
