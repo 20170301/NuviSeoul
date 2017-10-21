@@ -146,7 +146,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                 .show();*/
     }
 
-    private  void sendRequestWithDirection(LatLng ltOrigin,LatLng ltDestination)
+    private  void sendRequestWithDirection(LatLng ltOrigin,LatLng ltDestination,String pTitle)
     {
         //String strOrigin="37.509590,127.013767";
         //String strDestination="37.493909,127.014278";
@@ -166,7 +166,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
 
         try
         {
-            new DirectionFinder(this,this.mRoutes,strOrigin,strDestination).execute();
+            new DirectionFinder(this,this.mRoutes,strOrigin,strDestination,pTitle).execute();
         }
         catch(UnsupportedEncodingException e)
         {
@@ -305,7 +305,9 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                 Toast.makeText(getApplicationContext(),sOrigin, Toast.LENGTH_LONG)
                         .show();
                 */
-                    MapMarkerDisplay(latLng);
+                    //좌표를 명칭으로 바꾸는 함수 호출
+                    String _Title="";
+                    MapMarkerDisplay(latLng,_Title);
                 }
             });
         }//if(this.mType==1)
@@ -342,10 +344,10 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
     /*-------------------------------------------------------------------------------------------------*/
     }
 
-    public void MapMarkerDisplay(LatLng latLng)
+    public void MapMarkerDisplay(LatLng latLng,String pTitle)
     {
         if(mLastedMarkLatLng!=null) {
-            sendRequestWithDirection(mLastedMarkLatLng, latLng);
+            sendRequestWithDirection(mLastedMarkLatLng, latLng,pTitle);
         }
         else
         {
@@ -357,7 +359,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                     .position(latLng).title("Start"));
 
             makerInfo.showInfoWindow();*/
-            sendRequestWithDirection(latLng, latLng);
+            sendRequestWithDirection(latLng, latLng,pTitle);
         }
         mLastedMarkLatLng = latLng;
     }

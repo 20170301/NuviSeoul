@@ -35,12 +35,19 @@ public class DirectionFinder {
     private String destination;
     private List<Route> mRoutes;
     private String unigueIdx;
+    private String mTitle;
 
-    public DirectionFinder(DirectionFinderListener listener, List<Route> routes  ,String origin, String destination) {
+    public DirectionFinder(DirectionFinderListener listener, List<Route> routes  ,String origin, String destination,String pTitle) {
         this.listener = listener;
-        this.origin = origin;
-        this.destination = destination;
+        this.origin = origin.trim();
+        this.destination = destination.trim();
         this.mRoutes = routes;
+        if((pTitle==null)
+                ||(pTitle.length()==0)){
+            this.mTitle =  this.destination;
+        }else{
+            this.mTitle = pTitle.trim();
+        }
         this.unigueIdx=this.origin+"@"+this.destination;
     }
 
@@ -137,6 +144,10 @@ public class DirectionFinder {
 
             //인덱스 : 시작과 출발 좌표로 함
             route.index = this.unigueIdx;
+
+            //명칭
+            route.title = this.mTitle;
+
             this.mRoutes.add(route);
        //}
         listener.onDirectionFinderSuccess(this.mRoutes/*routes*/);

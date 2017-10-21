@@ -17,7 +17,7 @@ public class RecommendData {
     RecommendData(String image, String title, String addres, double latitude, double longitude) {
 
         //this.imageId = image;
-       this.image = image;
+        this.image = image;
         this.title = title;
         this.addres = addres;
         this.latitude = latitude;

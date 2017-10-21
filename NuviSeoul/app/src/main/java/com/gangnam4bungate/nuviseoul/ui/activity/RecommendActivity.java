@@ -280,7 +280,7 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
                     MapPreviousLocation(location);
                     */
                     //맵에 마크 추가하기
-                    MapMarkerDisplay(location);
+                    MapMarkerDisplay(location,title);
                     Toast.makeText(RecommendActivity.this, title, Toast.LENGTH_SHORT).show();
                 }
 
