@@ -38,6 +38,17 @@
 
         </activity>
 
+        <activity
+            android:name=".ui.activity.PlanDetailActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.gangnam4bungate.nuviseoul.ui.common.CommonActivity" />
+
+        </activity>
+
         <activity android:name=".ui.activity.RecommendActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

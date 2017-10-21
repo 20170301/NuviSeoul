@@ -19,19 +19,52 @@ import com.gangnam4bungate.nuviseoul.ui.activity.PlanEditActivity;
 
 public class Holder {
     public static int TYPE_PLAN_LIST = 1000;
+    public static int TYPE_PLAN_DETAIL = 2000;
+
     public static RecyclerView.ViewHolder getHolder(Context context, int viewtype){
         if(viewtype == TYPE_PLAN_LIST){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
             View v = (View) inflater.inflate(R.layout.layout_planlist, null);
-            return new PlanViewHolder(v);
+            return new PlanListViewHolder(v);
+        } else if(viewtype == TYPE_PLAN_DETAIL){
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+            View v = (View) inflater.inflate(R.layout.layout_plandetail, null);
+            return new PlanDetailViewHolder(v);
         } else {
             return null;
         }
     }
 
-    public static class PlanViewHolder extends RecyclerView.ViewHolder {
+    public static class PlanListViewHolder extends RecyclerView.ViewHolder {
+        private TextView mTvName;
+        private TextView mTvDate;
+        public PlanListViewHolder(View itemView) {
+            super(itemView);
+
+            if(itemView != null){
+                mTvName = (TextView) itemView.findViewById(R.id.tv_name);
+                mTvDate = (TextView) itemView.findViewById(R.id.tv_date);
+            }
+        }
+
+        public void setName(String name){
+            if(mTvName != null){
+                mTvName.setText(name);
+            }
+        }
+
+        public void setDate(String date){
+            if(mTvDate != null){
+                mTvDate.setText(date);
+            }
+        }
+
+
+    }
+
+    public static class PlanDetailViewHolder extends RecyclerView.ViewHolder {
         private TextView textView;
-        public PlanViewHolder(View itemView) {
+        public PlanDetailViewHolder(View itemView) {
             super(itemView);
 
             if(itemView != null){
@@ -46,4 +79,6 @@ public class Holder {
         }
 
     }
+
+
 }
