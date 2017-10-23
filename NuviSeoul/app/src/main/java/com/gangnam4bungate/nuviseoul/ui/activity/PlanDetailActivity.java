@@ -50,6 +50,7 @@ public class PlanDetailActivity extends CommonGoogleMapActivity implements OnMap
                                                                 GoogleApiClient.OnConnectionFailedListener,
                                                                 LocationListener{
 
+    private ImageView mIv_Modify;
     private TextView mTv_title;
     private ImageView mIv_search;
     private RecyclerView mRvPlan;
@@ -132,6 +133,20 @@ public class PlanDetailActivity extends CommonGoogleMapActivity implements OnMap
                 }
             });
         }
+
+        mIv_Modify = (ImageView) findViewById(R.id.iv_modify);
+        if(mIv_Modify != null){
+            mIv_Modify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), PlanEditActivity.class);
+                    intent.putExtra("edit", true);
+                    intent.putExtra("planid", mPlanid);
+                    startActivityForResult(intent, CODES.ActivityResult.PLAN_EDIT);
+                }
+            });
+        }
+
 
         ArrayList<PlanDetailList> allList = new ArrayList<PlanDetailList>();
         ArrayList<PlanDetailData> detailList = null;

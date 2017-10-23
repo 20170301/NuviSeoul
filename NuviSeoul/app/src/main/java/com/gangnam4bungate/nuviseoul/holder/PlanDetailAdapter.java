@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.gangnam4bungate.nuviseoul.config.CODES;
 import com.gangnam4bungate.nuviseoul.data.PlanDetailData;
 import com.gangnam4bungate.nuviseoul.data.PlanDetailList;
+import com.gangnam4bungate.nuviseoul.ui.activity.PlanDetailActivity;
 import com.gangnam4bungate.nuviseoul.ui.activity.PlanEditActivity;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
 
@@ -25,9 +26,9 @@ import java.util.Date;
 
 public class PlanDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public ArrayList<PlanDetailList> mPlanList;
-    private Activity mActivity;
+    private PlanDetailActivity mActivity;
 
-    public PlanDetailAdapter(Activity activity){
+    public PlanDetailAdapter(PlanDetailActivity activity){
         mActivity = activity;
     }
 
@@ -69,11 +70,8 @@ public class PlanDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     @Override
                     public void onClick(View v) {
                         PlanDetailData data = (PlanDetailData) v.getTag();
-                        if (data != null) {
-                            Intent intent = new Intent(mActivity, PlanEditActivity.class);
-                            intent.putExtra("edit", true);
-                            intent.putExtra("planid", data.getPlanid());
-                            mActivity.startActivityForResult(intent, CODES.ActivityResult.PLAN_EDIT);
+                        if (data != null && mActivity != null) {
+                            mActivity.showLocationData(data.getPlanid());
                         }
                     }
                 });

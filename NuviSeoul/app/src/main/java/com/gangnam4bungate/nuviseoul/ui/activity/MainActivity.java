@@ -42,6 +42,51 @@ public class MainActivity extends CommonActivity{
         initLayout();
     }
 
+    /**
+     * Dispatch onResume() to fragments.  Note that for better inter-operation
+     * with older versions of the platform, at the point of this call the
+     * fragments attached to the activity are <em>not</em> resumed.  This means
+     * that in some cases the previous state may still be saved, not allowing
+     * fragment transactions that modify the state.  To correctly interact
+     * with fragments in their proper state, you should instead override
+     * {@link #onResumeFragments()}.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Cursor cursor = mDBOpenHelper.planAllColumns();
+        ArrayList<PlanData> planList = new ArrayList<PlanData>();
+        if(cursor != null){
+            try {
+                do {
+                    PlanData data = new PlanData();
+
+                    data.setId(cursor.getInt(cursor.getColumnIndex(DataBases.CreatePlanDB._ID)));
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date start_date = sdf.parse(cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDB._STARTDATE)));
+                    Date end_date = sdf.parse(cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDB._ENDDATE)));
+
+                    data.setStart_date(start_date);
+                    data.setEnd_date(end_date);
+                    data.setName(cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDB._NAME)));
+
+                    planList.add(data);
+                } while (cursor.moveToNext());
+
+                cursor.close();
+
+            }catch(Exception e){
+
+            }
+        }
+
+        if(mPlanListAdapter != null)
+            mPlanListAdapter.bindData(planList);
+
+    }
+
     public void initLayout(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setContentInsetsAbsolute(0,0);

@@ -1,12 +1,14 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -73,6 +75,24 @@ public class PlanEditActivity extends CommonActivity {
         mPlanEditActivity = null;
     }
 
+    /**
+     * Dispatch onResume() to fragments.  Note that for better inter-operation
+     * with older versions of the platform, at the point of this call the
+     * fragments attached to the activity are <em>not</em> resumed.  This means
+     * that in some cases the previous state may still be saved, not allowing
+     * fragment transactions that modify the state.  To correctly interact
+     * with fragments in their proper state, you should instead override
+     * {@link #onResumeFragments()}.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mPlanSubjectText.getWindowToken(), 0);
+
+    }
+
     public void setLocations(ArrayList<Route> locationList){
         mLocationList.clear();
         mLocationList.addAll(locationList);
@@ -101,6 +121,16 @@ public class PlanEditActivity extends CommonActivity {
         if(isPlanEdit == false) {
             if (mllAddLayout != null) {
                 addLayout(mllAddLayout, null);
+            }
+            View addLayout = getLayoutInflater().inflate(R.layout.layout_plan_addlayout, null);
+            if (addLayout != null) {
+                mllAddLayout.addView(addLayout);
+                addLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addLayout(mllAddLayout, null);
+                    }
+                });
             }
         } else {
             Cursor c = mDBOpenHelper.plan_getColumn(mEditPlanId);
@@ -227,8 +257,8 @@ public class PlanEditActivity extends CommonActivity {
                         Date sDate = null;
                         Date eDate = null;
 
-                        for (int i = 0; i < mPlanDetailInsertList.size(); i++) {
-                            PlanDetailData data = mPlanDetailInsertList.get(i);
+                        for (int i = 0; i < mPlanDetailUpdateList.size(); i++) {
+                            PlanDetailData data = mPlanDetailUpdateList.get(i);
                             if (data != null) {
                                 if(sDate == null)
                                     sDate = data.getStartDate();
@@ -297,6 +327,12 @@ public class PlanEditActivity extends CommonActivity {
                 data = editdata;
             }
 
+            if(isPlanEdit == false){
+                mPlanDetailInsertList.add(data);
+            } else {
+                mPlanDetailUpdateList.add(data);
+            }
+
             if(data != null) {
                 if(data.getPathseq() == 0 || data.getPathseq() == -1){
                     final View view = getLayoutInflater().inflate(R.layout.layout_plan_edit_detail, null);
@@ -327,9 +363,9 @@ public class PlanEditActivity extends CommonActivity {
                                         try {
                                             TextView textView = (TextView) v;
                                             if (textView != null) {
-                                                textView.setText(String.format("%d/%d/%d", year, month, dayOfMonth));
+                                                textView.setText(String.format("%d/%d/%d", year, month + 1, dayOfMonth));
                                                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
-                                                Date date = dateFormat.parse(String.format("%d-%d-%d", year, month, dayOfMonth));
+                                                Date date = dateFormat.parse(String.format("%d-%d-%d", year, month + 1, dayOfMonth));
                                                 PlanDetailData data = (PlanDetailData) textView.getTag();
                                                 data.setStartDate(date);
                                             }
@@ -337,7 +373,7 @@ public class PlanEditActivity extends CommonActivity {
 
                                         }
                                     }
-                                }, year, month, date);
+                                }, year, month - 1, date);
                                 dateDialog.show();
                             }
                         });
@@ -365,9 +401,9 @@ public class PlanEditActivity extends CommonActivity {
                                         try {
                                             TextView textView = (TextView) v;
                                             if (textView != null) {
-                                                textView.setText(String.format("%d/%d/%d", year, month, dayOfMonth));
+                                                textView.setText(String.format("%d/%d/%d", year, month + 1, dayOfMonth));
                                                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
-                                                Date date = dateFormat.parse(String.format("%d-%d-%d", year, month, dayOfMonth));
+                                                Date date = dateFormat.parse(String.format("%d-%d-%d", year, month + 1, dayOfMonth));
                                                 PlanDetailData data = (PlanDetailData) textView.getTag();
                                                 data.setEndDate(date);
                                             }
@@ -375,7 +411,7 @@ public class PlanEditActivity extends CommonActivity {
 
                                         }
                                     }
-                                }, year, month, date);
+                                }, year, month - 1, date);
                                 dateDialog.show();
                             }
                         });
@@ -476,12 +512,6 @@ public class PlanEditActivity extends CommonActivity {
                     data.setLongitude(route.startLocation.longitude);
                     data.setPlacename(tv_dest.getText().toString());
                     data.setPathseq(0);
-
-                    if(isPlanEdit == false){
-                        mPlanDetailInsertList.add(data);
-                    } else {
-                        mPlanDetailUpdateList.add(data);
-                    }
                 }
                 if (addView != null) {
                     for (int index = 1; index < mLocationList.size(); index++) {
