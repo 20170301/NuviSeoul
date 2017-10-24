@@ -39,7 +39,8 @@ public class NetworkManager {
 
     public void requestAreaBaseDetailListInfo(Object object, String contentid){
         try {
-            Uri builtUri = Uri.parse("http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=" + CODES.Dev_ServiceKey + "&contentId="+ contentid +"&defaultYN=Y&MobileOS=AND&overviewYN=Y&MobileApp=" + ((Context) object).getString(R.string.app_name));
+            Uri builtUri = Uri.parse((CODES.DefaultDomain + CODES.URLCodes.URL_SEARCH) + CODES.Dev_ServiceKey + "&contentId="+ contentid +"&defaultYN=Y&MobileOS=AND&overviewYN=Y&MobileApp=" + ((Context) object).getString(R.string.app_name) + "&"+CODES.CommonCodes._TYPE + "=" +"json");
+
             String url = builtUri.toString();
 
             HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_AREABASEDETAILLIST);
@@ -69,7 +70,7 @@ public class NetworkManager {
 
         try {
             Uri builtUri = Uri.parse("http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=" + key +
-                    "&mapX=126.981611&mapY=37.568477&radius=10000&pageNo=1&numOfRows=4&listYN=Y&arrange=B&contentTypeId=14&MobileOS=AND&MobileApp=MyApplication&_type=json");
+                    "&mapX=126.981611&mapY=37.568477&radius=10000&pageNo=1&numOfRows=14&listYN=Y&arrange=B&contentTypeId=14&MobileOS=AND&MobileApp=MyApplication&_type=json");
 
             String url = builtUri.toString();
 

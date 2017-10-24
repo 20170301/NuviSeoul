@@ -11,6 +11,8 @@ import android.widget.ListView;
 
 import com.gangnam4bungate.nuviseoul.config.CODES;
 import com.gangnam4bungate.nuviseoul.data.PlanDetailData;
+import com.gangnam4bungate.nuviseoul.data.PlanDetailList;
+import com.gangnam4bungate.nuviseoul.ui.activity.PlanDetailActivity;
 import com.gangnam4bungate.nuviseoul.ui.activity.PlanEditActivity;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
 
@@ -22,16 +24,16 @@ import java.util.Date;
  * Created by wsseo on 2017. 8. 6..
  */
 
-public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public ArrayList<PlanDetailData> mPlanDetailList;
-    private Activity mActivity;
+public class PlanDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public ArrayList<PlanDetailList> mPlanList;
+    private PlanDetailActivity mActivity;
 
-    public PlanAdapter(Activity activity){
+    public PlanDetailAdapter(PlanDetailActivity activity){
         mActivity = activity;
     }
 
-    public void bindData(ArrayList<PlanDetailData> list){
-        mPlanDetailList = list;
+    public void bindData(ArrayList<PlanDetailList> list){
+        mPlanList = list;
         this.notifyDataSetChanged();
     }
 
@@ -42,36 +44,38 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(holder.getItemViewType() == Holder.TYPE_PLAN_LIST){
-            Holder.PlanViewHolder planViewHolder = (Holder.PlanViewHolder)holder;
+        if(holder.getItemViewType() == Holder.TYPE_PLAN_DETAIL){
+            Holder.PlanDetailViewHolder planViewHolder = (Holder.PlanDetailViewHolder)holder;
+            PlanDetailList detailList = mPlanList.get(position);
 
-            Date sDate = mPlanDetailList.get(position).getStartDate();
-            Date eDate = mPlanDetailList.get(position).getEndDate();
+            if(detailList != null) {
+                ArrayList<PlanDetailData> list = detailList.getArrayList();
+                Date sDate = list.get(0).getStartDate();
+                Date eDate = list.get(0).getEndDate();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String start_date = sdf.format(sDate);
-            String end_date = sdf.format(eDate);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String start_date = sdf.format(sDate);
+                String end_date = sdf.format(eDate);
 
-            if(start_date != null && end_date != null){
-               if(start_date.equals(end_date)) {
-                   planViewHolder.setDate(start_date + " ");
-               } else {
-                   planViewHolder.setDate(start_date + " ~ \n" + end_date);
-               }
-            }
-
-            planViewHolder.itemView.setTag(mPlanDetailList.get(position));
-            planViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    PlanDetailData data = (PlanDetailData)v.getTag();
-                    if(data != null){
-                        Intent intent = new Intent(mActivity, PlanEditActivity.class);
-                        intent.putExtra("planid", data.getPlanid());
-                        mActivity.startActivityForResult(intent, CODES.ActivityResult.PLAN_EDIT);
+                if (start_date != null && end_date != null) {
+                    if (start_date.equals(end_date)) {
+                        planViewHolder.setDate(start_date + " ");
+                    } else {
+                        planViewHolder.setDate(start_date + " ~ " + end_date);
                     }
                 }
-            });
+
+                planViewHolder.itemView.setTag(list.get(0));
+                planViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PlanDetailData data = (PlanDetailData) v.getTag();
+                        if (data != null && mActivity != null) {
+                            mActivity.showLocationData(data.getPlanid());
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -82,7 +86,7 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     @Override
     public int getItemCount() {
-        return mPlanDetailList.size();
+        return mPlanList.size();
     }
 
     /**
@@ -99,6 +103,6 @@ public class PlanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     @Override
     public int getItemViewType(int position) {
-        return Holder.TYPE_PLAN_LIST;
+        return Holder.TYPE_PLAN_DETAIL;
     }
 }

@@ -35,12 +35,33 @@ public class DirectionFinder {
     private String destination;
     private List<Route> mRoutes;
     private String unigueIdx;
+    private String mStartTitle;
+    private String mEndTitle;
 
-    public DirectionFinder(DirectionFinderListener listener, List<Route> routes  ,String origin, String destination) {
+
+    public DirectionFinder(DirectionFinderListener listener, List<Route> routes  ,String origin, String destination,String pEndTitle) {
         this.listener = listener;
-        this.origin = origin;
-        this.destination = destination;
-        this.mRoutes = routes;
+        this.origin = origin.trim();
+        this.destination = destination.trim();
+      this.mRoutes = routes;
+
+        if((pEndTitle==null)
+                ||(pEndTitle.length()==0)){
+            this.mEndTitle =  this.destination;
+        }else{
+            this.mEndTitle = pEndTitle.trim();
+        }
+        //------------------------------------------------------------
+        int iSize=this.mRoutes.size();
+        if(0<iSize)
+        {
+            //마지막  경로의 endTitle를 가져옴
+            Route route =  this.mRoutes.get((iSize-1));
+            this.mStartTitle = route.endTitle ;
+        } else   {
+            //초기치는 시작과 종료가 같음
+            this.mStartTitle =this.mEndTitle;
+        }
         this.unigueIdx=this.origin+"@"+this.destination;
     }
 
@@ -65,7 +86,10 @@ public class DirectionFinder {
         String urlOrigin = URLEncoder.encode(origin, "utf-8");
         String urlDestination = URLEncoder.encode(destination, "utf-8");
 
-        return DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination + "&mode=transit&key=" + GOOGLE_API_KEY;
+        return DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination + "&mode=transit&key=" + GOOGLE_API_KEY+"&language=ko";
+
+        //기본 영문
+        //return DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination + "&mode=transit&key=" + GOOGLE_API_KEY;
     }
 
     private class DownloadRawData extends AsyncTask<String, Void, String> {
@@ -130,10 +154,16 @@ public class DirectionFinder {
             route.startAddress = jsonLeg.getString("start_address");
             route.startLocation = new LatLng(jsonStartLocation.getDouble("lat"), jsonStartLocation.getDouble("lng"));
             route.endLocation = new LatLng(jsonEndLocation.getDouble("lat"), jsonEndLocation.getDouble("lng"));
-            route.points = decodePolyLine(overview_polylineJson.getString("points"));
-
+             if(route.startAddress.compareToIgnoreCase(route.endAddress)!=0) {
+                 route.points = decodePolyLine(overview_polylineJson.getString("points"));
+             }
             //인덱스 : 시작과 출발 좌표로 함
             route.index = this.unigueIdx;
+
+            //명칭
+            route.startTitle = this.mStartTitle;
+            route.endTitle = this.mEndTitle;
+
             this.mRoutes.add(route);
        //}
         listener.onDirectionFinderSuccess(this.mRoutes/*routes*/);
