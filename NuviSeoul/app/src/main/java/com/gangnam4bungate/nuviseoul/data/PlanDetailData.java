@@ -7,13 +7,21 @@ import java.util.Date;
  */
 
 public class PlanDetailData {
-    int planid;
+    int id;
+    int planid = -1;
     Date startdate;
     Date enddate;
     String placename;
-    int pathseq;
-    double latitude;
-    double longitude;
+    int pathseq = -1;
+    double latitude = 0.0d;
+    double longitude = 0.0d;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id){ this.id = id;}
 
     public int getPlanid() {
         return planid;

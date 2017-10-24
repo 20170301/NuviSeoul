@@ -123,7 +123,10 @@ public class DBOpenHelper {
 
     // Select All
     public Cursor planAllColumns(){
-        return mDB.query(DataBases.CreatePlanDB._TABLENAME, null, null, null, null, null, null);
+        Cursor c = mDB.query(DataBases.CreatePlanDB._TABLENAME, null, null, null, null, null, null);
+        if(c != null && c.getCount() != 0)
+            c.moveToFirst();
+        return c;
     }
 
     // ID 컬럼 얻어 오기
@@ -169,10 +172,12 @@ public class DBOpenHelper {
 
         ContentValues values = new ContentValues();
         try {
+
             SimpleDateFormat t_sdf = new SimpleDateFormat("yyyy-MM-dd");
             String str_startdate = t_sdf.format(data.getStartDate());
             String str_enddate = t_sdf.format(data.getEndDate());
 
+            values.put(DataBases.CreatePlanDetailDB._PLANID, data.getPlanid());
             values.put(DataBases.CreatePlanDetailDB._STARTDATE, str_startdate);
             values.put(DataBases.CreatePlanDetailDB._ENDDATE, str_enddate);
             values.put(DataBases.CreatePlanDetailDB._PLACE_NAME, data.getPlacename());
@@ -184,12 +189,13 @@ public class DBOpenHelper {
 
         }
 
-        return mDB.update(DataBases.CreatePlanDetailDB._TABLENAME, values, DataBases.CreatePlanDetailDB._ID + "=" + data.getPlanid(), null) > 0;
+        return mDB.update(DataBases.CreatePlanDetailDB._TABLENAME, values, DataBases.CreatePlanDetailDB._ID + "="+ data.getId(), null) > 0;
+
     }
 
-    // Delete planid
-    public boolean plandetailDelete(long planid){
-        return mDB.delete(DataBases.CreatePlanDetailDB._TABLENAME, DataBases.CreatePlanDetailDB._PLANID + "="+ planid, null) > 0;
+    // Delete id
+    public boolean plandetailDelete(long id){
+        return mDB.delete(DataBases.CreatePlanDetailDB._TABLENAME, DataBases.CreatePlanDetailDB._ID + "="+ id, null) > 0;
     }
 
     // Select All
