@@ -83,17 +83,22 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
     public void onDirectionFinderSuccess(List<Route> routes) {
         mMap.clear();
         boolean bFirst=true;
+        boolean bDelete=true;
+        if(routes.size()<=1){
+            bDelete=false;
+        }
         Marker makerInfo = null;
         for( Route route : routes) {
             if(route.startAddress.compareToIgnoreCase(route.endAddress)==0){
-
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, mZoom));
                 makerInfo = mMap.addMarker(new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
                         .position(route.endLocation)
                         .title(route.endAddress));
                 makerInfo.showInfoWindow();
-                routes.remove(route);
+                if(bDelete) {
+                    routes.remove(route);
+                }
             }else{
                 if(bFirst==true) {
                     makerInfo =mMap.addMarker(new MarkerOptions()
@@ -254,10 +259,6 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                 }
                 c.close();
             }
-        }
-/*-------------------------------------------------------------------------------------------------*/
-        else   if(this.mType==2){
-
         }
 /*-------------------------------------------------------------------------------------------------*/
         else{//if(this.mType==1){
