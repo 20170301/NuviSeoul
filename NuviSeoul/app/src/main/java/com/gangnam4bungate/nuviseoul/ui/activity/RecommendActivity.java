@@ -163,7 +163,7 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
     @Override
     public void onMashupSuccess(JSONObject object, String requestCode) {
 
-        String addr1 = null;
+        //String addr1 = null;
         String title = null;
         String mapx = null;
         String mapy = null;
@@ -186,14 +186,14 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
                 JSONObject jsonlocation = location.getJSONObject(i);
 
                 title = jsonlocation.getString("title");
-                addr1 = jsonlocation.getString("addr1");
+                //addr1 = jsonlocation.getString("addr1");
                 mapx = jsonlocation.getString("mapx");
                 mapy = jsonlocation.getString("mapy");
                 image = jsonlocation.optString("firstimage2", "no image");
 
-                data.add(new RecommendData( image, title, addr1, Double.parseDouble(mapy), Double.parseDouble(mapx)));
+                //data.add(new RecommendData( image, title, addr1, Double.parseDouble(mapy), Double.parseDouble(mapx)));
+                data.add(new RecommendData( image, title, Double.parseDouble(mapy), Double.parseDouble(mapx)));
             }
-
             horizontalAdapter=new HorizontalAdapter(data, getApplication());
 
             LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(RecommendActivity.this, LinearLayoutManager.HORIZONTAL, false);
@@ -261,7 +261,7 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
                 public void onClick(View v) {
 
                     String title = horizontalList.get(position).title.toString();
-                    String addres = horizontalList.get(position).addres.toString();
+                    //String addres = horizontalList.get(position).addres.toString();
                     double lati = horizontalList.get(position).latitude;
                     double longi = horizontalList.get(position).longitude;
 
@@ -280,7 +280,7 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
                     MapPreviousLocation(location);
                     */
                     //맵에 마크 추가하기
-                    MapMarkerDisplay(location);
+                    MapMarkerDisplay(location,title);
                     Toast.makeText(RecommendActivity.this, title, Toast.LENGTH_SHORT).show();
                 }
 

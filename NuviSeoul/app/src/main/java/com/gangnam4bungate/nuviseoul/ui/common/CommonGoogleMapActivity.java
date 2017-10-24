@@ -13,9 +13,13 @@ import android.widget.Toast;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.data.PlanData;
 import com.gangnam4bungate.nuviseoul.database.DBOpenHelper;
+import com.gangnam4bungate.nuviseoul.database.DataBases;
 import com.gangnam4bungate.nuviseoul.map.DirectionFinder;
 import com.gangnam4bungate.nuviseoul.map.DirectionFinderListener;
+import com.gangnam4bungate.nuviseoul.map.PlaceFinder;
+import com.gangnam4bungate.nuviseoul.map.PlaceFinderListener;
 import com.gangnam4bungate.nuviseoul.map.Route;
+import com.gangnam4bungate.nuviseoul.ui.activity.PlanEditActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,12 +37,13 @@ import java.util.List;
  * Created by hschoi on 2017. 8. 06..
  */
 
-public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapReadyCallback,DirectionFinderListener, GoogleMap.OnInfoWindowClickListener {
+public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapReadyCallback,DirectionFinderListener,PlaceFinderListener,GoogleMap.OnInfoWindowClickListener {
     protected GoogleMap mMap=null;
     private LatLng mLastedMarkLatLng=null;
-    public ArrayList<Route> mRoutes = null;//new ArrayList<Route>();
+    public ArrayList<Route> mRoutes = new ArrayList<Route>();//new ArrayList<Route>();
     public int mType=0;
     public int mZoom=13;
+    public int mPlanId=0;
 
     DBOpenHelper mDBOpenHelper;
     PlanData mPlanData = new PlanData();
@@ -65,8 +70,6 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
 
         if(this.mRoutes!=null)  {
             this.mRoutes.clear();
-        }else{
-            this.mRoutes=new ArrayList<Route>();
         }
 
         //DB
@@ -79,41 +82,37 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
 
     }
 
+
+    @Override
+    public void onPlaceFinderSuccess(LatLng latLng, String pTitle) {
+        MapMarkerDisplay(latLng,pTitle);
+    }
+
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
         mMap.clear();
         boolean bFirst=true;
-        boolean bDelete=true;
-        if(routes.size()<=1){
-            bDelete=false;
-        }
         Marker makerInfo = null;
         for( Route route : routes) {
-            if(route.startAddress.compareToIgnoreCase(route.endAddress)==0){
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, mZoom));
-                makerInfo = mMap.addMarker(new MarkerOptions()
+
+            if(bFirst==true) {
+                makerInfo =mMap.addMarker(new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
-                        .position(route.endLocation)
-                        .title(route.endAddress));
+                        .position(route.startLocation)
+                        .title(route.startAddress));
                 makerInfo.showInfoWindow();
-                if(bDelete) {
-                    routes.remove(route);
-                }
-            }else{
-                if(bFirst==true) {
-                    makerInfo =mMap.addMarker(new MarkerOptions()
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
-                            .position(route.startLocation)
-                            .title(route.startAddress));
-                    makerInfo.showInfoWindow();
-                    bFirst=false;
-                }
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, mZoom));
-                makerInfo = mMap.addMarker(new MarkerOptions()
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
-                        .position(route.endLocation)
-                        .title(route.endAddress));
-                makerInfo.showInfoWindow();
+                bFirst=false;
+            }
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, mZoom));
+            makerInfo = mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.recommend_location))
+                    .position(route.endLocation)
+                    .title(route.endAddress));
+            makerInfo.showInfoWindow();
+
+            //시작과 종료위치가 다른 경우만 경로 데이터를 보여줌
+            if(route.startAddress.compareToIgnoreCase(route.endAddress)!=0){
+
                 PolylineOptions polylineOptions = new PolylineOptions()
                         .geodesic(true)
                         .color(Color.BLUE)
@@ -151,7 +150,13 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                 .show();*/
     }
 
-    private  void sendRequestWithDirection(LatLng ltOrigin,LatLng ltDestination)
+
+    public void showLocationData(int planid){
+
+    }
+
+
+    private  void sendRequestWithDirection(LatLng ltOrigin,LatLng ltDestination,String pTitle)
     {
         //String strOrigin="37.509590,127.013767";
         //String strDestination="37.493909,127.014278";
@@ -171,7 +176,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
 
         try
         {
-            new DirectionFinder(this,this.mRoutes,strOrigin,strDestination).execute();
+            new DirectionFinder(this,this.mRoutes,strOrigin,strDestination,pTitle).execute();
         }
         catch(UnsupportedEncodingException e)
         {
@@ -248,25 +253,35 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
         if(this.mType==0){
             //planid
             //plandetail
-
-            Cursor c = mDBOpenHelper.planAllColumns();
-            int planid = 0;
-            if(c != null){
-                while(c.moveToNext()){
-
-                    //LatLng latLng=new LatLng(arg0.latitude,arg0.longitude);
-                    //MapMarkerDisplay(latLng);
+            //Cursor c = mDBOpenHelper.planAllColumns();
+            //int planid = 0;
+            Cursor c = mDBOpenHelper.plandetail_getColumn(this.mPlanId);
+            if(c != null) {
+                while (c.moveToNext()) {
+                    //LatLng latLng=new LatLng(route.endLocation.latitude,route.endLocation.longitude);
+                    //MapMarkerDisplay(latLng,route.endTitle);
+                    LatLng latLng=new LatLng(c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LATITUDE)), c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LONGITUDE)));
+                    GetPlaceInfo(latLng);
                 }
                 c.close();
             }
         }
-/*-------------------------------------------------------------------------------------------------*/
+        /*-------------------------------------------------------------------------------------------------*/
         else{//if(this.mType==1){
 
-
+            //수정 상태 - 기존 데이터 저장
+            if(PlanEditActivity.getInstance() != null) {
+                //PlanEditActivity.getInstance().mLocationList;
+                if(PlanEditActivity.getInstance().mLocationList.size()>0) {
+                    ArrayList<Route> Routes = PlanEditActivity.getInstance().mLocationList;
+                    for (Route route : mRoutes) {
+                        LatLng latLng = new LatLng(route.endLocation.latitude, route.endLocation.longitude);
+                        MapMarkerDisplay(latLng, route.endTitle);
+                    }
+                }
+            }
             //MapMarkerDisplay(new LatLng(37.5388,127.00155));
             //MapMarkerDisplay(new LatLng(37.6388,127.00455));
-
             //1 Map Click
             mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
@@ -309,7 +324,10 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                 Toast.makeText(getApplicationContext(),sOrigin, Toast.LENGTH_LONG)
                         .show();
                 */
-                    MapMarkerDisplay(latLng);
+                    //좌표를 명칭으로 바꾸는 함수 호출
+                    //String _Title="";
+                    //MapMarkerDisplay(latLng,_Title);
+                    GetPlaceInfo(latLng);
                 }
             });
         }//if(this.mType==1)
@@ -346,10 +364,23 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
     /*-------------------------------------------------------------------------------------------------*/
     }
 
-    public void MapMarkerDisplay(LatLng latLng)
+    public void GetPlaceInfo(LatLng latLng)
+    {
+        try
+        {
+            new PlaceFinder(this,latLng).execute();
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void MapMarkerDisplay(LatLng latLng,String pTitle)
     {
         if(mLastedMarkLatLng!=null) {
-            sendRequestWithDirection(mLastedMarkLatLng, latLng);
+            sendRequestWithDirection(mLastedMarkLatLng, latLng,pTitle);
         }
         else
         {
@@ -361,7 +392,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                     .position(latLng).title("Start"));
 
             makerInfo.showInfoWindow();*/
-            sendRequestWithDirection(latLng, latLng);
+            sendRequestWithDirection(latLng, latLng,pTitle);
         }
         mLastedMarkLatLng = latLng;
     }
@@ -371,33 +402,37 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
         Toast.makeText(this, "Info window clicked",
                 Toast.LENGTH_SHORT).show();
     }
-/*
-    public void MapMarkerDisplay(MarkerOptions _marker)
-    {
-        mMap.addMarker(_marker).showInfoWindow();
-    }
+    /*
+        public void MapMarkerDisplay(MarkerOptions _marker)
+        {
+            mMap.addMarker(_marker).showInfoWindow();
+        }
 
-    public void MapMarkerZoom(LatLng _location)
-    {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(_location,mZoom));
-    }
+        public void MapMarkerZoom(LatLng _location)
+        {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(_location,mZoom));
+        }
 
-    public void MapLineDrawing(LatLng _location)
-    {
-        mMap.addPolyline(new PolylineOptions()
-                .color(Color.BLUE)
-                .width(5)
-                .geodesic(true)
-                .add(mLastedMarkLatLng)
-                .add(_location)
-        );
-    }
+        public void MapLineDrawing(LatLng _location)
+        {
+            mMap.addPolyline(new PolylineOptions()
+                    .color(Color.BLUE)
+                    .width(5)
+                    .geodesic(true)
+                    .add(mLastedMarkLatLng)
+                    .add(_location)
+            );
+        }
 
-    public void MapPreviousLocation(LatLng _plocation)
+        public void MapPreviousLocation(LatLng _plocation)
+        {
+            mLastedMarkLatLng = _plocation;
+        }
+        */
+    public void SetPlanId(int _PlanId)
     {
-        mLastedMarkLatLng = _plocation;
+        this.mPlanId=_PlanId;
     }
-    */
 
     public void MapClear()
     {
