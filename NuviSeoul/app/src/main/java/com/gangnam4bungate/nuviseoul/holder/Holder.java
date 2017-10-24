@@ -49,13 +49,13 @@ public class Holder {
 
         public void setName(String name){
             if(mTvName != null){
-                mTvName.setText(name);
+                mTvName.setText(" " + name);
             }
         }
 
         public void setDate(String date){
             if(mTvDate != null){
-                mTvDate.setText(date);
+                mTvDate.setText(" " + date);
             }
         }
 
@@ -63,20 +63,31 @@ public class Holder {
     }
 
     public static class PlanDetailViewHolder extends RecyclerView.ViewHolder {
-        private TextView textView;
+        private TextView tv_date;
+        private TextView tv_place;
         public PlanDetailViewHolder(View itemView) {
             super(itemView);
 
             if(itemView != null){
-                textView = (TextView) itemView.findViewById(R.id.tv_date);
+                tv_date = (TextView) itemView.findViewById(R.id.tv_date);
+            }
+            if(itemView != null){
+                tv_place = (TextView) itemView.findViewById(R.id.tv_place);
             }
         }
 
         public void setDate(String date){
-            if(textView != null){
-                textView.setText(date);
+            if(tv_date != null){
+                tv_date.setText(date);
             }
         }
+
+        public void setPlace(String place){
+            if(tv_place != null){
+                tv_place.setText(place);
+            }
+        }
+
 
     }
 

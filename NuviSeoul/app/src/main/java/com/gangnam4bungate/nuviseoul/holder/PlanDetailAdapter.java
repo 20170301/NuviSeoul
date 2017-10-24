@@ -44,38 +44,44 @@ public class PlanDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(holder.getItemViewType() == Holder.TYPE_PLAN_DETAIL){
-            Holder.PlanDetailViewHolder planViewHolder = (Holder.PlanDetailViewHolder)holder;
-            PlanDetailList detailList = mPlanList.get(position);
+        try {
+            if (holder.getItemViewType() == Holder.TYPE_PLAN_DETAIL) {
+                Holder.PlanDetailViewHolder planViewHolder = (Holder.PlanDetailViewHolder) holder;
+                PlanDetailList detailList = mPlanList.get(position);
 
-            if(detailList != null) {
-                ArrayList<PlanDetailData> list = detailList.getArrayList();
-                Date sDate = list.get(0).getStartDate();
-                Date eDate = list.get(0).getEndDate();
+                if (detailList != null) {
+                    ArrayList<PlanDetailData> list = detailList.getArrayList();
+                    Date sDate = list.get(0).getStartDate();
+                    Date eDate = list.get(0).getEndDate();
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String start_date = sdf.format(sDate);
-                String end_date = sdf.format(eDate);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String start_date = sdf.format(sDate);
+                    String end_date = sdf.format(eDate);
 
-                if (start_date != null && end_date != null) {
-                    if (start_date.equals(end_date)) {
-                        planViewHolder.setDate(start_date + " ");
-                    } else {
-                        planViewHolder.setDate(start_date + " ~ " + end_date);
-                    }
-                }
-
-                planViewHolder.itemView.setTag(list.get(0));
-                planViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        PlanDetailData data = (PlanDetailData) v.getTag();
-                        if (data != null && mActivity != null) {
-                            mActivity.showLocationData(data.getPlanid());
+                    if (start_date != null && end_date != null) {
+                        if (start_date.equals(end_date)) {
+                            planViewHolder.setDate(start_date + " ");
+                        } else {
+                            planViewHolder.setDate(start_date + " ~ " + end_date);
                         }
                     }
-                });
+
+                    planViewHolder.setPlace(list.get(0).getPlacename());
+
+                    planViewHolder.itemView.setTag(list.get(0));
+                    planViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            PlanDetailData data = (PlanDetailData) v.getTag();
+                            if (data != null && mActivity != null) {
+                                mActivity.showLocationData(data.getPlanid());
+                            }
+                        }
+                    });
+                }
             }
+        }catch(Exception e){
+
         }
     }
 
