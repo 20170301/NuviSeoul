@@ -3,6 +3,8 @@ package com.gangnam4bungate.nuviseoul.ui.activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -10,13 +12,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
 import com.gangnam4bungate.nuviseoul.data.PlanData;
 import com.gangnam4bungate.nuviseoul.database.DBOpenHelper;
 import com.gangnam4bungate.nuviseoul.database.DataBases;
 import com.gangnam4bungate.nuviseoul.holder.PlanListAdapter;
+import com.gangnam4bungate.nuviseoul.holder.TabPagerAdapter;
+import com.gangnam4bungate.nuviseoul.model.TourCourseModel;
+import com.gangnam4bungate.nuviseoul.network.DataManager;
+import com.gangnam4bungate.nuviseoul.network.NetworkManager;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
+import com.google.gson.Gson;
+import com.mystory.commonlibrary.network.MashupCallback;
+
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,67 +36,18 @@ import java.util.Date;
 public class MainActivity extends CommonActivity{
 
     private TextView mTv_title;
-    private ImageView mIv_add;
     private ImageView mIv_search;
-    private RecyclerView mRvPlanList;
-    private PlanListAdapter mPlanListAdapter;
-    DBOpenHelper mDBOpenHelper;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDBOpenHelper = DBOpenHelper.getInstance();
-        if(mDBOpenHelper != null && mDBOpenHelper.isOpen() == false)
-            mDBOpenHelper.open(getApplicationContext());
         initLayout();
     }
 
-    /**
-     * Dispatch onResume() to fragments.  Note that for better inter-operation
-     * with older versions of the platform, at the point of this call the
-     * fragments attached to the activity are <em>not</em> resumed.  This means
-     * that in some cases the previous state may still be saved, not allowing
-     * fragment transactions that modify the state.  To correctly interact
-     * with fragments in their proper state, you should instead override
-     * {@link #onResumeFragments()}.
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Cursor cursor = mDBOpenHelper.planAllColumns();
-        ArrayList<PlanData> planList = new ArrayList<PlanData>();
-        if(cursor != null){
-            try {
-                do {
-                    PlanData data = new PlanData();
-
-                    data.setId(cursor.getInt(cursor.getColumnIndex(DataBases.CreatePlanDB._ID)));
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    Date start_date = sdf.parse(cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDB._STARTDATE)));
-                    Date end_date = sdf.parse(cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDB._ENDDATE)));
-
-                    data.setStart_date(start_date);
-                    data.setEnd_date(end_date);
-                    data.setName(cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDB._NAME)));
-
-                    planList.add(data);
-                } while (cursor.moveToNext());
-
-                cursor.close();
-
-            }catch(Exception e){
-
-            }
-        }
-
-        if(mPlanListAdapter != null)
-            mPlanListAdapter.bindData(planList);
-
-    }
 
     public void initLayout(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -95,15 +57,6 @@ public class MainActivity extends CommonActivity{
             mTv_title.setText(getString(R.string.app_name));
         setSupportActionBar(toolbar);
 
-        mIv_add = (ImageView) findViewById(R.id.iv_add);
-        if(mIv_add != null){
-            mIv_add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivityForResult(new Intent(getApplicationContext(), PlanEditActivity.class), CODES.ActivityResult.PLAN_EDIT);
-                }
-            });
-        }
         mIv_search = (ImageView) findViewById(R.id.iv_search);
         if(mIv_search != null){
             mIv_search.setOnClickListener(new View.OnClickListener() {
@@ -114,45 +67,39 @@ public class MainActivity extends CommonActivity{
             });
         }
 
-        Cursor cursor = mDBOpenHelper.planAllColumns();
-        ArrayList<PlanData> planList = new ArrayList<PlanData>();
-        if(cursor != null){
-            try {
-                do {
-                    PlanData data = new PlanData();
+        // Initializing the TabLayout
+        mTabLayout = (TabLayout) findViewById(R.id.tablayout);
+        mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.tab_plan_title)));
+        mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.tab_recommend_title)));
+        mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-                    data.setId(cursor.getInt(cursor.getColumnIndex(DataBases.CreatePlanDB._ID)));
+        // Initializing ViewPager
+        mViewPager = (ViewPager) findViewById(R.id.vp_pager);
 
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    Date start_date = sdf.parse(cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDB._STARTDATE)));
-                    Date end_date = sdf.parse(cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDB._ENDDATE)));
+        // Creating TabPagerAdapter adapter
+        TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
+        mViewPager.setAdapter(pagerAdapter);
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
-                    data.setStart_date(start_date);
-                    data.setEnd_date(end_date);
-                    data.setName(cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDB._NAME)));
+        // Set TabSelectedListener
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
-                    planList.add(data);
-                } while (cursor.moveToNext());
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mViewPager.setCurrentItem(tab.getPosition());
+            }
 
-                cursor.close();
-
-            }catch(Exception e){
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
             }
-        }
 
-        mRvPlanList = (RecyclerView) findViewById(R.id.rv_planlist);
-        mRvPlanList.setVisibility(View.VISIBLE);
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
 
-        mPlanListAdapter = new PlanListAdapter(this);
-
-        mRvPlanList.setLayoutManager(new LinearLayoutManager(this));
-        mRvPlanList.setAdapter(mPlanListAdapter);
-
-        mPlanListAdapter.bindData(planList);
-
+            }
+        });
     }
-
 
     /**
      * Take care of popping the fragment back stack or finishing the activity

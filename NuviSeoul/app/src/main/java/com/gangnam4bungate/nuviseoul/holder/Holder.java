@@ -7,11 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.ui.activity.PlanEditActivity;
+import com.gangnam4bungate.nuviseoul.ui.activity.RecommendActivity;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by wsseo on 2017. 8. 6..
@@ -20,6 +23,7 @@ import com.gangnam4bungate.nuviseoul.ui.activity.PlanEditActivity;
 public class Holder {
     public static int TYPE_PLAN_LIST = 1000;
     public static int TYPE_PLAN_DETAIL = 2000;
+    public static int TYPE_TOUR_COURSE_LIST = 3000;
 
     public static RecyclerView.ViewHolder getHolder(Context context, int viewtype){
         if(viewtype == TYPE_PLAN_LIST){
@@ -30,6 +34,10 @@ public class Holder {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
             View v = (View) inflater.inflate(R.layout.layout_plandetail, null);
             return new PlanDetailViewHolder(v);
+        } else if(viewtype == TYPE_TOUR_COURSE_LIST){
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+            View v = (View) inflater.inflate(R.layout.layout_tour_course_list, null);
+            return new TourCourseListHolder(v);
         } else {
             return null;
         }
@@ -89,6 +97,34 @@ public class Holder {
         }
 
 
+    }
+
+
+    public static class TourCourseListHolder extends RecyclerView.ViewHolder {
+        private TextView mTvName;
+        private ImageView mIvBg;
+        public TourCourseListHolder(View itemView) {
+            super(itemView);
+
+            if(itemView != null){
+                mTvName = (TextView) itemView.findViewById(R.id.tv_name);
+                mIvBg = (ImageView) itemView.findViewById(R.id.iv_bg);
+            }
+        }
+
+        public void setName(String name){
+            if(mTvName != null){
+                mTvName.setText(name);
+            }
+        }
+
+        public void setBackground(Context context, String url){
+            if(mIvBg != null){
+                Picasso.with(context)
+                        .load(url)
+                        .into(mIvBg);
+            }
+        }
     }
 
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_planlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:scrollbars="vertical"
+        android:background="#ffffff"/>
+
+    <ImageView
+        android:id="@+id/iv_add"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/ll_planlist"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="14dp"
+        android:background="@drawable/fab_bg"/>
+
+</RelativeLayout>

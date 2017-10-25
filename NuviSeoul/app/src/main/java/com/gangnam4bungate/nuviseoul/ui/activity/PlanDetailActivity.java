@@ -365,19 +365,13 @@ public class PlanDetailActivity extends CommonGoogleMapActivity implements OnMap
     }
 
     @Override
-    public void onMashupSuccess(JSONObject object, String requestCode) {
+    public void onMashupSuccess(JSONObject object, int requestCode) {
 
-        if(requestCode != null && requestCode.equals(CODES.RequestCode.REQUEST_AREABASELIST)) {
-
-        }
     }
 
     @Override
-    public void onMashupFail(VolleyError error, String requestCode) {
-        if(requestCode != null && requestCode.equals(CODES.RequestCode.REQUEST_AREABASELIST)) {
+    public void onMashupFail(VolleyError error, int requestCode) {
 
-            //Log.d(CODES.TAG, object.toString());
-        }
     }
 
     /**

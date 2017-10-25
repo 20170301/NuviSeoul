@@ -10,5 +10,9 @@ import java.util.List;
 
 public class Item {
     @SerializedName("item")
-    List<AreaBaseInfo> mitem;
+    List<TourCourseInfo> mitem;
+
+    public List<TourCourseInfo> getItemList() {
+        return mitem;
+    }
 }

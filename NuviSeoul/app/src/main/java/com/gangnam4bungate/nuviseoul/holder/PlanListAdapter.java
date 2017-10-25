@@ -1,6 +1,7 @@
 package com.gangnam4bungate.nuviseoul.holder;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.gangnam4bungate.nuviseoul.data.PlanData;
 import com.gangnam4bungate.nuviseoul.data.PlanDetailData;
 import com.gangnam4bungate.nuviseoul.ui.activity.PlanDetailActivity;
 import com.gangnam4bungate.nuviseoul.ui.activity.PlanEditActivity;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,10 +24,10 @@ import java.util.Date;
 
 public class PlanListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public ArrayList<PlanData> mPlanList;
-    private Activity mActivity;
+    private Context mContext;
 
-    public PlanListAdapter(Activity activity){
-        mActivity = activity;
+    public PlanListAdapter(Context context){
+        mContext = context;
     }
 
     public void bindData(ArrayList<PlanData> list){
@@ -66,9 +68,9 @@ public class PlanListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(View v) {
                         PlanData data = (PlanData) v.getTag();
                         if (data != null) {
-                            Intent intent = new Intent(mActivity, PlanDetailActivity.class);
+                            Intent intent = new Intent(mContext, PlanDetailActivity.class);
                             intent.putExtra("id", data.getId());
-                            mActivity.startActivity(intent);
+                            mContext.startActivity(intent);
                         }
                     }
                 });
