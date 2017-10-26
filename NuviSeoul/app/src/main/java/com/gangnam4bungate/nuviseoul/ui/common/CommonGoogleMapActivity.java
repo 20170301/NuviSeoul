@@ -149,6 +149,12 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
                 .show();*/
     }
 
+
+    public void showLocationData(int planid){
+
+    }
+
+
     private  void sendRequestWithDirection(LatLng ltOrigin,LatLng ltDestination,String pTitle)
     {
         //String strOrigin="37.509590,127.013767";

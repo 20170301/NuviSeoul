@@ -11,7 +11,7 @@
         android:layout_alignParentTop="true"
         android:minHeight="?attr/actionBarSize">
 
-        <include layout="@layout/layout_toolbar"/>
+        <include layout="@layout/layout_toolbar_v2"/>
 
     </android.support.v7.widget.Toolbar>
 
@@ -38,13 +38,14 @@
 
         <EditText
             android:id="@+id/et_subject"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="19dp"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:hint="@string/plan_title_hint"
+            android:textColorHint="#33000000"
+            android:inputType="text"/>
 
     </LinearLayout>
 
@@ -70,40 +71,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/ll_adddestination"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                android:layout_alignParentBottom="true">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="27dp"
-                    android:layout_marginBottom="20dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:background="@drawable/plus"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
-                        android:text="@string/add_destination"/>
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#cccccc"/>
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

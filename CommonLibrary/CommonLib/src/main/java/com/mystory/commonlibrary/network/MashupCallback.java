@@ -9,6 +9,6 @@ import org.json.JSONObject;
  */
 
 public interface MashupCallback {
-    void onMashupSuccess(JSONObject object, String requestCode);
-    void onMashupFail(VolleyError error, String requestCode);
+    void onMashupSuccess(JSONObject object, int requestCode);
+    void onMashupFail(VolleyError error, int requestCode);
 }

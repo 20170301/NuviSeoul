@@ -161,7 +161,7 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
     }
 */
     @Override
-    public void onMashupSuccess(JSONObject object, String requestCode) {
+    public void onMashupSuccess(JSONObject object, int requestCode) {
 
         //String addr1 = null;
         String title = null;
@@ -208,7 +208,7 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
     }
 
     @Override
-    public void onMashupFail(VolleyError error, String requestCode) {
+    public void onMashupFail(VolleyError error, int requestCode) {
 
     }
 

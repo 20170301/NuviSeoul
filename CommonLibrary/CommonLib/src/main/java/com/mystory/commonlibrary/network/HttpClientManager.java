@@ -45,7 +45,7 @@ public class HttpClientManager {
         return mRequestQueue;
     }
 
-    public void sendPost(final Object object, String url, final String requestCode){
+    public void sendPost(final Object object, String url, final int requestCode){
         try {
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(),
                     new Response.Listener<JSONObject>() {
@@ -70,7 +70,7 @@ public class HttpClientManager {
         }
     }
 
-    public void sendGet(final Object object, String url, final String requestCode){
+    public void sendGet(final Object object, String url, final int requestCode){
         try {
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new JSONObject(),
                     new Response.Listener<JSONObject>() {
@@ -95,7 +95,7 @@ public class HttpClientManager {
         }
     }
 
-    public void sendGet_naver(final Object object, String url, final String requestCode, final String clientid, final String clientSecret){
+    public void sendGet_naver(final Object object, String url, final int requestCode, final String clientid, final String clientSecret){
         try {
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, new JSONObject(),
                     new Response.Listener<JSONObject>() {

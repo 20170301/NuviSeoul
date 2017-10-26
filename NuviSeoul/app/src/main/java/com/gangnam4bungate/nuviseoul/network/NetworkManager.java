@@ -21,7 +21,7 @@ public class NetworkManager {
 
     public void requestAreaBaseListInfo(Object object, String keyword){
         try {
-            Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_AREABASELIST)
+            Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_SEARCH_KEYWORD_LIST)
                     .buildUpon()
                     .appendQueryParameter(CODES.CommonCodes.KEYWORD, keyword)
                     .appendQueryParameter(CODES.CommonCodes.MOBILEOS, "AND")
@@ -39,7 +39,8 @@ public class NetworkManager {
 
     public void requestAreaBaseDetailListInfo(Object object, String contentid){
         try {
-            Uri builtUri = Uri.parse("http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey=" + CODES.Dev_ServiceKey + "&contentId="+ contentid +"&defaultYN=Y&MobileOS=AND&overviewYN=Y&MobileApp=" + ((Context) object).getString(R.string.app_name));
+            Uri builtUri = Uri.parse((CODES.DefaultDomain + CODES.URLCodes.URL_SEARCH) + CODES.Dev_ServiceKey + "&contentId="+ contentid +"&defaultYN=Y&MobileOS=AND&overviewYN=Y&MobileApp=" + ((Context) object).getString(R.string.app_name) + "&"+CODES.CommonCodes._TYPE + "=" +"json");
+
             String url = builtUri.toString();
 
             HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_AREABASEDETAILLIST);
@@ -48,15 +49,23 @@ public class NetworkManager {
         }
     }
 
-    public void requestNaverSearchInfo(Object object, String query){
+    public void requestPlanCourseListInfo(Object object)
+    {
+
         try {
-            Uri builtUri = Uri.parse(CODES.NaverDomain + CODES.URLCodes.URL_SEARCH)
+            Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_AREA_BASED_LIST)
                     .buildUpon()
+                    .appendQueryParameter(CODES.CommonCodes.CONTENTTYPEID, CODES.API_CONTENTTYPE.TOUR_COURSE) //여행코스
+                    .appendQueryParameter(CODES.CommonCodes.AREACODE, "1") //서울
+                    .appendQueryParameter(CODES.CommonCodes.CAT1, "C01") //여행코스
+                    .appendQueryParameter(CODES.CommonCodes.MOBILEOS, "AND")
+                    .appendQueryParameter(CODES.CommonCodes.MOBILEAPP, ((Context) object).getString(R.string.app_name))
+                    .appendQueryParameter(CODES.CommonCodes._TYPE, "json")
                     .build();
 
-            String url = builtUri.toString() + query;
+            String url = builtUri.toString() + "&" + CODES.CommonCodes.SERVICEKEY + "=" + CODES.Dev_ServiceKey;
 
-            HttpClientManager.getInstance((Context) object).sendGet_naver(object, url, CODES.RequestCode.REQUEST_SEARCH, CODES.NAVER_CLIENT_ID, CODES.NAVER_CLIENT_SECRET);
+            HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_PLAN_COURSE_LIST);
         }catch(Exception e){
 
         }
@@ -68,12 +77,12 @@ public class NetworkManager {
 
 
         try {
-            Uri builtUri = Uri.parse("http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=" + key +
-                    "&mapX=126.981611&mapY=37.568477&radius=10000&pageNo=1&numOfRows=14&listYN=Y&arrange=B&contentTypeId=14&MobileOS=AND&MobileApp=MyApplication&_type=json");
+            Uri builtUri = Uri.parse("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=" + key +
+                    "&numOfRows=14&arrange=B&MobileOS=AND&MobileApp=NuviSeoul&contentTypeid=14&areaCode=1&cat1=A02&cat2=A0206&_type=json");
 
             String url = builtUri.toString();
 
-            HttpClientManager.getInstance((Context) object).sendGet(object, url, "");
+            HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_RECOMMEND_LOCATION_LIST);
 
         }catch(Exception e){
 

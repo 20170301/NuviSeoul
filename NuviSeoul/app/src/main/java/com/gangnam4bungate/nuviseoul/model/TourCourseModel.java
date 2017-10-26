@@ -8,7 +8,7 @@ import java.util.List;
  * Created by wsseo on 2017. 7. 2..
  */
 
-public class AreaBaseModel {
+public class TourCourseModel {
     @SerializedName("response")
     Response response;
 

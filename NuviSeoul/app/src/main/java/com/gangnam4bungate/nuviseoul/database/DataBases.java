@@ -25,7 +25,6 @@ public class DataBases {
     public static final class CreatePlanDetailDB implements BaseColumns {
 
         public static final String _TABLENAME = "plandetail";
-
         public static final String _PLANID = "planid";
         public static final String _STARTDATE = "startdate";
         public static final String _ENDDATE = "enddate";
@@ -36,6 +35,7 @@ public class DataBases {
 
         public static final String _CREATE =
                 "create table "+ _TABLENAME +"("
+                        + _ID  + " integer primary key autoincrement, "
                         + _PLANID  + " integer, "
                         + _STARTDATE + " date not null, "
                         + _ENDDATE + " date not null, "
