@@ -15,7 +15,7 @@ public class PlanDetailData {
     int pathseq = -1;
     double latitude = 0.0d;
     double longitude = 0.0d;
-
+    String subcontentid;
 
     public int getId() {
         return id;
@@ -73,5 +73,13 @@ public class PlanDetailData {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getSubcontentid() {
+        return subcontentid;
+    }
+
+    public void setSubcontentid(String subcontentid) {
+        this.subcontentid = subcontentid;
     }
 }

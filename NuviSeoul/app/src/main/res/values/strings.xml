@@ -27,4 +27,5 @@
 
     <string name="tab_plan_title">경로일정</string>
     <string name="tab_recommend_title">추천경로</string>
+    <string name="course">코스</string>
 </resources>

@@ -2,6 +2,7 @@ package com.gangnam4bungate.nuviseoul.ui.activity;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -72,6 +73,10 @@ public class MainActivity extends CommonActivity{
         mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.tab_plan_title)));
         mTabLayout.addTab(mTabLayout.newTab().setText(getString(R.string.tab_recommend_title)));
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        mTabLayout.setSelectedTabIndicatorColor(Color.parseColor("#FFFF00"));
+        mTabLayout.setSelectedTabIndicatorHeight((int) (5 * getResources().getDisplayMetrics().density));
+        mTabLayout.setTabTextColors(Color.parseColor("#FFFFFF"), Color.parseColor("#FFFF00"));
 
         // Initializing ViewPager
         mViewPager = (ViewPager) findViewById(R.id.vp_pager);

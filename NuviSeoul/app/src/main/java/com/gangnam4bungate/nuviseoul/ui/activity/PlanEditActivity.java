@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gangnam4bungate.nuviseoul.R;
@@ -29,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 public class PlanEditActivity extends CommonActivity {
@@ -47,6 +47,7 @@ public class PlanEditActivity extends CommonActivity {
 
     ArrayList<Route> mLocationList = new ArrayList<Route>();
     boolean isPlanEdit = false;
+    boolean isAddCourse = false;
     int mEditPlanId = 0;
 
     public static PlanEditActivity mPlanEditActivity = null;
@@ -64,6 +65,8 @@ public class PlanEditActivity extends CommonActivity {
         if(intent != null && intent.getBooleanExtra("edit", false)){
             isPlanEdit = true;
             mEditPlanId = intent.getIntExtra("planid", 0);
+        } else if(intent != null && intent.getBooleanExtra("add_course", false)){
+            isAddCourse = true;
         }
         mDBOpenHelper = DBOpenHelper.getInstance();
         if(mDBOpenHelper != null && mDBOpenHelper.isOpen() == false)
@@ -133,6 +136,10 @@ public class PlanEditActivity extends CommonActivity {
                         addLayout(mllAddLayout, null);
                     }
                 });
+            }
+
+            if(isAddCourse) {
+                addCourseLayout(mllAddLayout);
             }
         } else {
             Cursor c = mDBOpenHelper.plan_getColumn(mEditPlanId);
@@ -443,13 +450,13 @@ public class PlanEditActivity extends CommonActivity {
                     final TextView tvAddPlace = (TextView) ll_detail.findViewById(R.id.tv_addplace);
                     if (tvAddPlace != null) {
                         tvAddPlace.setTag(data);
+                        ll_detail.setTag(data);
                         if (editdata != null) {
                             tvAddPlace.setText(editdata.getPlacename());
                         }
                         tvAddPlace.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                ll_detail.setTag(v.getTag());
                                 startActivityForResult(new Intent(getApplicationContext(), RecommendActivity.class), CODES.ActivityResult.LOCATIONS);
                             }
                         });
@@ -577,6 +584,84 @@ public class PlanEditActivity extends CommonActivity {
                             copy.setLatitude(route.endLocation.latitude);
                             copy.setLongitude(route.endLocation.longitude);
 
+                            copy.setPlacename(tv_dest.getText().toString());
+
+                            if(isEdit == false){
+                                mPlanDetailInsertList.add(copy);
+                            } else {
+                                mPlanDetailUpdateList.add(copy);
+                            }
+                            addView.addView(view);
+                        }
+                    }
+
+                    addView.setTag(null);
+                }
+            }
+        }catch (Exception e){
+
+        }
+
+    }
+
+
+    public void addCourseLayout(LinearLayout parentView){
+        try {
+            boolean isEdit = false;
+            LinearLayout addView = null;
+            PlanDetailData data = null;
+            for (int index = 0; index < parentView.getChildCount(); index++) {
+                View childview = parentView.getChildAt(index);
+                if (childview != null && childview.getTag() != null) {
+                    data = (PlanDetailData)childview.getTag();
+                    if(data != null){
+                        addView = (LinearLayout)childview;
+                        break;
+                    }
+                }
+            }
+
+            List<PlanDetailData> list = RecommendCourseDetailActivity.getInstance().getPlanDetailDataList();
+            if(list.size() > 0) {
+                TextView tv_dest = (TextView) addView.findViewById(R.id.tv_addplace);
+                if (tv_dest != null) {
+                    PlanDetailData info = list.get(0);
+                    tv_dest.setText(info.getPlacename());
+                    data.setLatitude(info.getLatitude());
+                    data.setLongitude(info.getLongitude());
+                    data.setPlacename(info.getPlacename());
+                    data.setPathseq(0);
+
+                    for (int index = 0; index < mPlanDetailUpdateList.size(); index++) {
+                        PlanDetailData udata = mPlanDetailUpdateList.get(index);
+                        if (udata != null && udata.getId() == data.getId()
+                                && udata.getPlacename().equals(data.getPlacename())
+                                && udata.getStartDate().equals(data.getStartDate())
+                                && udata.getEndDate().equals(data.getEndDate())) {
+
+                            isEdit = true;
+                            break;
+                        }
+                    }
+                }
+                if (addView != null) {
+                    for (int index = 1; index < list.size(); index++) {
+                        PlanDetailData info = list.get(index);
+                        View view = getLayoutInflater().inflate(R.layout.layout_plan_destination, null);
+                        if (view != null) {
+                            tv_dest = (TextView) view.findViewById(R.id.tv_addplace);
+                        }
+                        if (tv_dest != null) {
+
+                            PlanDetailData copy = new PlanDetailData();
+                            copy.setId(data.getId());
+                            copy.setPathseq(index);
+                            copy.setEndDate(data.getEndDate());
+                            copy.setStartDate(data.getStartDate());
+                            copy.setPlanid(data.getPlanid());
+                            tv_dest.setText(info.getPlacename());
+                            copy.setLatitude(info.getLatitude());
+                            copy.setLongitude(info.getLongitude());
                             copy.setPlacename(tv_dest.getText().toString());
 
                             if(isEdit == false){

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.gangnam4bungate.nuviseoul.data.PlanData;
 import com.gangnam4bungate.nuviseoul.model.TourCourseInfo;
 import com.gangnam4bungate.nuviseoul.ui.activity.PlanDetailActivity;
+import com.gangnam4bungate.nuviseoul.ui.activity.RecommendCourseDetailActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.List;
  */
 
 public class TourCourseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public List<TourCourseInfo> mTourCourseList;
+    public List<TourCourseInfo> mTourCourseList = new ArrayList<TourCourseInfo>();
     private Context mContext;
 
     public TourCourseListAdapter(Context context){
@@ -46,6 +47,24 @@ public class TourCourseListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 tourCourseListHolder.setName(mTourCourseList.get(position).getTitle());
                 tourCourseListHolder.setBackground(mContext, mTourCourseList.get(position).getFirstimage());
 
+
+                tourCourseListHolder.itemView.setTag(mTourCourseList.get(position));
+                tourCourseListHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TourCourseInfo info = (TourCourseInfo)v.getTag();
+                        if(info != null){
+                            Intent intent = new Intent(mContext, RecommendCourseDetailActivity.class);
+                            intent.putExtra("contentid", info.getContentid());
+                            intent.putExtra("title", info.getTitle());
+                            intent.putExtra("image1", info.getFirstimage());
+                            intent.putExtra("image2", info.getFirstimage2());
+                            intent.putExtra("mapx", info.getMapx());
+                            intent.putExtra("mapy", info.getMapy());
+                            mContext.startActivity(intent);
+                        }
+                    }
+                });
             }catch(Exception e){
 
             }
