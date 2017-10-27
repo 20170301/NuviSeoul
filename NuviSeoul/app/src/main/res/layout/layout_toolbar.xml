@@ -32,15 +32,5 @@
             android:textStyle="bold"
             android:visibility="visible"/>
 
-        <EditText
-            android:id="@+id/et_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="#ffff00"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:visibility="gone"
-            />
     </RelativeLayout>
 </LinearLayout>

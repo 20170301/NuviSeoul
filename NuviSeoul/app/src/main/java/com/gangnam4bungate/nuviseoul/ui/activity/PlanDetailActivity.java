@@ -13,8 +13,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -51,11 +53,11 @@ public class PlanDetailActivity extends CommonGoogleMapActivity implements OnMap
                                                                 LocationListener{
 
     private ImageView mIv_Modify;
+    RelativeLayout mrl_back;
     private TextView mTv_title;
     private ImageView mIv_search;
     private RecyclerView mRvPlan;
     private PlanDetailAdapter mPlanAdapter;
-   // private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location mCurrentLocation;
@@ -119,10 +121,20 @@ public class PlanDetailActivity extends CommonGoogleMapActivity implements OnMap
     public void initLayout(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setContentInsetsAbsolute(0,0);
+        mrl_back = (RelativeLayout) toolbar.findViewById(R.id.rl_back);
+        if(mrl_back != null){
+            mrl_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
         mTv_title = (TextView) toolbar.findViewById(R.id.tv_title);
         if(mTv_title != null)
             mTv_title.setText(getString(R.string.main_title));
         setSupportActionBar(toolbar);
+
 
         mIv_search = (ImageView) findViewById(R.id.iv_search);
         if(mIv_search != null){

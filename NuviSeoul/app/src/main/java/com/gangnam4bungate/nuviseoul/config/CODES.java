@@ -29,6 +29,9 @@ public class CODES {
         public static String CONTENTID = "contentId";
         public static String DETAILYN = "detailYN";
         public static String MAPINFOYN = "mapinfoYN";
+        public static String ARRANGE = "arrange";
+        public static String NUMOFROWS = "numOfRows";
+        public static String PAGENO = "pageNo";
     }
 
     public static class RequestCode {

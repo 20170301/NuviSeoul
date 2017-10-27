@@ -3,6 +3,7 @@ package com.gangnam4bungate.nuviseoul.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.gangnam4bungate.nuviseoul.holder.PlanListAdapter;
 import com.gangnam4bungate.nuviseoul.holder.TourCourseListAdapter;
 import com.gangnam4bungate.nuviseoul.model.TourCourseModel;
 import com.gangnam4bungate.nuviseoul.network.DataManager;
+import com.gangnam4bungate.nuviseoul.ui.view.VerticalSpaceItemDecoration;
 
 /**
  * Created by wsseo on 2017. 10. 25..
@@ -24,6 +26,7 @@ public class RecommendCourseFragment extends Fragment {
 
     private RecyclerView mRvTourCourse;
     private TourCourseListAdapter mTourCourseAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
     /**
      * Called to have the fragment instantiate its user interface view.
      * This is optional, and non-graphical fragments can return null (which
@@ -53,6 +56,9 @@ public class RecommendCourseFragment extends Fragment {
         mTourCourseAdapter = new TourCourseListAdapter(inflater.getContext());
         mRvTourCourse.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
         mRvTourCourse.setAdapter(mTourCourseAdapter);
+
+        VerticalSpaceItemDecoration verticalSpaceItemDecoration = new VerticalSpaceItemDecoration(50);
+        mRvTourCourse.addItemDecoration(verticalSpaceItemDecoration);
 
         return view;
     }

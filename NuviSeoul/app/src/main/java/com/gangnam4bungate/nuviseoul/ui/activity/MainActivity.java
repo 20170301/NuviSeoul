@@ -1,10 +1,14 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
@@ -25,6 +30,7 @@ import com.gangnam4bungate.nuviseoul.model.TourCourseModel;
 import com.gangnam4bungate.nuviseoul.network.DataManager;
 import com.gangnam4bungate.nuviseoul.network.NetworkManager;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
+import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.mystory.commonlibrary.network.MashupCallback;
 
@@ -40,6 +46,7 @@ public class MainActivity extends CommonActivity{
     private ImageView mIv_search;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    public final static int PERMISSION_ACCESS_FINE_LOCATION = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +54,17 @@ public class MainActivity extends CommonActivity{
         setContentView(R.layout.activity_main);
 
         initLayout();
+        initPermission();
     }
 
+
+    public void initPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSION_ACCESS_FINE_LOCATION);
+        }
+    }
 
     public void initLayout(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -133,6 +149,20 @@ public class MainActivity extends CommonActivity{
                 initLayout();
             }
             break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_ACCESS_FINE_LOCATION:
+            {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.permission_location_fail_msg), Toast.LENGTH_LONG).show();
+                }
+            }
+            return;
         }
     }
 }

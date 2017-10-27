@@ -33,32 +33,35 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-            <Button
+            <ImageButton
                 android:id="@+id/locationSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="7dp"
-                android:text="저장"/>
+                android:layout_width="82dp"
+                android:layout_height="40dp"
+                android:layout_toLeftOf="@+id/locationReset"
+                android:layout_alignTop="@+id/locationReset"
+                android:background="@drawable/route_save"
+                android:scaleType="fitStart"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/locationReset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/locationSave"
-                android:layout_alignTop="@+id/locationSave"
-                android:layout_marginLeft="7dp"
-                android:text="초기화"/>
+                android:layout_width="82dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="11dp"
+                android:layout_marginLeft="-3dp"
+                android:background="@drawable/route_reset"
+                android:scaleType="fitStart"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/locationCancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="82dp"
+                android:layout_height="40dp"
                 android:layout_toRightOf="@+id/locationReset"
                 android:layout_alignTop="@+id/locationReset"
-                android:layout_marginLeft="7dp"
-                android:text="취소"/>
+                android:layout_marginLeft="-3dp"
+                android:background="@drawable/route_cancel"
+                android:scaleType="fitStart"/>
 
 
         <SlidingDrawer

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
@@ -99,17 +100,16 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
 
         NetworkManager.getInstance().requsetRecommendLocationInfo(this);
 
-        Button saveBtn = (Button) findViewById(R.id.locationSave);
-        Button resetBtn = (Button) findViewById(R.id.locationReset);
-        Button cancelBtn = (Button) findViewById(R.id.locationCancel);
+        ImageButton saveBtn = (ImageButton) findViewById(R.id.locationSave);
+        ImageButton resetBtn = (ImageButton) findViewById(R.id.locationReset);
+        ImageButton cancelBtn = (ImageButton) findViewById(R.id.locationCancel);
 
         saveBtn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 저장 버튼 눌렀을시 이벤트
-                if(PlanEditActivity.getInstance() != null) {
-                      PlanEditActivity.getInstance().setLocations(getRoutes());
-                }
+                if(PlanEditActivity.getInstance() != null)
+                    PlanEditActivity.getInstance().setLocations(getRoutes());
                 finish();
 
 
