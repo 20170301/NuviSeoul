@@ -51,6 +51,9 @@
 >#### (c). 서울 여행이 활성화된다.
 >	>#####  서울 여행을 계획하기가 편리해지고, 신뢰성 있는 장소를 추천받을 수 있게 되면서, 사람들은 이전보다 쉽게 서울여행을 계획할 것 입니다. 그렇기 때문에 전보다 많은 사람들이 서울로 여행을 오게 될것입니다. 더 많은 사람들이 여행을 오면 서울의 지역경제 발전과 서울 문화를 널리 알릴 수 있는 좋은 기회가 될 것 입니다.
 
-### 7. 메인화면
-<img width="100%" height="100%" src="/ReadMe.Image/app_icon.jpg"><img width="30%" height="30%" src="/ReadMe.Image/main.jpg"></img><img width="30%" height="30%" src="/ReadMe.Image/main_list.jpg"></img>
+### 7. 앱 화면
+>#### (a).앱 아이콘
+<img width="30%" height="29%" src="/ReadMe.Image/app_icon.jpg">
+>#### (b).앱 화면
+<img width="30%" height="30%" src="/ReadMe.Image/main.jpg"></img><img width="30%" height="30%" src="/ReadMe.Image/main_list.jpg"></img>
 
