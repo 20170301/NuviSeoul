@@ -40,6 +40,7 @@
             android:textColor="#ffff00"
             android:textSize="16dp"
             android:textStyle="bold"
+            android:hint="검색어를 입력해주세요."
             android:visibility="gone"
             />
     </RelativeLayout>

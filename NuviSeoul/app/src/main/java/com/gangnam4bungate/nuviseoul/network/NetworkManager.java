@@ -2,6 +2,7 @@ package com.gangnam4bungate.nuviseoul.network;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
@@ -39,13 +40,13 @@ public class NetworkManager {
 
     public void requestAreaBaseDetailListInfo(Object object, String contentid){
         try {
-            Uri builtUri = Uri.parse((CODES.DefaultDomain + CODES.URLCodes.URL_SEARCH) + CODES.Dev_ServiceKey + "&contentId="+ contentid +"&defaultYN=Y&MobileOS=AND&overviewYN=Y&MobileApp=" + ((Context) object).getString(R.string.app_name) + "&"+CODES.CommonCodes._TYPE + "=" +"json");
+            Uri builtUri = Uri.parse((CODES.DefaultDomain + CODES.URLCodes.URL_DETAIL_COMMON) + "ServiceKey=" + CODES.Dev_ServiceKey + "&contentId="+ contentid +"&defaultYN=Y&MobileOS=AND&overviewYN=Y&MobileApp=" + ((Context) object).getString(R.string.app_name) + "&"+CODES.CommonCodes._TYPE + "=" +"json");
 
             String url = builtUri.toString();
 
             HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_AREABASEDETAILLIST);
         }catch (Exception e){
-
+            Log.d("aaaa", e.getMessage());
         }
     }
 

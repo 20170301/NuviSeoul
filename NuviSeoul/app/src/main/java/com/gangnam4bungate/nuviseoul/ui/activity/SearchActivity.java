@@ -1,14 +1,16 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.gangnam4bungate.nuviseoul.R;
@@ -23,11 +25,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.gangnam4bungate.nuviseoul.config.CODES.RequestCode.REQUEST_AREABASEDETAILLIST;
 import static com.gangnam4bungate.nuviseoul.config.CODES.RequestCode.REQUEST_AREABASELIST;
@@ -39,8 +39,11 @@ import static com.gangnam4bungate.nuviseoul.config.CODES.RequestCode.REQUEST_ARE
 public class SearchActivity extends CommonActivity implements MashupCallback {
     private ArrayList<searchDTO> searchDTOs = new ArrayList<>();
     private ArrayList<searchDetailDTO> searchDetailDTOs = new ArrayList<>();
-    Bitmap firstImage_bit = null;
-    back task;
+    private Map<String, String> map = new HashMap<>();
+    int Count = 0;
+    private ImageView mIv_search;
+    private TextView mTv_title;
+    private EditText mEt_title;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,8 +51,42 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
         setContentView(R.layout.activity_main_search);
         //searchTextView = (TextView)findViewById(R.id.searchTextView);
         Intent intent = getIntent();
-        String value = intent.getStringExtra("mEt_title_value");
-        NetworkManager.getInstance().requestAreaBaseListInfo(this, value);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setContentInsetsAbsolute(0,0);
+        mIv_search = (ImageView) toolbar.findViewById(R.id.iv_search);
+        mTv_title = (TextView) toolbar.findViewById(R.id.tv_title);
+        mEt_title = (EditText)toolbar.findViewById(R.id.et_title);
+        mTv_title.setVisibility(View.INVISIBLE);
+        mEt_title.setVisibility(View.VISIBLE);
+
+        mIv_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEt_title.setHint("");
+                String mEt_title_value = mEt_title.getText().toString();
+                NetworkManager.getInstance().requestAreaBaseListInfo(SearchActivity.this, mEt_title_value);
+                if(searchDTOs != null){
+                    searchDTOs.clear();
+                }
+                if(searchDetailDTOs != null){
+                    searchDetailDTOs.clear();
+                }
+            }
+        });
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(searchDTOs != null){
+            searchDTOs.clear();
+        }
+
+        if(searchDetailDTOs != null){
+            searchDetailDTOs.clear();
+        }
     }
 
     @Override
@@ -62,6 +99,7 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
                 JSONObject body = response.getJSONObject("body");
                 JSONObject locations = body.getJSONObject("items");
                 JSONObject item = locations.getJSONObject("item");
+                String contentId = item.getString("contentid");
 
                 String homePage = "";
                 String overView = "";
@@ -89,17 +127,19 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
                         homePage = homePage.substring(0, homePage.indexOf("/"));
                     }
                 }
-
+                Log.d("homePage", homePage);
                 searchDetailDTOs.add(new searchDetailDTO(overView, homePage));
+                map.put(contentId, homePage + "|" + overView);
 
-                if(searchDTOs.size() == searchDetailDTOs.size()){
+                if(searchDetailDTOs.size()==Count){
                     RecyclerView view = (RecyclerView) findViewById(R.id.main_recyclerview);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
                     Log.d("searchDetailSize", String.valueOf(searchDetailDTOs.size()));
                     Log.d("searchSize", String.valueOf(searchDTOs.size()));
-                    searchRecyclerView searchRecyclerView = new searchRecyclerView(searchDTOs, searchDetailDTOs, this);
+                    searchRecyclerView searchRecyclerView = new searchRecyclerView(searchDTOs, searchDetailDTOs, map, this);
                     view.setLayoutManager(layoutManager);
                     view.setAdapter(searchRecyclerView);
+                    searchRecyclerView.notifyDataSetChanged();
                 }
 
             }catch (JSONException e){
@@ -119,6 +159,7 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
                 JSONObject locations = body.getJSONObject("items");
                 JSONArray item = locations.getJSONArray("item");
                 //
+                Count = item.length();
 
                 String contentId = "";
                 String title = "";
@@ -136,13 +177,9 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
                     firstImage = item.getJSONObject(i).optString("firstimage", "no Parsing");
 
                     searchDTOs.add(new searchDTO(contentId, title, firstImage, mapX, mapY));
-
+                    NetworkManager.getInstance().requestAreaBaseDetailListInfo(this, contentId);
                 }
 
-                for(int i = 0; i < searchDTOs.size(); i++){
-                    String content_Id = searchDTOs.get(i).contentId;
-                    NetworkManager.getInstance().requestAreaBaseDetailListInfo(this, content_Id);
-                }
 
             }
             catch (JSONException e)
@@ -164,28 +201,5 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
         super.onBackPressed();
     }
 
-    private class back extends AsyncTask<String, Integer, Bitmap> {
-
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-            // TODO Auto-generated method stub
-            try{
-                URL myFileUrl = new URL(urls[0]);
-                HttpURLConnection conn = (HttpURLConnection)myFileUrl.openConnection();
-                conn.setDoInput(true);
-                conn.connect();
-
-                InputStream is = conn.getInputStream();
-
-                firstImage_bit = BitmapFactory.decodeStream(is);
-
-
-            }catch(IOException e){
-                e.printStackTrace();
-            }
-            return firstImage_bit;
-        }
-
-    }
 
 }

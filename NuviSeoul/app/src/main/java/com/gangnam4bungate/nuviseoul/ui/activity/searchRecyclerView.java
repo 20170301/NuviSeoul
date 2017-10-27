@@ -1,11 +1,13 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by shj89 on 2017-09-16.
@@ -31,12 +34,14 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private ArrayList<searchDTO> searchDTOs = new ArrayList<>();
     private ArrayList<searchDetailDTO> searchDetailDTOs = new ArrayList<>();
+    Map<String, String> map;
     Context getContext;
 
-    public searchRecyclerView(ArrayList searchDTO, ArrayList searchDetailDTO, Context context) {
+    public searchRecyclerView(ArrayList searchDTO, ArrayList searchDetailDTO, Map map, Context context) {
         this.searchDTOs = searchDTO;
         this.searchDetailDTOs = searchDetailDTO;
         getContext = context;
+        this.map = map;
 
         Log.d("testtt" , searchDetailDTO.size() + " " +searchDetailDTO.size());
     }
@@ -52,17 +57,41 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        String view = map.get(searchDTOs.get(position).contentId);
+        final String homepage = view.substring(0, view.indexOf("|"));
+        String overview = view.substring(view.indexOf("|"), view.length());
+
         ((RowCell)holder).searchTitle.setText(searchDTOs.get(position).title);
-        ((RowCell) holder).searchDescription.setText(searchDetailDTOs.get(position).overView);
-        ((RowCell) holder).searchHomepage.setText(searchDetailDTOs.get(position).homePage);
+        ((RowCell) holder).searchDescription.setText(overview);
+        ((RowCell) holder).searchHomepage.setText(homepage);
         Picasso.with(getContext)
                 .load(searchDTOs.get(position).firstImage.toString())
                 .fit()
                 .into(((RowCell) holder).searchImage);
 
-        if(searchDetailDTOs.get(position).homePage.equals("주소가 없어요.")){
+//        if(searchDetailDTOs.get(position).homePage.equals("주소가 없어요.")){
+//            ((RowCell) holder).homePageButton.setVisibility(View.INVISIBLE);
+//        }
+
+        if(homepage.equals("주소가 없어요.")){
             ((RowCell) holder).homePageButton.setVisibility(View.INVISIBLE);
         }
+
+
+        ((RowCell) holder).homePageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + homepage));
+                getContext.startActivity(intent);
+            }
+        });
+
+        ((RowCell) holder).addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -77,6 +106,7 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView searchHomepage;
         ImageView searchImage;
         Button homePageButton;
+        Button addButton;
 
         public RowCell(View view) {
             super(view);
@@ -85,6 +115,7 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
             searchHomepage = (TextView) view.findViewById(R.id.searchHomepage);
             searchImage = (ImageView) view.findViewById(R.id.searchImage);
             homePageButton = (Button) view.findViewById(R.id.homePageButton);
+            addButton = (Button) view.findViewById(R.id.addButton);
         }
     }
 
