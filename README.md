@@ -54,6 +54,6 @@
 ### 7. 앱 화면
 >#### (a).앱 아이콘
 <img width="30%" height="29%" src="/ReadMe.Image/app_icon.jpg">
->#### (b).앱 화면
-<img width="30%" height="30%" src="/ReadMe.Image/main.jpg"></img><img width="30%" height="30%" src="/ReadMe.Image/main_list.jpg"></img>
 
+>#### (b).앱 화면
+<img width="30%" height="30%" src="/ReadMe.Image/main.jpg"></img>
