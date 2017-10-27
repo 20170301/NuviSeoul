@@ -7,4 +7,4 @@
 #### *Link: [소개동영상](https://google.com )
 
 ### 3. 화면
-<img width="10%" height="10%" src="/ReadMe.Image/main.jpg"></img>
+<img width="30%" height="30%" src="/ReadMe.Image/main.jpg"></img>
