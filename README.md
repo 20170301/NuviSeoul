@@ -25,6 +25,7 @@
 <img width="80%" height="80%" src="/ReadMe.Image/structure.jpg"></img>
 >#### (b)서비스 내용
 <img width="80%" height="80%" src="/ReadMe.Image/contents.jpg"></img>
+ * "여행 추억 관리" 및 편의 제공 서비스는 오픈소스를 통해서 차후 지속적으로 업그레이드할 예정임.
 
 ###  5. 데이터 활용 내용
 >#### (a). 종류
