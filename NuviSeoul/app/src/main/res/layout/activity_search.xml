@@ -62,24 +62,24 @@
                 android:textColor="@android:color/white" />
             <Button
                 android:id="@+id/homePageButton"
-                android:layout_width="100dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/searchHomepage"
                 android:layout_below="@+id/searchDescription"
                 android:layout_marginTop="15dp"
-                android:layout_marginLeft="15dp"
-                android:text="홈페이지"
+                android:layout_marginLeft="50dp"
+                android:background="@drawable/homepage"
                 />
 
             <Button
                 android:id="@+id/addButton"
-                android:layout_width="100dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/homePageButton"
                 android:layout_below="@+id/searchDescription"
                 android:layout_marginTop="15dp"
-                android:layout_marginLeft="15dp"
-                android:text="+"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/add_location"
                 />
 
 

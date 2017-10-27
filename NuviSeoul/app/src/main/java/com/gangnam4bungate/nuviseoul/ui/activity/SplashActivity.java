@@ -26,7 +26,7 @@ public class SplashActivity extends CommonActivity implements MashupCallback{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        NetworkManager.getInstance().requestPlanCourseListInfo(SplashActivity.this);
+        NetworkManager.getInstance().requestPlanCourseListInfo(SplashActivity.this, "1");
     }
 
     @Override
@@ -37,12 +37,16 @@ public class SplashActivity extends CommonActivity implements MashupCallback{
                 switch (requestCode){
                     case CODES.RequestCode.REQUEST_PLAN_COURSE_LIST:
                     {
-                        TourCourseModel model = new Gson().fromJson(object.toString(), TourCourseModel.class);
-                        if(model != null){
-                            DataManager.getInstance().setTourCourseModel(model);
+                        try {
+                            TourCourseModel model = new Gson().fromJson(object.toString(), TourCourseModel.class);
+                            if (model != null) {
+                                DataManager.getInstance().setTourCourseModel(model);
+                            }
+                            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                            finish();
+                        }catch(Exception e){
+
                         }
-                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                        finish();
                     }
                     break;
                 }

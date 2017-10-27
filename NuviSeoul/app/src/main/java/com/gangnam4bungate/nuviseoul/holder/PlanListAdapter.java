@@ -23,7 +23,7 @@ import java.util.Date;
  */
 
 public class PlanListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public ArrayList<PlanData> mPlanList;
+    public ArrayList<PlanData> mPlanList = new ArrayList<PlanData>();
     private Context mContext;
 
     public PlanListAdapter(Context context){
