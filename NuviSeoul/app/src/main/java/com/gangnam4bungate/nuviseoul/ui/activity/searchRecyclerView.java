@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Shader;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -59,7 +61,7 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         String view = map.get(searchDTOs.get(position).contentId);
         final String homepage = view.substring(0, view.indexOf("|"));
-        String overview = view.substring(view.indexOf("|"), view.length());
+        String overview = view.substring(view.indexOf("|") +1, view.length());
 
         ((RowCell)holder).searchTitle.setText(searchDTOs.get(position).title);
         ((RowCell) holder).searchDescription.setText(overview);
@@ -68,6 +70,8 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
                 .load(searchDTOs.get(position).firstImage.toString())
                 .fit()
                 .into(((RowCell) holder).searchImage);
+        ((RowCell) holder).searchImage.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.MULTIPLY);
+
 
 //        if(searchDetailDTOs.get(position).homePage.equals("주소가 없어요.")){
 //            ((RowCell) holder).homePageButton.setVisibility(View.INVISIBLE);
