@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.searchDTO;
 import com.gangnam4bungate.nuviseoul.config.searchDetailDTO;
+import com.gangnam4bungate.nuviseoul.data.PlanDetailData;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -34,15 +35,16 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private ArrayList<searchDTO> searchDTOs = new ArrayList<>();
     private ArrayList<searchDetailDTO> searchDetailDTOs = new ArrayList<>();
+    ArrayList<PlanDetailData> mSearchDataList;
     Map<String, String> map;
     Context getContext;
 
-    public searchRecyclerView(ArrayList searchDTO, ArrayList searchDetailDTO, Map map, Context context) {
+    public searchRecyclerView(ArrayList searchDTO, ArrayList searchDetailDTO, Map map, Context context, ArrayList<PlanDetailData> mSearchDataList) {
         this.searchDTOs = searchDTO;
         this.searchDetailDTOs = searchDetailDTO;
         getContext = context;
         this.map = map;
-
+        this.mSearchDataList  = mSearchDataList;
         Log.d("testtt" , searchDetailDTO.size() + " " +searchDetailDTO.size());
     }
 
@@ -86,10 +88,15 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
         });
 
+      //  mSearchDataList.add(new PlanDetailData())
+
         ((RowCell) holder).addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //ADD 버튼 추가하는곳
+                //Intent intent = new Intent(getContext.getApplicationContext(), PlanEditActivity.class);
+                //getContext.startActivity(intent);
             }
         });
     }

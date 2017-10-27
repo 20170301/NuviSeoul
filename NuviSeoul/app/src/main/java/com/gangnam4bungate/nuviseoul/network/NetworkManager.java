@@ -121,7 +121,7 @@ public class NetworkManager {
 
         try {
             Uri builtUri = Uri.parse("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=" + key +
-                    "&numOfRows=14&arrange=B&MobileOS=AND&MobileApp=NuviSeoul&contentTypeid=14&areaCode=1&cat1=A02&cat2=A0206&_type=json");
+                    "&numOfRows=20&arrange=B&MobileOS=AND&MobileApp=NuviSeoul&contentTypeid=14&areaCode=1&cat1=A02&cat2=A0206&_type=json");
 
             String url = builtUri.toString();
 

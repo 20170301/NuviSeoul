@@ -52,7 +52,7 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
     private List<RecommendData> data;
 
     ImageView closehandle;
-
+    SlidingDrawer drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +75,14 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
 
         horizontal_recycler_view= (RecyclerView) findViewById(R.id.horizontal_recycler_view);
 
+        drawer = (SlidingDrawer)findViewById(R.id.slide);
+        drawer.animateOpen();
+
         closehandle = (ImageView) findViewById(R.id.close);
 
         closehandle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SlidingDrawer drawer = (SlidingDrawer)findViewById(R.id.slide);
                 drawer.animateClose();
             }
         });
