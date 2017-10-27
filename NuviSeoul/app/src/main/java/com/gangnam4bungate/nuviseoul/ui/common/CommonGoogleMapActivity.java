@@ -200,7 +200,19 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
 
         try
         {
-            new DirectionFinder(this,this.mRoutes,strOrigin,strDestination,pTitle).execute();
+            boolean bInsert=true;
+
+            for(Route route : this.mRoutes ) {
+                if((pTitle==route.startTitle)
+                      ||(pTitle==route.endTitle) ){
+                    bInsert=false;
+                    break;
+                }
+            }
+
+            if(bInsert) {
+                new DirectionFinder(this, this.mRoutes, strOrigin, strDestination, pTitle).execute();
+            }
         }
         catch(UnsupportedEncodingException e)
         {
@@ -412,6 +424,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
 
     public void MapMarkerDisplay(LatLng latLng,String pTitle)
     {
+
         if(mLastedMarkLatLng!=null) {
             sendRequestWithDirection(mLastedMarkLatLng, latLng,pTitle);
         }
