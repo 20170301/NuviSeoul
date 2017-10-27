@@ -1,8 +1,6 @@
 # 서울여행 NuviSeoul
 
-
-syntax: [소개동영상](https://google.com )
-Link: [소개동영상][moviewlink] [movielink]: "Go Movie"
+Link: [소개동영상](https://google.com )
 * * *
 
 ## This is a H2
