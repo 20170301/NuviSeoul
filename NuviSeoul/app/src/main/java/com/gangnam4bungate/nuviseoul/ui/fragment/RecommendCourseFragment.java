@@ -20,7 +20,7 @@ import com.gangnam4bungate.nuviseoul.network.DataManager;
  * Created by wsseo on 2017. 10. 25..
  */
 
-public class RecommendFragment extends Fragment {
+public class RecommendCourseFragment extends Fragment {
 
     private RecyclerView mRvTourCourse;
     private TourCourseListAdapter mTourCourseAdapter;

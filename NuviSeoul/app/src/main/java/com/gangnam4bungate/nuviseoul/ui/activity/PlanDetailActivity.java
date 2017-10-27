@@ -55,7 +55,7 @@ public class PlanDetailActivity extends CommonGoogleMapActivity implements OnMap
     private ImageView mIv_search;
     private RecyclerView mRvPlan;
     private PlanDetailAdapter mPlanAdapter;
-    private GoogleMap mMap;
+   // private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location mCurrentLocation;

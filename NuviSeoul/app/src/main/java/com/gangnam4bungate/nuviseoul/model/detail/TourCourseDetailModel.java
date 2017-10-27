@@ -1,4 +1,4 @@
-package com.gangnam4bungate.nuviseoul.model;
+package com.gangnam4bungate.nuviseoul.model.detail;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -6,11 +6,11 @@ import com.google.gson.annotations.SerializedName;
  * Created by wsseo on 2017. 7. 2..
  */
 
-public class TourCourseModel {
+public class TourCourseDetailModel {
     @SerializedName("response")
-    Response response;
+    DetailResponse response;
 
-    public Response getResponse() {
+    public DetailResponse getResponse() {
         return response;
     }
 }

@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.gangnam4bungate.nuviseoul.ui.fragment.PlanFragment;
-import com.gangnam4bungate.nuviseoul.ui.fragment.RecommendFragment;
+import com.gangnam4bungate.nuviseoul.ui.fragment.RecommendCourseFragment;
 
 /**
  * Created by wsseo on 2017. 10. 25..
@@ -30,7 +30,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
                 PlanFragment planFragment = new PlanFragment();
                 return planFragment;
             case 1:
-                RecommendFragment recommendFragment = new RecommendFragment();
+                RecommendCourseFragment recommendFragment = new RecommendCourseFragment();
                 return recommendFragment;
             default:
                 return null;

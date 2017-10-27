@@ -107,8 +107,9 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
             @Override
             public void onClick(View view) {
                 // 저장 버튼 눌렀을시 이벤트
-                if(PlanEditActivity.getInstance() != null)
-                    PlanEditActivity.getInstance().setLocations(getRoutes());
+                if(PlanEditActivity.getInstance() != null) {
+                      PlanEditActivity.getInstance().setLocations(getRoutes());
+                }
                 finish();
 
 

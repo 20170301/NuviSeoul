@@ -58,6 +58,9 @@
         <activity android:name=".ui.activity.PlanEditActivity"
             android:windowSoftInputMode="stateHidden"/>
 
+        <activity android:name=".ui.activity.RecommendCourseDetailActivity"
+            android:windowSoftInputMode="stateHidden"/>
+
         <activity
             android:name=".ui.activity.SearchActivity"
             android:label="Search"

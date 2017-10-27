@@ -103,4 +103,68 @@ public class TourCourseInfo {
     public String getTitle() {
         return title;
     }
+
+    public void setAreacode(String areacode) {
+        this.areacode = areacode;
+    }
+
+    public void setCat1(String cat1) {
+        this.cat1 = cat1;
+    }
+
+    public void setCat2(String cat2) {
+        this.cat2 = cat2;
+    }
+
+    public void setCat3(String cat3) {
+        this.cat3 = cat3;
+    }
+
+    public void setContentid(String contentid) {
+        this.contentid = contentid;
+    }
+
+    public void setContenttypeid(String contenttypeid) {
+        this.contenttypeid = contenttypeid;
+    }
+
+    public void setCreatedtime(String createdtime) {
+        this.createdtime = createdtime;
+    }
+
+    public void setFirstimage(String firstimage) {
+        this.firstimage = firstimage;
+    }
+
+    public void setFirstimage2(String firstimage2) {
+        this.firstimage2 = firstimage2;
+    }
+
+    public void setMapx(String mapx) {
+        this.mapx = mapx;
+    }
+
+    public void setMapy(String mapy) {
+        this.mapy = mapy;
+    }
+
+    public void setMlevel(String mlevel) {
+        this.mlevel = mlevel;
+    }
+
+    public void setModifiedtime(String modifiedtime) {
+        this.modifiedtime = modifiedtime;
+    }
+
+    public void setReadcount(String readcount) {
+        this.readcount = readcount;
+    }
+
+    public void setSigungucode(String sigungucode) {
+        this.sigungucode = sigungucode;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

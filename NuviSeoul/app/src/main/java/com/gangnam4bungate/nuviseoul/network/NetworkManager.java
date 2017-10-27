@@ -49,8 +49,7 @@ public class NetworkManager {
         }
     }
 
-    public void requestPlanCourseListInfo(Object object)
-    {
+    public void requestPlanCourseListInfo(Object object) {
 
         try {
             Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_AREA_BASED_LIST)
@@ -66,6 +65,47 @@ public class NetworkManager {
             String url = builtUri.toString() + "&" + CODES.CommonCodes.SERVICEKEY + "=" + CODES.Dev_ServiceKey;
 
             HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_PLAN_COURSE_LIST);
+        }catch(Exception e){
+
+        }
+    }
+
+    public void requestPlanCourseDetailListInfo(Object object, String contentid, String detailYN) {
+
+        try {
+            Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_DETAIL_INFO)
+                    .buildUpon()
+                    .appendQueryParameter(CODES.CommonCodes.CONTENTTYPEID, CODES.API_CONTENTTYPE.TOUR_COURSE) //여행코스
+                    .appendQueryParameter(CODES.CommonCodes.CONTENTID, contentid)
+                    .appendQueryParameter(CODES.CommonCodes.DETAILYN, detailYN)
+                    .appendQueryParameter(CODES.CommonCodes.MOBILEOS, "AND")
+                    .appendQueryParameter(CODES.CommonCodes.MOBILEAPP, ((Context) object).getString(R.string.app_name))
+                    .appendQueryParameter(CODES.CommonCodes._TYPE, "json")
+                    .build();
+
+            String url = builtUri.toString() + "&" + CODES.CommonCodes.SERVICEKEY + "=" + CODES.Dev_ServiceKey;
+
+            HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_PLAN_COURSE_DETAIL_INFO);
+        }catch(Exception e){
+
+        }
+    }
+
+    public void requestPlanCourseDetailCommon(Object object, String contentid, String MAPINFOYN) {
+
+        try {
+            Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_DETAIL_COMMON)
+                    .buildUpon()
+                    .appendQueryParameter(CODES.CommonCodes.CONTENTID, contentid)
+                    .appendQueryParameter(CODES.CommonCodes.MAPINFOYN, MAPINFOYN)
+                    .appendQueryParameter(CODES.CommonCodes.MOBILEOS, "AND")
+                    .appendQueryParameter(CODES.CommonCodes.MOBILEAPP, ((Context) object).getString(R.string.app_name))
+                    .appendQueryParameter(CODES.CommonCodes._TYPE, "json")
+                    .build();
+
+            String url = builtUri.toString() + "&" + CODES.CommonCodes.SERVICEKEY + "=" + CODES.Dev_ServiceKey;
+
+            HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_PLAN_COURSE_DETAIL_COMMON);
         }catch(Exception e){
 
         }
