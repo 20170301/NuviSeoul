@@ -1,8 +1,5 @@
-
-
-
-# 서울여행 NuviSeoul
-Link: [소개동영상](https://google.com )
+# NuviSeoul  - 계획있는 서울 여행, 그레잇!
+###### *Link: [소개동영상](https://google.com )
 ============
 GFM은
 —
