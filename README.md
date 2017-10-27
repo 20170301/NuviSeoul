@@ -1,7 +1,8 @@
 # 서울여행 NuviSeoul
 
 
-Link: [소개동영상][moviewlink] [movielink]: https://google.com "Go Movie"
+syntax: [소개동영상](https://google.com )
+Link: [소개동영상][moviewlink] [movielink]: "Go Movie"
 * * *
 
 ## This is a H2
