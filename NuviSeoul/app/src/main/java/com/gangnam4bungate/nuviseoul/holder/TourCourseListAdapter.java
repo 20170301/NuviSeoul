@@ -1,37 +1,35 @@
 package com.gangnam4bungate.nuviseoul.holder;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.gangnam4bungate.nuviseoul.config.CODES;
 import com.gangnam4bungate.nuviseoul.data.PlanData;
-import com.gangnam4bungate.nuviseoul.data.PlanDetailData;
+import com.gangnam4bungate.nuviseoul.model.TourCourseInfo;
 import com.gangnam4bungate.nuviseoul.ui.activity.PlanDetailActivity;
-import com.gangnam4bungate.nuviseoul.ui.activity.PlanEditActivity;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.gangnam4bungate.nuviseoul.ui.activity.RecommendCourseDetailActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wsseo on 2017. 8. 6..
  */
 
-public class PlanListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public ArrayList<PlanData> mPlanList;
+public class TourCourseListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public List<TourCourseInfo> mTourCourseList = new ArrayList<TourCourseInfo>();
     private Context mContext;
 
-    public PlanListAdapter(Context context){
+    public TourCourseListAdapter(Context context){
         mContext = context;
     }
 
-    public void bindData(ArrayList<PlanData> list){
-        mPlanList = list;
+    public void bindData(List<TourCourseInfo> list){
+        mTourCourseList = list;
         this.notifyDataSetChanged();
     }
 
@@ -42,34 +40,27 @@ public class PlanListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(holder.getItemViewType() == Holder.TYPE_PLAN_LIST){
-            Holder.PlanListViewHolder planListViewHolder = (Holder.PlanListViewHolder)holder;
+        if(holder.getItemViewType() == Holder.TYPE_TOUR_COURSE_LIST){
+            Holder.TourCourseListHolder tourCourseListHolder = (Holder.TourCourseListHolder)holder;
 
             try {
-                Date sDate = mPlanList.get(position).getStart_date();
-                Date eDate = mPlanList.get(position).getEnd_date();
+                tourCourseListHolder.setName(mTourCourseList.get(position).getTitle());
+                tourCourseListHolder.setBackground(mContext, mTourCourseList.get(position).getFirstimage());
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String start_date = sdf.format(sDate);
-                String end_date = sdf.format(eDate);
 
-                if (start_date != null && end_date != null) {
-                    if (start_date.equals(end_date)) {
-                        planListViewHolder.setDate(start_date + " ");
-                    } else {
-                        planListViewHolder.setDate(start_date + " ~ " + end_date);
-                    }
-                }
-
-                planListViewHolder.setName(mPlanList.get(position).getName());
-                planListViewHolder.itemView.setTag(mPlanList.get(position));
-                planListViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                tourCourseListHolder.itemView.setTag(mTourCourseList.get(position));
+                tourCourseListHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        PlanData data = (PlanData) v.getTag();
-                        if (data != null) {
-                            Intent intent = new Intent(mContext, PlanDetailActivity.class);
-                            intent.putExtra("id", data.getId());
+                        TourCourseInfo info = (TourCourseInfo)v.getTag();
+                        if(info != null){
+                            Intent intent = new Intent(mContext, RecommendCourseDetailActivity.class);
+                            intent.putExtra("contentid", info.getContentid());
+                            intent.putExtra("title", info.getTitle());
+                            intent.putExtra("image1", info.getFirstimage());
+                            intent.putExtra("image2", info.getFirstimage2());
+                            intent.putExtra("mapx", info.getMapx());
+                            intent.putExtra("mapy", info.getMapy());
                             mContext.startActivity(intent);
                         }
                     }
@@ -87,7 +78,7 @@ public class PlanListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      */
     @Override
     public int getItemCount() {
-        return mPlanList.size();
+        return mTourCourseList.size();
     }
 
     /**
@@ -104,6 +95,6 @@ public class PlanListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      */
     @Override
     public int getItemViewType(int position) {
-        return Holder.TYPE_PLAN_LIST;
+        return Holder.TYPE_TOUR_COURSE_LIST;
     }
 }

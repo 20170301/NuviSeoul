@@ -12,7 +12,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,12 +28,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 public class PlanEditActivity extends CommonActivity {
     Button mSaveButton;
     LinearLayout mllAddLayout;
-    LinearLayout mllAddDestination;
+    LinearLayout mllAddDetailPlan;
 
 
     DBOpenHelper mDBOpenHelper;
@@ -43,8 +43,11 @@ public class PlanEditActivity extends CommonActivity {
     PlanData mPlanData = new PlanData();
     ArrayList<PlanDetailData> mPlanDetailInsertList = new ArrayList<PlanDetailData>();
     ArrayList<PlanDetailData> mPlanDetailUpdateList = new ArrayList<PlanDetailData>();
+    ArrayList<PlanDetailData> mPlanDetailDeleteList = new ArrayList<PlanDetailData>();
+
     ArrayList<Route> mLocationList = new ArrayList<Route>();
     boolean isPlanEdit = false;
+    boolean isAddCourse = false;
     int mEditPlanId = 0;
 
     public static PlanEditActivity mPlanEditActivity = null;
@@ -62,6 +65,8 @@ public class PlanEditActivity extends CommonActivity {
         if(intent != null && intent.getBooleanExtra("edit", false)){
             isPlanEdit = true;
             mEditPlanId = intent.getIntExtra("planid", 0);
+        } else if(intent != null && intent.getBooleanExtra("add_course", false)){
+            isAddCourse = true;
         }
         mDBOpenHelper = DBOpenHelper.getInstance();
         if(mDBOpenHelper != null && mDBOpenHelper.isOpen() == false)
@@ -122,7 +127,7 @@ public class PlanEditActivity extends CommonActivity {
             if (mllAddLayout != null) {
                 addLayout(mllAddLayout, null);
             }
-            View addLayout = getLayoutInflater().inflate(R.layout.layout_plan_addlayout, null);
+            View addLayout = getLayoutInflater().inflate(R.layout.layout_plan_adddetailplan, null);
             if (addLayout != null) {
                 mllAddLayout.addView(addLayout);
                 addLayout.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +136,10 @@ public class PlanEditActivity extends CommonActivity {
                         addLayout(mllAddLayout, null);
                     }
                 });
+            }
+
+            if(isAddCourse) {
+                addCourseLayout(mllAddLayout);
             }
         } else {
             Cursor c = mDBOpenHelper.plan_getColumn(mEditPlanId);
@@ -177,7 +186,7 @@ public class PlanEditActivity extends CommonActivity {
                 cursor.close();
             }
 
-            View addLayout = getLayoutInflater().inflate(R.layout.layout_plan_addlayout, null);
+            View addLayout = getLayoutInflater().inflate(R.layout.layout_plan_adddetailplan, null);
             if (addLayout != null) {
                 mllAddLayout.addView(addLayout);
                 addLayout.setOnClickListener(new View.OnClickListener() {
@@ -189,9 +198,9 @@ public class PlanEditActivity extends CommonActivity {
             }
         }
 
-        mllAddDestination = (LinearLayout) findViewById(R.id.ll_adddestination);
-        if(mllAddDestination != null){
-            mllAddDestination.setOnClickListener(new View.OnClickListener() {
+        mllAddDetailPlan = (LinearLayout) findViewById(R.id.ll_adddetailplan);
+        if(mllAddDetailPlan != null){
+            mllAddDetailPlan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     addLayout(mllAddLayout, null);
@@ -274,6 +283,23 @@ public class PlanEditActivity extends CommonActivity {
                             }
                         }
 
+                        for (int i = 0; i < mPlanDetailInsertList.size(); i++) {
+                            PlanDetailData data = mPlanDetailInsertList.get(i);
+                            if (data != null) {
+                                if(sDate == null)
+                                    sDate = data.getStartDate();
+                                else if(sDate.compareTo(data.getStartDate()) > 0){
+                                    sDate = data.getStartDate();
+                                }
+
+                                if(eDate == null)
+                                    eDate = data.getEndDate();
+                                else if(eDate.compareTo(data.getEndDate()) < 0){
+                                    eDate = data.getEndDate();
+                                }
+                            }
+                        }
+
                         if(sDate != null)
                             mPlanData.setStart_date(sDate);
                         if(eDate != null)
@@ -304,6 +330,13 @@ public class PlanEditActivity extends CommonActivity {
                                 mDBOpenHelper.plandetailUpdate(data);
                             }
                         }
+
+                        for (int i = 0; i < mPlanDetailDeleteList.size(); i++) {
+                            PlanDetailData data = mPlanDetailDeleteList.get(i);
+                            if (data != null) {
+                                mDBOpenHelper.plandetailDelete(data.getId());
+                            }
+                        }
                     }
 
                     finish();
@@ -315,33 +348,30 @@ public class PlanEditActivity extends CommonActivity {
 
     public void addLayout(final LinearLayout addView, PlanDetailData editdata){
         try {
-            LinearLayout linearLayout = (LinearLayout) addView.findViewById(R.id.ll_addlayout);
-            if (linearLayout != null) {
-                addView.removeView(linearLayout);
+            LinearLayout ll_adddetailplan = (LinearLayout) addView.findViewById(R.id.ll_adddetailplan);
+            if (ll_adddetailplan != null) {
+                addView.removeView(ll_adddetailplan);
             }
 
             PlanDetailData data;
             if (editdata == null) {
                 data = new PlanDetailData();
-            } else {
-                data = editdata;
-            }
-
-            if(isPlanEdit == false){
                 mPlanDetailInsertList.add(data);
             } else {
+                data = editdata;
                 mPlanDetailUpdateList.add(data);
             }
 
             if(data != null) {
                 if(data.getPathseq() == 0 || data.getPathseq() == -1){
-                    final View view = getLayoutInflater().inflate(R.layout.layout_plan_edit_detail, null);
-                    if (view != null)
-                        addView.addView(view);
-                    if(linearLayout != null)
-                        addView.addView(linearLayout);
+                    final LinearLayout ll_detail = (LinearLayout) getLayoutInflater().inflate(R.layout.layout_plan_edit_detail, null);
+                    if (ll_detail != null) {
+                        addView.addView(ll_detail);
+                    }
+                    if(ll_adddetailplan != null)
+                        addView.addView(ll_adddetailplan);
 
-                    TextView tvStartDate = (TextView) view.findViewById(R.id.tv_startDate);
+                    TextView tvStartDate = (TextView) ll_detail.findViewById(R.id.tv_startDate);
                     if (tvStartDate != null) {
                         tvStartDate.setTag(data);
                         if (editdata != null) {
@@ -379,7 +409,7 @@ public class PlanEditActivity extends CommonActivity {
                         });
                     }
 
-                    TextView tvEndDate = (TextView) view.findViewById(R.id.tv_endDate);
+                    TextView tvEndDate = (TextView) ll_detail.findViewById(R.id.tv_endDate);
                     if (tvEndDate != null) {
                         tvEndDate.setTag(data);
                         if (editdata != null) {
@@ -417,50 +447,58 @@ public class PlanEditActivity extends CommonActivity {
                         });
                     }
 
-                    final TextView tvAddPlace = (TextView) view.findViewById(R.id.tv_addplace);
+                    final TextView tvAddPlace = (TextView) ll_detail.findViewById(R.id.tv_addplace);
                     if (tvAddPlace != null) {
                         tvAddPlace.setTag(data);
+                        ll_detail.setTag(data);
                         if (editdata != null) {
                             tvAddPlace.setText(editdata.getPlacename());
                         }
                         tvAddPlace.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                view.setTag(v.getTag());
                                 startActivityForResult(new Intent(getApplicationContext(), RecommendActivity.class), CODES.ActivityResult.LOCATIONS);
                             }
                         });
                     }
 
-                    Button btClose = (Button) view.findViewById(R.id.bt_close);
+                    Button btClose = (Button) ll_detail.findViewById(R.id.bt_close);
                     if (btClose != null)
                         btClose.setTag(data);
                     btClose.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            addView.removeView(view);
-                            PlanDetailData data = (PlanDetailData) v.getTag();
+                            addView.removeView(ll_detail);
 
-                            for (int index = 0; index < mPlanDetailInsertList.size(); index++) {
-                                PlanDetailData idata = mPlanDetailInsertList.get(index);
-                                if (idata != null && idata.getPlacename().equals(data.getPlacename())
-                                        && idata.getStartDate().equals(data.getStartDate())
-                                        && idata.getEndDate().equals(data.getEndDate())) {
+                            try {
+                                PlanDetailData data = (PlanDetailData) v.getTag();
 
-                                    mPlanDetailInsertList.remove(data);
-                                    break;
+                                if (data != null) {
+                                    mPlanDetailDeleteList.add(data);
+                                    for (int index = 0; index < mPlanDetailInsertList.size(); index++) {
+                                        PlanDetailData idata = mPlanDetailInsertList.get(index);
+                                        if (idata != null && idata.getPlacename().equals(data.getPlacename())
+                                                && idata.getStartDate().equals(data.getStartDate())
+                                                && idata.getEndDate().equals(data.getEndDate())) {
+
+                                            mPlanDetailInsertList.remove(data);
+                                            break;
+                                        }
+                                    }
+
+                                    for (int index = 0; index < mPlanDetailUpdateList.size(); index++) {
+                                        PlanDetailData idata = mPlanDetailUpdateList.get(index);
+                                        if (idata != null && idata.getPlacename().equals(data.getPlacename())
+                                                && idata.getStartDate().equals(data.getStartDate())
+                                                && idata.getEndDate().equals(data.getEndDate())) {
+
+                                            mPlanDetailUpdateList.remove(data);
+                                            break;
+                                        }
+                                    }
                                 }
-                            }
+                            }catch(Exception e){
 
-                            for (int index = 0; index < mPlanDetailUpdateList.size(); index++) {
-                                PlanDetailData idata = mPlanDetailUpdateList.get(index);
-                                if (idata != null && idata.getPlacename().equals(data.getPlacename())
-                                        && idata.getStartDate().equals(data.getStartDate())
-                                        && idata.getEndDate().equals(data.getEndDate())) {
-
-                                    mPlanDetailUpdateList.remove(data);
-                                    break;
-                                }
                             }
                         }
                     });
@@ -490,6 +528,7 @@ public class PlanEditActivity extends CommonActivity {
 
     public void addLocationLayout(LinearLayout parentView){
         try {
+            boolean isEdit = false;
             LinearLayout addView = null;
             PlanDetailData data = null;
             for (int index = 0; index < parentView.getChildCount(); index++) {
@@ -512,6 +551,18 @@ public class PlanEditActivity extends CommonActivity {
                     data.setLongitude(route.startLocation.longitude);
                     data.setPlacename(tv_dest.getText().toString());
                     data.setPathseq(0);
+
+                    for (int index = 0; index < mPlanDetailUpdateList.size(); index++) {
+                        PlanDetailData udata = mPlanDetailUpdateList.get(index);
+                        if (udata != null && udata.getId() == data.getId()
+                                && udata.getPlacename().equals(data.getPlacename())
+                                && udata.getStartDate().equals(data.getStartDate())
+                                && udata.getEndDate().equals(data.getEndDate())) {
+
+                            isEdit = true;
+                            break;
+                        }
+                    }
                 }
                 if (addView != null) {
                     for (int index = 1; index < mLocationList.size(); index++) {
@@ -529,18 +580,91 @@ public class PlanEditActivity extends CommonActivity {
                             copy.setStartDate(data.getStartDate());
                             copy.setPlanid(data.getPlanid());
 
-                            if (index >= mLocationList.size() - 1) {
-                                tv_dest.setText(route.endTitle);
-                                copy.setLatitude(route.endLocation.latitude);
-                                copy.setLongitude(route.endLocation.longitude);
-                            } else {
-                                tv_dest.setText(route.startTitle);
-                                copy.setLatitude(route.startLocation.latitude);
-                                copy.setLongitude(route.startLocation.longitude);
-                            }
+                            tv_dest.setText(route.endTitle);
+                            copy.setLatitude(route.endLocation.latitude);
+                            copy.setLongitude(route.endLocation.longitude);
+
                             copy.setPlacename(tv_dest.getText().toString());
 
-                            if(isPlanEdit == false){
+                            if(isEdit == false){
+                                mPlanDetailInsertList.add(copy);
+                            } else {
+                                mPlanDetailUpdateList.add(copy);
+                            }
+                            addView.addView(view);
+                        }
+                    }
+
+                    addView.setTag(null);
+                }
+            }
+        }catch (Exception e){
+
+        }
+
+    }
+
+
+    public void addCourseLayout(LinearLayout parentView){
+        try {
+            boolean isEdit = false;
+            LinearLayout addView = null;
+            PlanDetailData data = null;
+            for (int index = 0; index < parentView.getChildCount(); index++) {
+                View childview = parentView.getChildAt(index);
+                if (childview != null && childview.getTag() != null) {
+                    data = (PlanDetailData)childview.getTag();
+                    if(data != null){
+                        addView = (LinearLayout)childview;
+                        break;
+                    }
+                }
+            }
+
+            List<PlanDetailData> list = RecommendCourseDetailActivity.getInstance().getPlanDetailDataList();
+            if(list.size() > 0) {
+                TextView tv_dest = (TextView) addView.findViewById(R.id.tv_addplace);
+                if (tv_dest != null) {
+                    PlanDetailData info = list.get(0);
+                    tv_dest.setText(info.getPlacename());
+                    data.setLatitude(info.getLatitude());
+                    data.setLongitude(info.getLongitude());
+                    data.setPlacename(info.getPlacename());
+                    data.setPathseq(0);
+
+                    for (int index = 0; index < mPlanDetailUpdateList.size(); index++) {
+                        PlanDetailData udata = mPlanDetailUpdateList.get(index);
+                        if (udata != null && udata.getId() == data.getId()
+                                && udata.getPlacename().equals(data.getPlacename())
+                                && udata.getStartDate().equals(data.getStartDate())
+                                && udata.getEndDate().equals(data.getEndDate())) {
+
+                            isEdit = true;
+                            break;
+                        }
+                    }
+                }
+                if (addView != null) {
+                    for (int index = 1; index < list.size(); index++) {
+                        PlanDetailData info = list.get(index);
+                        View view = getLayoutInflater().inflate(R.layout.layout_plan_destination, null);
+                        if (view != null) {
+                            tv_dest = (TextView) view.findViewById(R.id.tv_addplace);
+                        }
+                        if (tv_dest != null) {
+
+                            PlanDetailData copy = new PlanDetailData();
+                            copy.setId(data.getId());
+                            copy.setPathseq(index);
+                            copy.setEndDate(data.getEndDate());
+                            copy.setStartDate(data.getStartDate());
+                            copy.setPlanid(data.getPlanid());
+                            tv_dest.setText(info.getPlacename());
+                            copy.setLatitude(info.getLatitude());
+                            copy.setLongitude(info.getLongitude());
+                            copy.setPlacename(tv_dest.getText().toString());
+
+                            if(isEdit == false){
                                 mPlanDetailInsertList.add(copy);
                             } else {
                                 mPlanDetailUpdateList.add(copy);

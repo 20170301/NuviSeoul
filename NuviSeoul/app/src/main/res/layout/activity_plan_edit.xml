@@ -11,7 +11,7 @@
         android:layout_alignParentTop="true"
         android:minHeight="?attr/actionBarSize">
 
-        <include layout="@layout/layout_toolbar"/>
+        <include layout="@layout/layout_toolbar_v2"/>
 
     </android.support.v7.widget.Toolbar>
 
@@ -43,6 +43,8 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="19dp"
+            android:hint="@string/plan_title_hint"
+            android:textColorHint="#33000000"
             android:inputType="text"/>
 
     </LinearLayout>
@@ -68,6 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
 
         </LinearLayout>
     </ScrollView>

@@ -53,7 +53,7 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
     }
 
     @Override
-    public void onMashupSuccess(JSONObject object, String requestCode) {
+    public void onMashupSuccess(JSONObject object, int requestCode) {
         if(requestCode == REQUEST_AREABASEDETAILLIST){
             Log.d(CODES.TAG, "Search " + object.toString());
             try{
@@ -155,7 +155,7 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
     }
 
     @Override
-    public void onMashupFail(VolleyError error, String requestCode) {
+    public void onMashupFail(VolleyError error, int requestCode) {
 
     }
 

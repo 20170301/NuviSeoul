@@ -8,7 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="27dp"
-        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -30,8 +29,11 @@
             <TextView
                 android:id="@+id/tv_addplace"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
+                android:gravity="bottom"
+                android:hint="@string/plan_place_hint"
+                android:textColorHint="#33000000"
                 android:inputType="textPersonName" />
 
             <ImageView
@@ -40,4 +42,7 @@
                 android:background="#000000" />
         </LinearLayout>
     </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
 </LinearLayout>

@@ -21,7 +21,7 @@ public class NetworkManager {
 
     public void requestAreaBaseListInfo(Object object, String keyword){
         try {
-            Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_AREABASELIST)
+            Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_SEARCH_KEYWORD_LIST)
                     .buildUpon()
                     .appendQueryParameter(CODES.CommonCodes.KEYWORD, keyword)
                     .appendQueryParameter(CODES.CommonCodes.MOBILEOS, "AND")
@@ -49,15 +49,63 @@ public class NetworkManager {
         }
     }
 
-    public void requestNaverSearchInfo(Object object, String query){
+    public void requestPlanCourseListInfo(Object object) {
+
         try {
-            Uri builtUri = Uri.parse(CODES.NaverDomain + CODES.URLCodes.URL_SEARCH)
+            Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_AREA_BASED_LIST)
                     .buildUpon()
+                    .appendQueryParameter(CODES.CommonCodes.CONTENTTYPEID, CODES.API_CONTENTTYPE.TOUR_COURSE) //여행코스
+                    .appendQueryParameter(CODES.CommonCodes.AREACODE, "1") //서울
+                    .appendQueryParameter(CODES.CommonCodes.CAT1, "C01") //여행코스
+                    .appendQueryParameter(CODES.CommonCodes.MOBILEOS, "AND")
+                    .appendQueryParameter(CODES.CommonCodes.MOBILEAPP, ((Context) object).getString(R.string.app_name))
+                    .appendQueryParameter(CODES.CommonCodes._TYPE, "json")
                     .build();
 
-            String url = builtUri.toString() + query;
+            String url = builtUri.toString() + "&" + CODES.CommonCodes.SERVICEKEY + "=" + CODES.Dev_ServiceKey;
 
-            HttpClientManager.getInstance((Context) object).sendGet_naver(object, url, CODES.RequestCode.REQUEST_SEARCH, CODES.NAVER_CLIENT_ID, CODES.NAVER_CLIENT_SECRET);
+            HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_PLAN_COURSE_LIST);
+        }catch(Exception e){
+
+        }
+    }
+
+    public void requestPlanCourseDetailListInfo(Object object, String contentid, String detailYN) {
+
+        try {
+            Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_DETAIL_INFO)
+                    .buildUpon()
+                    .appendQueryParameter(CODES.CommonCodes.CONTENTTYPEID, CODES.API_CONTENTTYPE.TOUR_COURSE) //여행코스
+                    .appendQueryParameter(CODES.CommonCodes.CONTENTID, contentid)
+                    .appendQueryParameter(CODES.CommonCodes.DETAILYN, detailYN)
+                    .appendQueryParameter(CODES.CommonCodes.MOBILEOS, "AND")
+                    .appendQueryParameter(CODES.CommonCodes.MOBILEAPP, ((Context) object).getString(R.string.app_name))
+                    .appendQueryParameter(CODES.CommonCodes._TYPE, "json")
+                    .build();
+
+            String url = builtUri.toString() + "&" + CODES.CommonCodes.SERVICEKEY + "=" + CODES.Dev_ServiceKey;
+
+            HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_PLAN_COURSE_DETAIL_INFO);
+        }catch(Exception e){
+
+        }
+    }
+
+    public void requestPlanCourseDetailCommon(Object object, String contentid, String MAPINFOYN) {
+
+        try {
+            Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_DETAIL_COMMON)
+                    .buildUpon()
+                    .appendQueryParameter(CODES.CommonCodes.CONTENTID, contentid)
+                    .appendQueryParameter(CODES.CommonCodes.MAPINFOYN, MAPINFOYN)
+                    .appendQueryParameter(CODES.CommonCodes.MOBILEOS, "AND")
+                    .appendQueryParameter(CODES.CommonCodes.MOBILEAPP, ((Context) object).getString(R.string.app_name))
+                    .appendQueryParameter(CODES.CommonCodes._TYPE, "json")
+                    .build();
+
+            String url = builtUri.toString() + "&" + CODES.CommonCodes.SERVICEKEY + "=" + CODES.Dev_ServiceKey;
+
+            HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_PLAN_COURSE_DETAIL_COMMON);
         }catch(Exception e){
 
         }
@@ -74,7 +122,7 @@ public class NetworkManager {
 
             String url = builtUri.toString();
 
-            HttpClientManager.getInstance((Context) object).sendGet(object, url, "");
+            HttpClientManager.getInstance((Context) object).sendGet(object, url, CODES.RequestCode.REQUEST_RECOMMEND_LOCATION_LIST);
 
         }catch(Exception e){
 

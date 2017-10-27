@@ -61,6 +61,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/abc_spinner_mtrl_am_alpha"
+                    android:hint="@string/plan_sdate_hint"
+                    android:textColorHint="#33000000"
                     android:inputType="textPersonName" />
 
                 <ImageView
@@ -82,6 +84,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:hint="@string/plan_edate_hint"
+                    android:textColorHint="#33000000"
                     android:background="@drawable/abc_spinner_mtrl_am_alpha"
                     android:inputType="textPersonName" />
 
@@ -122,6 +126,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:hint="@string/plan_place_hint"
+                    android:textColorHint="#33000000"
                     android:inputType="textPersonName" />
 
                 <ImageView
@@ -130,4 +136,7 @@
                     android:background="#000000" />
             </LinearLayout>
         </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
 </LinearLayout>

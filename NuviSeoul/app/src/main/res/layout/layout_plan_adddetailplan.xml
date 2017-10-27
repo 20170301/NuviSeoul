@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll_addlayout"
+    android:id="@+id/ll_adddetailplan"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -10,22 +10,24 @@
         android:id="@+id/iv_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
         android:background="#cccccc"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
 
     <LinearLayout
         android:id="@+id/ll_adddestination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true">
+        android:layout_centerVertical="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="27dp"
-            android:layout_marginBottom="20dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -41,10 +43,14 @@
                 android:text="@string/add_destination"/>
 
         </LinearLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#cccccc"/>
     </LinearLayout>
+    <ImageView
+        android:id="@+id/iv_marginbottom"
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="#cccccc"/>
 </LinearLayout>
