@@ -6,5 +6,5 @@
 ### 2. 소개 동영상 
 #### *Link: [소개동영상](https://google.com )
 
-### 3. 소개 동영상 
-![메인화면](/ReadMe.Image/main.jpg)
+### 3. 메인화면
+![메인화면](<img width="10%" height="10%" src="/ReadMe.Image/main.jpg"></img>)
