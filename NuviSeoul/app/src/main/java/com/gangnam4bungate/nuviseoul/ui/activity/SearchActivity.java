@@ -1,5 +1,6 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,8 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -42,6 +45,7 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
     private ArrayList<searchDetailDTO> searchDetailDTOs = new ArrayList<>();
     private ArrayList<PlanDetailData> mSearchDataList = new ArrayList<PlanDetailData>();
     private Map<String, String> map = new HashMap<>();
+    private ProgressBar mProgressBar;
     int Count = 0;
     private ImageView mIv_search;
     private TextView mTv_title;
@@ -57,24 +61,46 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setContentInsetsAbsolute(0,0);
         mIv_search = (ImageView) toolbar.findViewById(R.id.iv_search);
+        mTv_title = (TextView) toolbar.findViewById(R.id.tv_title);
         mEt_title = (EditText)toolbar.findViewById(R.id.et_title);
-
+        mTv_title.setVisibility(View.INVISIBLE);
+        mEt_title.setVisibility(View.VISIBLE);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
         mIv_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEt_title.setHint("");
-                String mEt_title_value = mEt_title.getText().toString();
-                NetworkManager.getInstance().requestAreaBaseListInfo(SearchActivity.this, mEt_title_value);
-                if(searchDTOs != null){
-                    searchDTOs.clear();
-                }
-                if(searchDetailDTOs != null){
-                    searchDetailDTOs.clear();
+
+                try {
+                    mEt_title.setHint("");
+                    String mEt_title_value = mEt_title.getText().toString();
+                    if (mProgressBar != null)
+                        mProgressBar.setVisibility(View.VISIBLE);
+                    NetworkManager.getInstance().requestAreaBaseListInfo(SearchActivity.this, mEt_title_value);
+                    if (searchDTOs != null) {
+                        searchDTOs.clear();
+                    }
+                    if (searchDetailDTOs != null) {
+                        searchDetailDTOs.clear();
+                    }
+                    hideKeyboard();
+                }catch (Exception e){
+
                 }
             }
         });
 
     }
+
+    private void hideKeyboard(){
+        try {
+            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }catch (Exception e){
+
+        }
+
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -113,8 +139,8 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
                         .replaceAll("&lt;","")
                         .replaceAll("&gt;","");
 
-                if(overView.length() > 100){
-                    overView = overView.substring(0, 100) + "...";
+                if(overView.length() > 120){
+                    overView = overView.substring(0, 120) + "...";
                 }
 
                 homePage = item.optString("homepage", "주소가 없어요.");
@@ -139,6 +165,8 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
                     view.setLayoutManager(layoutManager);
                     view.setAdapter(searchRecyclerView);
                     searchRecyclerView.notifyDataSetChanged();
+                    if(mProgressBar != null)
+                        mProgressBar.setVisibility(View.GONE);
                 }
 
             }catch (JSONException e){
