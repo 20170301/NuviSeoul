@@ -114,8 +114,8 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
                         .replaceAll("&lt;","")
                         .replaceAll("&gt;","");
 
-                if(overView.length() > 100){
-                    overView = overView.substring(0, 100) + "...";
+                if(overView.length() > 120){
+                    overView = overView.substring(0, 120) + "...";
                 }
 
                 homePage = item.optString("homepage", "주소가 없어요.");
