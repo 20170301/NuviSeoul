@@ -13,10 +13,10 @@
         android:scaleType="fitXY"
         android:adjustViewBounds="true"/>
 
-    <LinearLayout
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#20bbbbbb"/>
+        android:background="#40aaaaaa"/>
 
     <TextView
         android:id="@+id/tv_name"
