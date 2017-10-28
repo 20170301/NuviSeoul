@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ import java.util.List;
 //public class RecommendActivity extends CommonGoogleMapActivity implements CommonActivity {
 public class RecommendActivity extends CommonGoogleMapActivity implements MashupCallback {
 
+    RelativeLayout mrl_back;
     RecyclerView horizontal_recycler_view;
     HorizontalAdapter horizontalAdapter;
     private List<RecommendData> data;
@@ -68,6 +70,15 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
         }
         setSupportActionBar(toolbar);
 
+        mrl_back = (RelativeLayout) toolbar.findViewById(R.id.rl_back);
+        if(mrl_back != null){
+            mrl_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
