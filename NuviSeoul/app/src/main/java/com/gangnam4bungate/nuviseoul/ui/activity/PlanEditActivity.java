@@ -12,7 +12,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gangnam4bungate.nuviseoul.R;
@@ -35,7 +37,7 @@ public class PlanEditActivity extends CommonActivity {
     Button mSaveButton;
     LinearLayout mllAddLayout;
     LinearLayout mllAddDetailPlan;
-
+    RelativeLayout mrl_back;
 
     DBOpenHelper mDBOpenHelper;
     EditText mPlanSubjectText;
@@ -112,6 +114,15 @@ public class PlanEditActivity extends CommonActivity {
                 tv_title.setText(getString(R.string.plan_make_title));
             else
                 tv_title.setText(getString(R.string.edit_title));
+        }
+        mrl_back = (RelativeLayout) toolbar.findViewById(R.id.rl_back);
+        if(mrl_back != null){
+            mrl_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
         }
         setSupportActionBar(toolbar);
 

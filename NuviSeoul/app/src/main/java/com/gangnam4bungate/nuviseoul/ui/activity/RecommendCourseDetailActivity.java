@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -35,6 +36,7 @@ import java.util.List;
 
 public class RecommendCourseDetailActivity extends CommonActivity implements MashupCallback{
     TextView mTv_title;
+    RelativeLayout mrl_back;
     private ImageView mIv_add;
     TourCourseInfo info = new TourCourseInfo();
     private RecyclerView mRvTourCourseDetail;
@@ -71,11 +73,19 @@ public class RecommendCourseDetailActivity extends CommonActivity implements Mas
     public void initLayout(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setContentInsetsAbsolute(0,0);
+        mrl_back = (RelativeLayout) toolbar.findViewById(R.id.rl_back);
+        if(mrl_back != null){
+            mrl_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
         mTv_title = (TextView) toolbar.findViewById(R.id.tv_title);
         if(mTv_title != null && info.getTitle() != null)
             mTv_title.setText(info.getTitle());
         setSupportActionBar(toolbar);
-
         mIv_add = (ImageView) findViewById(R.id.iv_add);
         if(mIv_add != null){
             mIv_add.setOnClickListener(new View.OnClickListener() {

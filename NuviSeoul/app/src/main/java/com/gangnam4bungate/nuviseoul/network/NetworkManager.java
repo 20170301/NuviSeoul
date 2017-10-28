@@ -39,7 +39,7 @@ public class NetworkManager {
 
     public void requestAreaBaseDetailListInfo(Object object, String contentid){
         try {
-            Uri builtUri = Uri.parse((CODES.DefaultDomain + CODES.URLCodes.URL_SEARCH) + CODES.Dev_ServiceKey + "&contentId="+ contentid +"&defaultYN=Y&MobileOS=AND&overviewYN=Y&MobileApp=" + ((Context) object).getString(R.string.app_name) + "&"+CODES.CommonCodes._TYPE + "=" +"json");
+            Uri builtUri = Uri.parse((CODES.DefaultDomain + CODES.URLCodes.URL_DETAIL_COMMON) + "ServiceKey=" + CODES.Dev_ServiceKey + "&contentId="+ contentid +"&defaultYN=Y&MobileOS=AND&overviewYN=Y&MobileApp=" + ((Context) object).getString(R.string.app_name) + "&"+CODES.CommonCodes._TYPE + "=" +"json");
 
             String url = builtUri.toString();
 
@@ -49,13 +49,16 @@ public class NetworkManager {
         }
     }
 
-    public void requestPlanCourseListInfo(Object object) {
+    public void requestPlanCourseListInfo(Object object, String pageNo) {
 
         try {
             Uri builtUri = Uri.parse(CODES.DefaultDomain + CODES.URLCodes.URL_AREA_BASED_LIST)
                     .buildUpon()
+                    .appendQueryParameter(CODES.CommonCodes.NUMOFROWS, "30")
+                    .appendQueryParameter(CODES.CommonCodes.PAGENO, pageNo)
                     .appendQueryParameter(CODES.CommonCodes.CONTENTTYPEID, CODES.API_CONTENTTYPE.TOUR_COURSE) //여행코스
                     .appendQueryParameter(CODES.CommonCodes.AREACODE, "1") //서울
+                    .appendQueryParameter(CODES.CommonCodes.ARRANGE, "P") //조회순
                     .appendQueryParameter(CODES.CommonCodes.CAT1, "C01") //여행코스
                     .appendQueryParameter(CODES.CommonCodes.MOBILEOS, "AND")
                     .appendQueryParameter(CODES.CommonCodes.MOBILEAPP, ((Context) object).getString(R.string.app_name))
@@ -117,8 +120,8 @@ public class NetworkManager {
 
 
         try {
-            Uri builtUri = Uri.parse("http://api.visitkorea.or.kr/openapi/service/rest/KorService/locationBasedList?ServiceKey=" + key +
-                    "&mapX=126.981611&mapY=37.568477&radius=10000&pageNo=1&numOfRows=14&listYN=Y&arrange=B&contentTypeId=14&MobileOS=AND&MobileApp=MyApplication&_type=json");
+            Uri builtUri = Uri.parse("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=" + key +
+                    "&numOfRows=14&arrange=B&MobileOS=AND&MobileApp=NuviSeoul&contentTypeid=14&areaCode=1&cat1=A02&cat2=A0206&_type=json");
 
             String url = builtUri.toString();
 

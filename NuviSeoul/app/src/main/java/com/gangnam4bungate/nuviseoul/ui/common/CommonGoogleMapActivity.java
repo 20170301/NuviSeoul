@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.data.PlanData;
 import com.gangnam4bungate.nuviseoul.database.DBOpenHelper;
+import com.gangnam4bungate.nuviseoul.database.DataBases;
 import com.gangnam4bungate.nuviseoul.map.DirectionFinder;
 import com.gangnam4bungate.nuviseoul.map.DirectionFinderListener;
 import com.gangnam4bungate.nuviseoul.map.PlaceFinder;
@@ -89,6 +90,10 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
 
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
+        if(mMap==null)
+        {
+            return ;
+        }
         mMap.clear();
         boolean bFirst=true;
         Marker makerInfo = null;
@@ -151,7 +156,27 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
 
 
     public void showLocationData(int planid){
+        //Cursor c = mDBOpenHelper.planAllColumns();
+        //int planid = 0;
+        //예외처리 필요
+        if(this.mMap==null)
+            return;
 
+        this.MapClear();
+
+        Cursor c = mDBOpenHelper.plandetail_getColumn(planid);
+        if(c != null) {
+            do
+            {
+                //LatLng latLng=new LatLng(route.endLocation.latitude,route.endLocation.longitude);
+                //MapMarkerDisplay(latLng,route.endTitle);
+                double dLat=c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LATITUDE));
+                double dLng=c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LONGITUDE));
+                LatLng latLng=new LatLng(dLat,dLng );
+                GetPlaceInfo(latLng);
+            }while (c.moveToNext());
+                c.close();
+        }
     }
 
 
@@ -175,7 +200,19 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
 
         try
         {
-            new DirectionFinder(this,this.mRoutes,strOrigin,strDestination,pTitle).execute();
+            boolean bInsert=true;
+
+            for(Route route : this.mRoutes ) {
+                if((pTitle==route.startTitle)
+                      ||(pTitle==route.endTitle) ){
+                    bInsert=false;
+                    break;
+                }
+            }
+
+            if(bInsert) {
+                new DirectionFinder(this, this.mRoutes, strOrigin, strDestination, pTitle).execute();
+            }
         }
         catch(UnsupportedEncodingException e)
         {
@@ -253,28 +290,40 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
         if(this.mType==0){
             //planid
             //plandetail
-
-            Cursor c = mDBOpenHelper.planAllColumns();
-            int planid = 0;
-            if(c != null){
-                while(c.moveToNext()){
-
-                    //LatLng latLng=new LatLng(arg0.latitude,arg0.longitude);
-                    //MapMarkerDisplay(latLng);
+            //Cursor c = mDBOpenHelper.planAllColumns();
+            //int planid = 0;
+           /* Cursor c = mDBOpenHelper.plandetail_getColumn(this.mPlanId);
+            if(c != null) {
+                while (c.moveToNext()) {
+                    //LatLng latLng=new LatLng(route.endLocation.latitude,route.endLocation.longitude);
+                    //MapMarkerDisplay(latLng,route.endTitle);
+                    LatLng latLng=new LatLng(c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LATITUDE)), c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LONGITUDE)));
+                    GetPlaceInfo(latLng);
                 }
                 c.close();
-            }
+            }*/
         }
 /*-------------------------------------------------------------------------------------------------*/
-        //수정
-        else if(this.mType==2){
-            //기존 좌표 리스트
-
-        }
-        /*-------------------------------------------------------------------------------------------------*/
+   /*-------------------------------------------------------------------------------------------------*/
         else{//if(this.mType==1){
 
-
+            //1안. 수정 상태 - 기존 데이터 저장
+            /*
+            if(PlanEditActivity.getInstance() != null) {
+                //PlanEditActivity.getInstance().mLocationList;
+                //1. 방식
+                if(PlanEditActivity.getInstance().mLocationList.size()>0) {
+                    ArrayList<Route> Routes = PlanEditActivity.getInstance().mLocationList;
+                    for (Route route : mRoutes) {
+                        LatLng latLng = new LatLng(route.endLocation.latitude, route.endLocation.longitude);
+                        MapMarkerDisplay(latLng, route.endTitle);
+                    }
+                }
+                //2번 방식
+                this.showLocationData(PlanEditActivity.getInstance().mEditPlanId);
+            }
+            */
+            //2안 : 추가 개념이므로 항상 신규맵 상태 유지
             //MapMarkerDisplay(new LatLng(37.5388,127.00155));
             //MapMarkerDisplay(new LatLng(37.6388,127.00455));
 
@@ -375,6 +424,7 @@ public class CommonGoogleMapActivity extends AppCompatActivity implements OnMapR
 
     public void MapMarkerDisplay(LatLng latLng,String pTitle)
     {
+
         if(mLastedMarkLatLng!=null) {
             sendRequestWithDirection(mLastedMarkLatLng, latLng,pTitle);
         }
