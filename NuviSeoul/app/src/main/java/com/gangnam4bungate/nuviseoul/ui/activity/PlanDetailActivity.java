@@ -1,6 +1,7 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -10,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -53,6 +55,7 @@ public class PlanDetailActivity extends CommonGoogleMapActivity implements OnMap
                                                                 LocationListener{
 
     private ImageView mIv_Modify;
+    private ImageView mIv_Delete;
     RelativeLayout mrl_back;
     private TextView mTv_title;
     private ImageView mIv_search;
@@ -158,7 +161,41 @@ public class PlanDetailActivity extends CommonGoogleMapActivity implements OnMap
                 }
             });
         }
+        mIv_Delete = (ImageView) findViewById(R.id.iv_delete);
+        if(mIv_Delete != null){
+            mIv_Delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                            PlanDetailActivity.this);
+                    alertDialogBuilder
+                            .setMessage(getString(R.string.delete_msg))
+                            .setCancelable(false)
+                            .setPositiveButton(getString(R.string.ok),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialog, int id) {
+                                            dialog.cancel();
 
+                                            mDBOpenHelper.plandetailDelete(mPlanid);
+                                            mDBOpenHelper.planDelete(mPlanid);
+
+                                            finish();
+                                        }
+                                    })
+                            .setNegativeButton(getString(R.string.no),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            });
+        }
 
         ArrayList<PlanDetailList> allList = new ArrayList<PlanDetailList>();
         ArrayList<PlanDetailData> detailList = null;

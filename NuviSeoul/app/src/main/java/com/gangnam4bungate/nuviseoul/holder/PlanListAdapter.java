@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
 import com.gangnam4bungate.nuviseoul.data.PlanData;
 import com.gangnam4bungate.nuviseoul.data.PlanDetailData;
@@ -49,7 +50,7 @@ public class PlanListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Date sDate = mPlanList.get(position).getStart_date();
                 Date eDate = mPlanList.get(position).getEnd_date();
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdf = new SimpleDateFormat("yy.MM.dd");
                 String start_date = sdf.format(sDate);
                 String end_date = sdf.format(eDate);
 
@@ -57,11 +58,12 @@ public class PlanListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     if (start_date.equals(end_date)) {
                         planListViewHolder.setDate(start_date + " ");
                     } else {
-                        planListViewHolder.setDate(start_date + " ~ " + end_date);
+                        planListViewHolder.setDate(start_date + " - " + end_date);
                     }
                 }
 
                 planListViewHolder.setName(mPlanList.get(position).getName());
+                planListViewHolder.setPlaceNum(mPlanList.get(position).getPlacenum() + mContext.getString(R.string.plan_list_place_msg));
                 planListViewHolder.itemView.setTag(mPlanList.get(position));
                 planListViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

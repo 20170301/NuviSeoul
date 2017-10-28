@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
@@ -51,7 +52,7 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
     private List<RecommendData> data;
 
     ImageView closehandle;
-
+    SlidingDrawer drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +75,14 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
 
         horizontal_recycler_view= (RecyclerView) findViewById(R.id.horizontal_recycler_view);
 
+        drawer = (SlidingDrawer)findViewById(R.id.slide);
+        drawer.animateOpen();
+
         closehandle = (ImageView) findViewById(R.id.close);
 
         closehandle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SlidingDrawer drawer = (SlidingDrawer)findViewById(R.id.slide);
                 drawer.animateClose();
             }
         });
@@ -99,9 +102,9 @@ public class RecommendActivity extends CommonGoogleMapActivity implements Mashup
 
         NetworkManager.getInstance().requsetRecommendLocationInfo(this);
 
-        Button saveBtn = (Button) findViewById(R.id.locationSave);
-        Button resetBtn = (Button) findViewById(R.id.locationReset);
-        Button cancelBtn = (Button) findViewById(R.id.locationCancel);
+        ImageButton saveBtn = (ImageButton) findViewById(R.id.locationSave);
+        ImageButton resetBtn = (ImageButton) findViewById(R.id.locationReset);
+        ImageButton cancelBtn = (ImageButton) findViewById(R.id.locationCancel);
 
         saveBtn.setOnClickListener(new Button.OnClickListener() {
             @Override

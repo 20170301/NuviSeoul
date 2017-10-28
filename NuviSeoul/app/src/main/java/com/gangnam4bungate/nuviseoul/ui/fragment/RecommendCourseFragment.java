@@ -57,7 +57,7 @@ public class RecommendCourseFragment extends Fragment {
         mRvTourCourse.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
         mRvTourCourse.setAdapter(mTourCourseAdapter);
 
-        VerticalSpaceItemDecoration verticalSpaceItemDecoration = new VerticalSpaceItemDecoration(50);
+        VerticalSpaceItemDecoration verticalSpaceItemDecoration = new VerticalSpaceItemDecoration(30);
         mRvTourCourse.addItemDecoration(verticalSpaceItemDecoration);
 
         return view;

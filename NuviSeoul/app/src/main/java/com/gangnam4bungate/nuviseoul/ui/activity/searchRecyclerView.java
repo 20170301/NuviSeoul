@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Shader;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.searchDTO;
 import com.gangnam4bungate.nuviseoul.config.searchDetailDTO;
+import com.gangnam4bungate.nuviseoul.data.PlanDetailData;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -34,15 +37,16 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private ArrayList<searchDTO> searchDTOs = new ArrayList<>();
     private ArrayList<searchDetailDTO> searchDetailDTOs = new ArrayList<>();
+    ArrayList<PlanDetailData> mSearchDataList;
     Map<String, String> map;
     Context getContext;
 
-    public searchRecyclerView(ArrayList searchDTO, ArrayList searchDetailDTO, Map map, Context context) {
+    public searchRecyclerView(ArrayList searchDTO, ArrayList searchDetailDTO, Map map, Context context, ArrayList<PlanDetailData> mSearchDataList) {
         this.searchDTOs = searchDTO;
         this.searchDetailDTOs = searchDetailDTO;
         getContext = context;
         this.map = map;
-
+        this.mSearchDataList  = mSearchDataList;
         Log.d("testtt" , searchDetailDTO.size() + " " +searchDetailDTO.size());
     }
 
@@ -59,7 +63,7 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         String view = map.get(searchDTOs.get(position).contentId);
         final String homepage = view.substring(0, view.indexOf("|"));
-        String overview = view.substring(view.indexOf("|"), view.length());
+        String overview = view.substring(view.indexOf("|") +1, view.length());
 
         ((RowCell)holder).searchTitle.setText(searchDTOs.get(position).title);
         ((RowCell) holder).searchDescription.setText(overview);
@@ -68,6 +72,8 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
                 .load(searchDTOs.get(position).firstImage.toString())
                 .fit()
                 .into(((RowCell) holder).searchImage);
+        ((RowCell) holder).searchImage.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.MULTIPLY);
+
 
 //        if(searchDetailDTOs.get(position).homePage.equals("주소가 없어요.")){
 //            ((RowCell) holder).homePageButton.setVisibility(View.INVISIBLE);
@@ -86,10 +92,15 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
         });
 
+      //  mSearchDataList.add(new PlanDetailData())
+
         ((RowCell) holder).addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //ADD 버튼 추가하는곳
+                //Intent intent = new Intent(getContext.getApplicationContext(), PlanEditActivity.class);
+                //getContext.startActivity(intent);
             }
         });
     }

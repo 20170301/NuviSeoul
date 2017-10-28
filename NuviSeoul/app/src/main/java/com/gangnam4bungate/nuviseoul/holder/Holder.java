@@ -51,12 +51,14 @@ public class Holder {
     public static class PlanListViewHolder extends RecyclerView.ViewHolder {
         private TextView mTvName;
         private TextView mTvDate;
+        private TextView mTvPlaceNumber;
         public PlanListViewHolder(View itemView) {
             super(itemView);
 
             if(itemView != null){
                 mTvName = (TextView) itemView.findViewById(R.id.tv_name);
                 mTvDate = (TextView) itemView.findViewById(R.id.tv_date);
+                mTvPlaceNumber = (TextView) itemView.findViewById(R.id.tv_place_num);
             }
         }
 
@@ -72,7 +74,11 @@ public class Holder {
             }
         }
 
-
+        public void setPlaceNum(String placeNum){
+            if(mTvPlaceNumber != null){
+                mTvPlaceNumber.setText(placeNum);
+            }
+        }
     }
 
     public static class PlanDetailViewHolder extends RecyclerView.ViewHolder {

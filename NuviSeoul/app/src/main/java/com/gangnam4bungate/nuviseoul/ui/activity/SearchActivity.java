@@ -17,6 +17,7 @@ import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
 import com.gangnam4bungate.nuviseoul.config.searchDTO;
 import com.gangnam4bungate.nuviseoul.config.searchDetailDTO;
+import com.gangnam4bungate.nuviseoul.data.PlanDetailData;
 import com.gangnam4bungate.nuviseoul.network.NetworkManager;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
 import com.mystory.commonlibrary.network.MashupCallback;
@@ -39,6 +40,7 @@ import static com.gangnam4bungate.nuviseoul.config.CODES.RequestCode.REQUEST_ARE
 public class SearchActivity extends CommonActivity implements MashupCallback {
     private ArrayList<searchDTO> searchDTOs = new ArrayList<>();
     private ArrayList<searchDetailDTO> searchDetailDTOs = new ArrayList<>();
+    private ArrayList<PlanDetailData> mSearchDataList = new ArrayList<PlanDetailData>();
     private Map<String, String> map = new HashMap<>();
     int Count = 0;
     private ImageView mIv_search;
@@ -133,7 +135,7 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
                     Log.d("searchDetailSize", String.valueOf(searchDetailDTOs.size()));
                     Log.d("searchSize", String.valueOf(searchDTOs.size()));
-                    searchRecyclerView searchRecyclerView = new searchRecyclerView(searchDTOs, searchDetailDTOs, map, this);
+                    searchRecyclerView searchRecyclerView = new searchRecyclerView(searchDTOs, searchDetailDTOs, map, this, mSearchDataList);
                     view.setLayoutManager(layoutManager);
                     view.setAdapter(searchRecyclerView);
                     searchRecyclerView.notifyDataSetChanged();

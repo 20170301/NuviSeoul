@@ -12,6 +12,7 @@ public class PlanData {
     String name = "";
     Date start_date;
     Date end_date;
+    int placenum = 0;
     ArrayList<PlanDetailData> mDetailDataList;
 
     public int getId() {
@@ -50,5 +51,13 @@ public class PlanData {
 
     public void setDetailDataList(ArrayList<PlanDetailData> detailList) {
         this.mDetailDataList = detailList;
+    }
+
+    public int getPlacenum() {
+        return placenum;
+    }
+
+    public void setPlacenum(int placenum) {
+        this.placenum = placenum;
     }
 }

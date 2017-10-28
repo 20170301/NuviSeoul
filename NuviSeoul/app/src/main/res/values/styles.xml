@@ -15,4 +15,13 @@
         <item name="android:textColor">#ffffff</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="AppThemeSearch" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">#ffff00</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

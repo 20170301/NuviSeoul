@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.gangnam4bungate.nuviseoul.model.TourCourseModel;
 import com.gangnam4bungate.nuviseoul.network.DataManager;
 import com.gangnam4bungate.nuviseoul.network.NetworkManager;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
+import com.google.android.gms.common.api.Releasable;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.mystory.commonlibrary.network.MashupCallback;
@@ -43,7 +45,7 @@ import java.util.Date;
 public class MainActivity extends CommonActivity{
 
     private TextView mTv_title;
-    private ImageView mIv_search;
+    private RelativeLayout mRl_search;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     public final static int PERMISSION_ACCESS_FINE_LOCATION = 0;
@@ -69,20 +71,16 @@ public class MainActivity extends CommonActivity{
     public void initLayout(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setContentInsetsAbsolute(0,0);
-        mTv_title = (TextView) toolbar.findViewById(R.id.tv_title);
-        if(mTv_title != null)
-            mTv_title.setText(getString(R.string.app_name));
-        setSupportActionBar(toolbar);
-
-        mIv_search = (ImageView) findViewById(R.id.iv_search);
-        if(mIv_search != null){
-            mIv_search.setOnClickListener(new View.OnClickListener() {
+        mRl_search = (RelativeLayout) findViewById(R.id.rl_search);
+        if(mRl_search != null){
+            mRl_search.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(getApplicationContext(), SearchActivity.class));
                 }
             });
         }
+        setSupportActionBar(toolbar);
 
         // Initializing the TabLayout
         mTabLayout = (TabLayout) findViewById(R.id.tablayout);

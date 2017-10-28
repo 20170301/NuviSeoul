@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
@@ -229,8 +230,14 @@ public class PlanEditActivity extends CommonActivity {
                 @Override
                 public void onClick(View v) {
 
+                    String subject = mPlanSubjectText.getText().toString();
+                    if(subject == null || (subject != null && subject.equals(""))){
+                        Toast.makeText(getApplicationContext(), getString(R.string.subject_error_toast_msg), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
                     if(isPlanEdit == false) {
-                        mPlanData.setName(mPlanSubjectText.getText().toString());
+                        mPlanData.setName(subject);
                         Date sDate = null;
                         Date eDate = null;
 
@@ -251,10 +258,39 @@ public class PlanEditActivity extends CommonActivity {
                             }
                         }
 
+
+                        if(sDate == null){
+                            Toast.makeText(getApplicationContext(), getString(R.string.sdate_error_toast_msg), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        if(eDate == null){
+                            Toast.makeText(getApplicationContext(), getString(R.string.edate_error_toast_msg), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        boolean isPlaced = false;
+                        for (int i = 0; i < mPlanDetailInsertList.size(); i++) {
+                            PlanDetailData data = mPlanDetailInsertList.get(i);
+                            if (data != null && data.getPlacename() != null &&
+                                    data.getPlacename().equals("") == false &&
+                                    data.getLatitude() > 0 &&
+                                    data.getLongitude() > 0) {
+
+                                isPlaced = true;
+                                break;
+                            }
+                        }
+
+                        if(isPlaced == false){
+                            Toast.makeText(getApplicationContext(), getString(R.string.place_error_toast_msg), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+
                         if(sDate != null)
                             mPlanData.setStart_date(sDate);
                         if(eDate != null)
                             mPlanData.setEnd_date(eDate);
+
                         mPlanData.setDetailDataList(mPlanDetailInsertList);
 
                         mDBOpenHelper.planInsert(mPlanData);
@@ -273,7 +309,7 @@ public class PlanEditActivity extends CommonActivity {
                             }
                         }
                     } else {
-                        mPlanData.setName(mPlanSubjectText.getText().toString());
+                        mPlanData.setName(subject);
                         Date sDate = null;
                         Date eDate = null;
 
@@ -309,6 +345,43 @@ public class PlanEditActivity extends CommonActivity {
                                     eDate = data.getEndDate();
                                 }
                             }
+                        }
+
+                        if(sDate == null){
+                            Toast.makeText(getApplicationContext(), getString(R.string.sdate_error_toast_msg), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        if(eDate == null){
+                            Toast.makeText(getApplicationContext(), getString(R.string.edate_error_toast_msg), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        boolean isPlaced = false;
+                        for (int i = 0; i < mPlanDetailInsertList.size(); i++) {
+                            PlanDetailData data = mPlanDetailInsertList.get(i);
+                            if (data != null && data.getPlacename() != null &&
+                                    data.getPlacename().equals("") == false &&
+                                    data.getLatitude() > 0 &&
+                                    data.getLongitude() > 0) {
+
+                                isPlaced = true;
+                                break;
+                            }
+                        }
+                        for (int i = 0; i < mPlanDetailUpdateList.size(); i++) {
+                            PlanDetailData data = mPlanDetailUpdateList.get(i);
+                            if (data != null && data.getPlacename() != null &&
+                                    data.getPlacename().equals("") == false &&
+                                    data.getLatitude() > 0 &&
+                                    data.getLongitude() > 0) {
+
+                                isPlaced = true;
+                                break;
+                            }
+                        }
+                        if(isPlaced == false){
+                            Toast.makeText(getApplicationContext(), getString(R.string.place_error_toast_msg), Toast.LENGTH_LONG).show();
+                            return;
                         }
 
                         if(sDate != null)
@@ -364,7 +437,7 @@ public class PlanEditActivity extends CommonActivity {
                 addView.removeView(ll_adddetailplan);
             }
 
-            PlanDetailData data;
+            final PlanDetailData data;
             if (editdata == null) {
                 data = new PlanDetailData();
                 mPlanDetailInsertList.add(data);
@@ -442,11 +515,15 @@ public class PlanEditActivity extends CommonActivity {
                                         try {
                                             TextView textView = (TextView) v;
                                             if (textView != null) {
-                                                textView.setText(String.format("%d/%d/%d", year, month + 1, dayOfMonth));
                                                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
-                                                Date date = dateFormat.parse(String.format("%d-%d-%d", year, month + 1, dayOfMonth));
+                                                Date edate = dateFormat.parse(String.format("%d-%d-%d", year, month + 1, dayOfMonth));
                                                 PlanDetailData data = (PlanDetailData) textView.getTag();
-                                                data.setEndDate(date);
+                                                if(edate != null && edate.compareTo(data.getStartDate()) < 0){
+                                                    Toast.makeText(getApplicationContext(), getString(R.string.date_error_toast_msg), Toast.LENGTH_LONG).show();
+                                                } else {
+                                                    textView.setText(String.format("%d/%d/%d", year, month + 1, dayOfMonth));
+                                                    data.setEndDate(edate);
+                                                }
                                             }
                                         } catch (Exception e) {
 
@@ -461,14 +538,31 @@ public class PlanEditActivity extends CommonActivity {
                     final TextView tvAddPlace = (TextView) ll_detail.findViewById(R.id.tv_addplace);
                     if (tvAddPlace != null) {
                         tvAddPlace.setTag(data);
-                        ll_detail.setTag(data);
                         if (editdata != null) {
                             tvAddPlace.setText(editdata.getPlacename());
                         }
                         tvAddPlace.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                startActivityForResult(new Intent(getApplicationContext(), RecommendActivity.class), CODES.ActivityResult.LOCATIONS);
+                                try {
+                                    if (v != null) {
+                                        TextView textView = (TextView) v;
+                                        if (textView != null) {
+
+                                            if(textView.getText() != null && textView.getText().toString().equals("") == false){
+                                                Toast.makeText(getApplicationContext(), getString(R.string.place_add_fail_toast), Toast.LENGTH_LONG).show();
+                                            } else if(textView.getText() == null || (textView.getText() != null &&
+                                                                                        textView.getText().toString().equals(""))){
+                                                if (ll_detail != null && textView != null && textView.getTag() != null)
+                                                    ll_detail.setTag((PlanDetailData) textView.getTag());
+                                                startActivityForResult(new Intent(getApplicationContext(), RecommendActivity.class),
+                                                        CODES.ActivityResult.LOCATIONS);
+                                            }
+                                        }
+                                    }
+                                }catch(Exception e){
+
+                                }
                             }
                         });
                     }
@@ -530,8 +624,21 @@ public class PlanEditActivity extends CommonActivity {
         View view = getLayoutInflater().inflate(R.layout.layout_plan_destination, null);
         if (view != null) {
             tv_dest = (TextView) view.findViewById(R.id.tv_addplace);
-            if(tv_dest != null)
+            if(tv_dest != null) {
                 tv_dest.setText(data.getPlacename());
+                tv_dest.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            if (v != null) {
+                                Toast.makeText(getApplicationContext(), getString(R.string.place_add_fail_toast), Toast.LENGTH_LONG).show();
+                            }
+                        }catch(Exception e){
+
+                        }
+                    }
+                });
+            }
         }
         parentView.addView(view);
     }
@@ -594,7 +701,6 @@ public class PlanEditActivity extends CommonActivity {
                             tv_dest.setText(route.endTitle);
                             copy.setLatitude(route.endLocation.latitude);
                             copy.setLongitude(route.endLocation.longitude);
-
                             copy.setPlacename(tv_dest.getText().toString());
 
                             if(isEdit == false){
@@ -602,6 +708,18 @@ public class PlanEditActivity extends CommonActivity {
                             } else {
                                 mPlanDetailUpdateList.add(copy);
                             }
+                            tv_dest.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    try {
+                                        if (v != null) {
+                                            Toast.makeText(getApplicationContext(), getString(R.string.place_add_fail_toast), Toast.LENGTH_LONG).show();
+                                        }
+                                    }catch(Exception e){
+
+                                    }
+                                }
+                            });
                             addView.addView(view);
                         }
                     }

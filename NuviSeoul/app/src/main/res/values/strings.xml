@@ -21,12 +21,23 @@
     <string name="plandetail_subtitle">일정</string>
 
     <string name="plan_title_hint">일정 이름을 입력하세요.</string>
-    <string name="plan_sdate_hint">일정시작날짜 입력</string>
-    <string name="plan_edate_hint">일정끝날짜 입력</string>
-    <string name="plan_place_hint">여기를 클릭하여 여행 장소를 추가하세요.</string>
+    <string name="plan_sdate_hint">시작날짜 입력</string>
+    <string name="plan_edate_hint">끝날짜 입력</string>
+    <string name="plan_place_hint">여행 장소를 추가하세요.</string>
 
-    <string name="tab_plan_title">경로일정</string>
-    <string name="tab_recommend_title">추천경로</string>
+    <string name="plan_list_place_msg">개 장소 저장됨</string>
+    <string name="tab_plan_title">나의 일정</string>
+    <string name="tab_recommend_title">일정 추천</string>
     <string name="course">코스</string>
+    <string name="empty_msg">나의 일정을 추가해주세요 -></string>
+    <string name="delete_msg">일정을 삭제하시겠습니까?</string>
+    <string name="ok">예</string>
+    <string name="no">아니요</string>
+    <string name="place_add_fail_toast">추가된 장소를 수정할수 없으므로 세부일정을 삭제하고 새로 추가하여 만들어주세요.</string>
+    <string name="date_error_toast_msg">시작날짜보다 작을수가 없으므로 다시 입력하여 주세요.</string>
+    <string name="subject_error_toast_msg">일정 이름이 입력되지 않았습니다.</string>
+    <string name="sdate_error_toast_msg">시작날짜가 입력되지 않았습니다.</string>
+    <string name="edate_error_toast_msg">끝날짜가 입력되지 않았습니다.</string>
+    <string name="place_error_toast_msg">장소가 입력되지 않았습니다.</string>
     <string name="permission_location_fail_msg">위치 권한 획득에 실패하였습니다. 권한을 승인해주세요.(위치권한이 있어야 여행장소를 볼 수 있습니다.)</string>
 </resources>

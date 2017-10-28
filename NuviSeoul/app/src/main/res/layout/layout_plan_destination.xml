@@ -22,6 +22,7 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:gravity="bottom"
+            android:layout_marginBottom="15dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:orientation="vertical">
@@ -33,6 +34,7 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="bottom"
                 android:hint="@string/plan_place_hint"
+                android:textSize="16dp"
                 android:textColorHint="#33000000"
                 android:inputType="textPersonName" />
 

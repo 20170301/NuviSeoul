@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.gangnam4bungate.nuviseoul.R;
 import com.gangnam4bungate.nuviseoul.config.CODES;
@@ -33,6 +35,8 @@ import java.util.Date;
  */
 
 public class PlanFragment extends Fragment {
+    private RelativeLayout mRL_Empty;
+    private TextView mTv_Empty;
     private ImageView mIv_add;
     private RecyclerView mRvPlanList;
     private PlanListAdapter mPlanListAdapter;
@@ -66,6 +70,8 @@ public class PlanFragment extends Fragment {
         if(mDBOpenHelper != null && mDBOpenHelper.isOpen() == false)
             mDBOpenHelper.open(inflater.getContext());
 
+        mRL_Empty = (RelativeLayout) view.findViewById(R.id.rl_empty);
+        mTv_Empty = (TextView) view.findViewById(R.id.tv_empty);
         mIv_add = (ImageView) view.findViewById(R.id.iv_add);
         if(mIv_add != null){
             mIv_add.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +86,16 @@ public class PlanFragment extends Fragment {
         ArrayList<PlanData> planList = new ArrayList<PlanData>();
         if(cursor != null){
             try {
+                if(cursor.getCount() > 0){
+                    mRvPlanList.setVisibility(View.VISIBLE);
+                    mRL_Empty.setVisibility(View.GONE);
+                    mTv_Empty.setVisibility(View.GONE);
+                } else {
+                    mRvPlanList.setVisibility(View.GONE);
+                    mRL_Empty.setVisibility(View.VISIBLE);
+                    mTv_Empty.setVisibility(View.VISIBLE);
+                }
+
                 do {
                     PlanData data = new PlanData();
 
@@ -92,6 +108,12 @@ public class PlanFragment extends Fragment {
                     data.setStart_date(start_date);
                     data.setEnd_date(end_date);
                     data.setName(cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDB._NAME)));
+
+                    Cursor c = mDBOpenHelper.plandetail_getColumn(data.getId());
+                    if(c != null){
+                        data.setPlacenum(c.getCount());
+                        c.close();
+                    }
 
                     planList.add(data);
                 } while (cursor.moveToNext());
@@ -127,6 +149,17 @@ public class PlanFragment extends Fragment {
         ArrayList<PlanData> planList = new ArrayList<PlanData>();
         if(cursor != null){
             try {
+
+                if(cursor.getCount() > 0){
+                    mRvPlanList.setVisibility(View.VISIBLE);
+                    mRL_Empty.setVisibility(View.GONE);
+                    mTv_Empty.setVisibility(View.GONE);
+                } else {
+                    mRvPlanList.setVisibility(View.GONE);
+                    mRL_Empty.setVisibility(View.VISIBLE);
+                    mTv_Empty.setVisibility(View.VISIBLE);
+                }
+
                 do {
                     PlanData data = new PlanData();
 
@@ -139,7 +172,11 @@ public class PlanFragment extends Fragment {
                     data.setStart_date(start_date);
                     data.setEnd_date(end_date);
                     data.setName(cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDB._NAME)));
-
+                    Cursor c = mDBOpenHelper.plandetail_getColumn(data.getId());
+                    if(c != null){
+                        data.setPlacenum(c.getCount());
+                        c.close();
+                    }
                     planList.add(data);
                 } while (cursor.moveToNext());
 
