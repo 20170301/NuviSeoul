@@ -22,6 +22,7 @@ import com.gangnam4bungate.nuviseoul.model.map.MapInfo;
 import com.gangnam4bungate.nuviseoul.model.map.MapModel;
 import com.gangnam4bungate.nuviseoul.network.NetworkManager;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonActivity;
+import com.gangnam4bungate.nuviseoul.ui.view.VerticalSpaceItemDecoration;
 import com.google.gson.Gson;
 import com.mystory.commonlibrary.network.MashupCallback;
 
@@ -103,6 +104,9 @@ public class RecommendCourseDetailActivity extends CommonActivity implements Mas
         mTourCourseDetailListAdapter = new TourCourseDetailListAdapter(getApplicationContext());
         mRvTourCourseDetail.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mRvTourCourseDetail.setAdapter(mTourCourseDetailListAdapter);
+
+        VerticalSpaceItemDecoration verticalSpaceItemDecoration = new VerticalSpaceItemDecoration(50);
+        mRvTourCourseDetail.addItemDecoration(verticalSpaceItemDecoration);
     }
 
     public ArrayList<PlanDetailData> getPlanDetailDataList(){

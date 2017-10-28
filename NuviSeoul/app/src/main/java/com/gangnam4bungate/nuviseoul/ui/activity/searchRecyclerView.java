@@ -88,6 +88,8 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         if(homepage.equals("주소가 없어요.")){
             ((RowCell) holder).homePageButton.setVisibility(View.INVISIBLE);
+        } else {
+            ((RowCell) holder).homePageButton.setVisibility(View.VISIBLE);
         }
 
 

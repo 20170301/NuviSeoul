@@ -31,11 +31,13 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/rl_back"
             android:textColor="#ffff00"
             android:textSize="20dp"
             android:textStyle="bold"
-            android:visibility="visible"/>
+            android:visibility="visible"
+            android:singleLine="true"/>
         <EditText
             android:id="@+id/et_title"
             android:layout_width="wrap_content"
