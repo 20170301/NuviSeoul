@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -66,12 +67,18 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
         ((RowCell)holder).searchTitle.setText(searchDTOs.get(position).title);
         ((RowCell) holder).searchDescription.setText(overview);
         ((RowCell) holder).searchHomepage.setText(homepage);
-        Picasso.with(getContext)
-                .load(searchDTOs.get(position).firstImage.toString())
-                .fit()
-                .into(((RowCell) holder).searchImage);
-        ((RowCell) holder).searchImage.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.MULTIPLY);
 
+        if(searchDTOs.get(position).firstImage.toString().equals("no Parsing") ){
+            Drawable drawable = getContext.getResources().getDrawable(R.drawable.noimage);
+            ((RowCell) holder).searchImage.setImageDrawable(drawable);
+            ((RowCell) holder).searchImage.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.MULTIPLY);
+        }else{
+            Picasso.with(getContext)
+                    .load(searchDTOs.get(position).firstImage.toString())
+                    .fit()
+                    .into(((RowCell) holder).searchImage);
+            ((RowCell) holder).searchImage.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.MULTIPLY);
+        }
 
 //        if(searchDetailDTOs.get(position).homePage.equals("주소가 없어요.")){
 //            ((RowCell) holder).homePageButton.setVisibility(View.INVISIBLE);

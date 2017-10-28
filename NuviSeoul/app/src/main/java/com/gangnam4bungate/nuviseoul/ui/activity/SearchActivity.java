@@ -166,6 +166,7 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
                 String firstImage = "";
                 String mapX = "";
                 String mapY = "";
+
                 for (int i =0; i < item.length(); i++){
                     contentId = item.getJSONObject(i).getString("contentid");
                     title = item.getJSONObject(i).getString("title");
