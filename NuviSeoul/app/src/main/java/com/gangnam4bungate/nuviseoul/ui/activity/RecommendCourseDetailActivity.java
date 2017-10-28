@@ -159,8 +159,8 @@ public class RecommendCourseDetailActivity extends CommonActivity implements Mas
                                 for (PlanDetailData data : mPlanDetailDataList) {
                                     if (data != null && info != null && data.getSubcontentid() != null
                                             && data.getSubcontentid().equals(info.getContentid())) {
-                                        data.setLatitude(Double.valueOf(info.getMapx()));
-                                        data.setLongitude(Double.valueOf(info.getMapy()));
+                                        data.setLatitude(Double.valueOf(info.getMapy()));
+                                        data.setLongitude(Double.valueOf(info.getMapx()));
                                     }
                                 }
                             }

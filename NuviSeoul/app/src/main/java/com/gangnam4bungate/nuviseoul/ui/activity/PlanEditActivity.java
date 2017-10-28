@@ -51,6 +51,7 @@ public class PlanEditActivity extends CommonActivity {
     ArrayList<Route> mLocationList = new ArrayList<Route>();
     boolean isPlanEdit = false;
     boolean isAddCourse = false;
+    boolean isSearchAddCourse = false;
     int mEditPlanId = 0;
 
     public static PlanEditActivity mPlanEditActivity = null;
@@ -70,6 +71,9 @@ public class PlanEditActivity extends CommonActivity {
             mEditPlanId = intent.getIntExtra("planid", 0);
         } else if(intent != null && intent.getBooleanExtra("add_course", false)){
             isAddCourse = true;
+        } else if(intent != null && intent.getBooleanExtra("search_add_course", false)){
+            isSearchAddCourse = true;
+
         }
         mDBOpenHelper = DBOpenHelper.getInstance();
         if(mDBOpenHelper != null && mDBOpenHelper.isOpen() == false)
@@ -152,6 +156,10 @@ public class PlanEditActivity extends CommonActivity {
 
             if(isAddCourse) {
                 addCourseLayout(mllAddLayout);
+            }
+
+            if(isSearchAddCourse) {
+                addSearchCourseLayout(mllAddLayout);
             }
         } else {
             Cursor c = mDBOpenHelper.plan_getColumn(mEditPlanId);
@@ -244,16 +252,23 @@ public class PlanEditActivity extends CommonActivity {
                         for (int i = 0; i < mPlanDetailInsertList.size(); i++) {
                             PlanDetailData data = mPlanDetailInsertList.get(i);
                             if (data != null) {
-                                if(sDate == null)
+                                if(sDate == null) {
                                     sDate = data.getStartDate();
-                                else if(sDate.compareTo(data.getStartDate()) > 0){
-                                    sDate = data.getStartDate();
+                                } else {
+                                    if(data.getStartDate() == null)
+                                        data.setStartDate(sDate);
+                                    if(sDate.compareTo(data.getStartDate()) > 0){
+                                        sDate = data.getStartDate();
+                                    }
                                 }
-
-                                if(eDate == null)
+                                if(eDate == null) {
                                     eDate = data.getEndDate();
-                                else if(eDate.compareTo(data.getEndDate()) < 0){
-                                    eDate = data.getEndDate();
+                                } else {
+                                    if(data.getEndDate() == null)
+                                        data.setEndDate(eDate);
+                                    if(eDate.compareTo(data.getEndDate()) < 0){
+                                        eDate = data.getEndDate();
+                                    }
                                 }
                             }
                         }
@@ -316,16 +331,23 @@ public class PlanEditActivity extends CommonActivity {
                         for (int i = 0; i < mPlanDetailUpdateList.size(); i++) {
                             PlanDetailData data = mPlanDetailUpdateList.get(i);
                             if (data != null) {
-                                if(sDate == null)
+                                if(sDate == null) {
                                     sDate = data.getStartDate();
-                                else if(sDate.compareTo(data.getStartDate()) > 0){
-                                    sDate = data.getStartDate();
+                                } else {
+                                    if(data.getStartDate() == null)
+                                        data.setStartDate(sDate);
+                                    if(sDate.compareTo(data.getStartDate()) > 0){
+                                        sDate = data.getStartDate();
+                                    }
                                 }
-
-                                if(eDate == null)
+                                if(eDate == null) {
                                     eDate = data.getEndDate();
-                                else if(eDate.compareTo(data.getEndDate()) < 0){
-                                    eDate = data.getEndDate();
+                                } else {
+                                    if(data.getEndDate() == null)
+                                        data.setEndDate(eDate);
+                                    if(eDate.compareTo(data.getEndDate()) < 0){
+                                        eDate = data.getEndDate();
+                                    }
                                 }
                             }
                         }
@@ -333,16 +355,23 @@ public class PlanEditActivity extends CommonActivity {
                         for (int i = 0; i < mPlanDetailInsertList.size(); i++) {
                             PlanDetailData data = mPlanDetailInsertList.get(i);
                             if (data != null) {
-                                if(sDate == null)
+                                if(sDate == null) {
                                     sDate = data.getStartDate();
-                                else if(sDate.compareTo(data.getStartDate()) > 0){
-                                    sDate = data.getStartDate();
+                                } else {
+                                    if(data.getStartDate() == null)
+                                        data.setStartDate(sDate);
+                                    if(sDate.compareTo(data.getStartDate()) > 0){
+                                        sDate = data.getStartDate();
+                                    }
                                 }
-
-                                if(eDate == null)
+                                if(eDate == null) {
                                     eDate = data.getEndDate();
-                                else if(eDate.compareTo(data.getEndDate()) < 0){
-                                    eDate = data.getEndDate();
+                                } else {
+                                    if(data.getEndDate() == null)
+                                        data.setEndDate(eDate);
+                                    if(eDate.compareTo(data.getEndDate()) < 0){
+                                        eDate = data.getEndDate();
+                                    }
                                 }
                             }
                         }
@@ -422,13 +451,25 @@ public class PlanEditActivity extends CommonActivity {
                             }
                         }
                     }
-
+                    Toast.makeText(getApplicationContext(), getString(R.string.plan_add_finish_msg), Toast.LENGTH_LONG).show();
+                    hideKeyboard();
                     finish();
 
                 }
             });
         }
     }
+
+    private void hideKeyboard(){
+        try {
+            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }catch (Exception e){
+
+        }
+
+    }
+
 
     public void addLayout(final LinearLayout addView, PlanDetailData editdata){
         try {
@@ -737,23 +778,16 @@ public class PlanEditActivity extends CommonActivity {
     public void addCourseLayout(LinearLayout parentView){
         try {
             boolean isEdit = false;
-            LinearLayout addView = null;
+            LinearLayout addView = (LinearLayout) parentView.findViewById(R.id.ll_plan_deail);
             PlanDetailData data = null;
-            for (int index = 0; index < parentView.getChildCount(); index++) {
-                View childview = parentView.getChildAt(index);
-                if (childview != null && childview.getTag() != null) {
-                    data = (PlanDetailData)childview.getTag();
-                    if(data != null){
-                        addView = (LinearLayout)childview;
-                        break;
-                    }
-                }
-            }
 
             List<PlanDetailData> list = RecommendCourseDetailActivity.getInstance().getPlanDetailDataList();
             if(list.size() > 0) {
                 TextView tv_dest = (TextView) addView.findViewById(R.id.tv_addplace);
                 if (tv_dest != null) {
+                    data = (PlanDetailData) tv_dest.getTag();
+                    if(data == null)
+                        return;
                     PlanDetailData info = list.get(0);
                     tv_dest.setText(info.getPlacename());
                     data.setLatitude(info.getLatitude());
@@ -805,6 +839,39 @@ public class PlanEditActivity extends CommonActivity {
                     addView.setTag(null);
                 }
             }
+        }catch (Exception e){
+
+        }
+
+    }
+
+
+    public void addSearchCourseLayout(LinearLayout parentView){
+        try {
+            PlanDetailData data = null;
+            if(parentView != null){
+                LinearLayout linearLayout = (LinearLayout) parentView.findViewById(R.id.ll_plan_deail);
+                if(linearLayout != null){
+                    Intent intent = getIntent();
+                    if(intent != null) {
+                        TextView tv_dest = (TextView) linearLayout.findViewById(R.id.tv_addplace);
+                        if (tv_dest != null) {
+                            tv_dest.setText(intent.getStringExtra("placename"));
+                            data = (PlanDetailData)tv_dest.getTag();
+                            if(data != null) {
+                                String mapx = intent.getStringExtra("mapx");
+                                String mapy = intent.getStringExtra("mapy");
+                                data.setLatitude(Double.valueOf(mapy));
+                                data.setLongitude(Double.valueOf(mapx));
+                                data.setPlacename(intent.getStringExtra("placename"));
+                                data.setPathseq(0);
+                            }
+                        }
+                    }
+
+                }
+            }
+
         }catch (Exception e){
 
         }

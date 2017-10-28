@@ -203,57 +203,61 @@ public class PlanDetailActivity extends CommonGoogleMapActivity implements OnMap
         String eDate = "";
         String name = "";
         if(mPlanid >= 0) {
-            Cursor cursor = mDBOpenHelper.plan_getColumn(mPlanid);
-            if (cursor != null && cursor.getCount() > 0) {
-                name = cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDB._NAME));
-                cursor.close();
+            try {
+                Cursor cursor = mDBOpenHelper.plan_getColumn(mPlanid);
+                if (cursor != null && cursor.getCount() > 0) {
+                    name = cursor.getString(cursor.getColumnIndex(DataBases.CreatePlanDB._NAME));
+                    cursor.close();
 
-                Cursor c = mDBOpenHelper.plandetail_getColumn(mPlanid);
-                if (c != null) {
-                    c.moveToFirst();
-                    do {
-                        PlanDetailData data = new PlanDetailData();
-                        data.setPlanid(mPlanid);
-                        try {
-                            String tempsDate = c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._STARTDATE));
-                            String tempeDate = c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._ENDDATE));
-                            if(c.isFirst()){
-                                detailList = new ArrayList<PlanDetailData>();
-                            } else if((sDate.equals(tempsDate) == false)
-                                    || (eDate.equals(tempeDate) == false)){
-                                PlanDetailList list = new PlanDetailList();
-                                list.setArrayList(detailList);
-                                allList.add(list);
-                                detailList = new ArrayList<PlanDetailData>();
+                    Cursor c = mDBOpenHelper.plandetail_getColumn(mPlanid);
+                    if (c != null) {
+                        c.moveToFirst();
+                        do {
+                            PlanDetailData data = new PlanDetailData();
+                            data.setPlanid(mPlanid);
+                            try {
+                                String tempsDate = c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._STARTDATE));
+                                String tempeDate = c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._ENDDATE));
+                                if (c.isFirst()) {
+                                    detailList = new ArrayList<PlanDetailData>();
+                                } else if ((sDate.equals(tempsDate) == false)
+                                        || (eDate.equals(tempeDate) == false)) {
+                                    PlanDetailList list = new PlanDetailList();
+                                    list.setArrayList(detailList);
+                                    allList.add(list);
+                                    detailList = new ArrayList<PlanDetailData>();
+                                }
+
+                                sDate = c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._STARTDATE));
+                                eDate = c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._ENDDATE));
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                Date start_date = sdf.parse(sDate);
+                                Date end_date = sdf.parse(eDate);
+
+                                data.setStartDate(start_date);
+                                data.setEndDate(end_date);
+                            } catch (Exception e) {
+
                             }
-
-                            sDate = c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._STARTDATE));
-                            eDate = c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._ENDDATE));
-
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            Date start_date = sdf.parse(sDate);
-                            Date end_date = sdf.parse(eDate);
-
-                            data.setStartDate(start_date);
-                            data.setEndDate(end_date);
-                        } catch (Exception e) {
-
-                        }
-                        data.setPathseq(c.getInt(c.getColumnIndex(DataBases.CreatePlanDetailDB._PATH_SEQ)));
-                        data.setPlacename(c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_NAME)));
-                        data.setLatitude(c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LATITUDE)));
-                        data.setLongitude(c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LONGITUDE)));
-                        detailList.add(data);
+                            data.setPathseq(c.getInt(c.getColumnIndex(DataBases.CreatePlanDetailDB._PATH_SEQ)));
+                            data.setPlacename(c.getString(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_NAME)));
+                            data.setLatitude(c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LATITUDE)));
+                            data.setLongitude(c.getDouble(c.getColumnIndex(DataBases.CreatePlanDetailDB._PLACE_GPS_LONGITUDE)));
+                            detailList.add(data);
 
 
-                    } while (c.moveToNext());
+                        } while (c.moveToNext());
 
-                    PlanDetailList list = new PlanDetailList();
-                    list.setArrayList(detailList);
-                    allList.add(list);
+                        PlanDetailList list = new PlanDetailList();
+                        list.setArrayList(detailList);
+                        allList.add(list);
 
-                    c.close();
+                        c.close();
+                    }
                 }
+            }catch(Exception e){
+
             }
         }
 

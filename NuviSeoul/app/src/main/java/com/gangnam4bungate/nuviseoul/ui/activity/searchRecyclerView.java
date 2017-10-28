@@ -1,5 +1,6 @@
 package com.gangnam4bungate.nuviseoul.ui.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gangnam4bungate.nuviseoul.R;
@@ -38,16 +40,14 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private ArrayList<searchDTO> searchDTOs = new ArrayList<>();
     private ArrayList<searchDetailDTO> searchDetailDTOs = new ArrayList<>();
-    ArrayList<PlanDetailData> mSearchDataList;
     Map<String, String> map;
-    Context getContext;
+    Activity mActivity;
 
-    public searchRecyclerView(ArrayList searchDTO, ArrayList searchDetailDTO, Map map, Context context, ArrayList<PlanDetailData> mSearchDataList) {
+    public searchRecyclerView(ArrayList searchDTO, ArrayList searchDetailDTO, Map map, Activity activity) {
         this.searchDTOs = searchDTO;
         this.searchDetailDTOs = searchDetailDTO;
-        getContext = context;
+        mActivity = activity;
         this.map = map;
-        this.mSearchDataList  = mSearchDataList;
         Log.d("testtt" , searchDetailDTO.size() + " " +searchDetailDTO.size());
     }
 
@@ -71,11 +71,11 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
         ((RowCell) holder).searchHomepage.setText(homepage);
 
         if(searchDTOs.get(position).firstImage.toString().equals("no Parsing") ){
-            Drawable drawable = getContext.getResources().getDrawable(R.drawable.noimage);
+            Drawable drawable = mActivity.getResources().getDrawable(R.drawable.noimage);
             ((RowCell) holder).searchImage.setImageDrawable(drawable);
             ((RowCell) holder).searchImage.setColorFilter(Color.parseColor("#BDBDBD"), PorterDuff.Mode.MULTIPLY);
         }else{
-            Picasso.with(getContext)
+            Picasso.with(mActivity.getApplicationContext())
                     .load(searchDTOs.get(position).firstImage.toString())
                     .fit()
                     .into(((RowCell) holder).searchImage);
@@ -95,19 +95,29 @@ public class searchRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + homepage));
-                getContext.startActivity(intent);
+                mActivity.startActivity(intent);
             }
         });
 
       //  mSearchDataList.add(new PlanDetailData())
 
+        ((RowCell) holder).addButton.setTag(searchDTOs.get(position));
         ((RowCell) holder).addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    searchDTO dto = (searchDTO) v.getTag();
+                    if (dto != null) {
+                        Intent intent = new Intent(mActivity.getApplicationContext(), PlanEditActivity.class);
+                        intent.putExtra("search_add_course", true);
+                        intent.putExtra("placename", dto.title);
+                        intent.putExtra("mapx", dto.mapX);
+                        intent.putExtra("mapy", dto.mapY);
+                        mActivity.startActivity(intent);
+                    }
+                }catch(Exception e){
 
-                //ADD 버튼 추가하는곳
-                //Intent intent = new Intent(getContext.getApplicationContext(), PlanEditActivity.class);
-                //getContext.startActivity(intent);
+                }
             }
         });
     }

@@ -133,6 +133,7 @@ public class Holder {
             if(mIvBg != null){
                 Picasso.with(context)
                         .load(url)
+                        .placeholder(R.drawable.noimage)
                         .into(mIvBg);
             }
         }
@@ -178,6 +179,7 @@ public class Holder {
             if(mIvBg != null){
                 Picasso.with(context)
                         .load(url)
+                        .placeholder(R.drawable.noimage)
                         .into(mIvBg);
             }
         }
