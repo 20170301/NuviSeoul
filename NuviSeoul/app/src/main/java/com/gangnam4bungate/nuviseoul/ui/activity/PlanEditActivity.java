@@ -614,10 +614,25 @@ public class PlanEditActivity extends CommonActivity {
                     btClose.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            addView.removeView(ll_detail);
 
                             try {
                                 PlanDetailData data = (PlanDetailData) v.getTag();
+                                if(data != null){
+                                    for (int index = 0; index < mllAddLayout.getChildCount(); index++) {
+                                        View childview = mllAddLayout.getChildAt(index);
+                                        if (childview != null) {
+                                            TextView tv_dest = (TextView) childview.findViewById(R.id.tv_addplace);
+                                            if (tv_dest != null) {
+                                                PlanDetailData data_diff = (PlanDetailData) tv_dest.getTag();
+                                                if (data != null && data.getId() == data_diff.getId()
+                                                        && data.getPlacename().equals(data_diff.getPlacename())) {
+                                                    mllAddLayout.removeView(childview);
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
 
                                 if (data != null) {
                                     mPlanDetailDeleteList.add(data);

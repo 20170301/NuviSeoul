@@ -82,25 +82,33 @@ public class Holder {
     }
 
     public static class PlanDetailViewHolder extends RecyclerView.ViewHolder {
-        private TextView tv_date;
-        private TextView tv_place;
+        public TextView tv_sdate;
+        public TextView tv_edate;
+        public TextView tv_date_line;
+        public TextView tv_place;
         public PlanDetailViewHolder(View itemView) {
             super(itemView);
 
             if(itemView != null){
-                tv_date = (TextView) itemView.findViewById(R.id.tv_date);
+                tv_sdate = (TextView) itemView.findViewById(R.id.tv_sdate);
+                tv_edate = (TextView) itemView.findViewById(R.id.tv_edate);
+                tv_date_line = (TextView) itemView.findViewById(R.id.tv_date_line);
             }
             if(itemView != null){
                 tv_place = (TextView) itemView.findViewById(R.id.tv_place);
             }
         }
 
-        public void setDate(String date){
-            if(tv_date != null){
-                tv_date.setText(date);
+        public void setSDate(String date){
+            if(tv_sdate != null){
+                tv_sdate.setText(date);
             }
         }
-
+        public void setEDate(String date){
+            if(tv_edate != null){
+                tv_edate.setText(date);
+            }
+        }
         public void setPlace(String place){
             if(tv_place != null){
                 tv_place.setText(place);

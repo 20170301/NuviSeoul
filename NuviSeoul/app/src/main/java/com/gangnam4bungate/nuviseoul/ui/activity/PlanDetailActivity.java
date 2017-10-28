@@ -30,6 +30,8 @@ import com.gangnam4bungate.nuviseoul.database.DBOpenHelper;
 import com.gangnam4bungate.nuviseoul.database.DataBases;
 import com.gangnam4bungate.nuviseoul.holder.PlanDetailAdapter;
 import com.gangnam4bungate.nuviseoul.ui.common.CommonGoogleMapActivity;
+import com.gangnam4bungate.nuviseoul.ui.view.HorizontalSpaceItemDecoration;
+import com.gangnam4bungate.nuviseoul.ui.view.VerticalSpaceItemDecoration;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -272,6 +274,9 @@ public class PlanDetailActivity extends CommonGoogleMapActivity implements OnMap
             LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
             mRvPlan.setLayoutManager(layoutManager);
             mRvPlan.setAdapter(mPlanAdapter);
+
+            HorizontalSpaceItemDecoration verticalSpaceItemDecoration = new HorizontalSpaceItemDecoration(50);
+            mRvPlan.addItemDecoration(verticalSpaceItemDecoration);
 
             if(findViewById(R.id.iv_left) != null){
                 findViewById(R.id.iv_left).setVisibility(View.VISIBLE);

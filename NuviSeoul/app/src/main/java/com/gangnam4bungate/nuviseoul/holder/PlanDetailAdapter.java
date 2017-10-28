@@ -54,16 +54,24 @@ public class PlanDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Date sDate = list.get(0).getStartDate();
                     Date eDate = list.get(0).getEndDate();
 
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yy.MM.dd");
                     String start_date = sdf.format(sDate);
                     String end_date = sdf.format(eDate);
 
-                    if (start_date != null && end_date != null) {
-                        if (start_date.equals(end_date)) {
-                            planViewHolder.setDate(start_date + " ");
-                        } else {
-                            planViewHolder.setDate(start_date + " ~ " + end_date);
+                    if (start_date != null) {
+                        planViewHolder.setSDate(start_date);
+                        if (end_date != null && start_date.equals(end_date)) {
+                            planViewHolder.tv_date_line.setVisibility(View.INVISIBLE);
+                            planViewHolder.tv_edate.setVisibility(View.INVISIBLE);
                         }
+                    }
+
+                    if(end_date != null){
+                        if (end_date != null && start_date.equals(end_date) == false) {
+                            planViewHolder.tv_date_line.setVisibility(View.VISIBLE);
+                            planViewHolder.tv_edate.setVisibility(View.VISIBLE);
+                        }
+                        planViewHolder.setEDate(end_date);
                     }
 
                     planViewHolder.setPlace(list.get(0).getPlacename());
