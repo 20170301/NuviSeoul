@@ -55,16 +55,11 @@ public class SearchActivity extends CommonActivity implements MashupCallback {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_search);
-        //searchTextView = (TextView)findViewById(R.id.searchTextView);
-        Intent intent = getIntent();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setContentInsetsAbsolute(0,0);
         mIv_search = (ImageView) toolbar.findViewById(R.id.iv_search);
-        mTv_title = (TextView) toolbar.findViewById(R.id.tv_title);
         mEt_title = (EditText)toolbar.findViewById(R.id.et_title);
-        mTv_title.setVisibility(View.INVISIBLE);
-        mEt_title.setVisibility(View.VISIBLE);
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
         mIv_search.setOnClickListener(new View.OnClickListener() {
             @Override
